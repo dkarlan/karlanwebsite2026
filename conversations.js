@@ -1,0 +1,122 @@
+const conversations = [
+  {
+    id: 1,
+    title: "Community Health Initiative",
+    location: "Nairobi, Kenya",
+    lat: -1.2921,
+    lng: 36.8219,
+    status: "active",
+    partner: "Kenya Health Ministry",
+    startDate: "2026-01-15",
+    lastUpdate: "2026-03-12",
+    notes: "Discussing expansion of rural health clinics. Follow-up scheduled for next week."
+  },
+  {
+    id: 2,
+    title: "Education Access Program",
+    location: "Lima, Peru",
+    lat: -12.0464,
+    lng: -77.0428,
+    status: "active",
+    partner: "Ministry of Education",
+    startDate: "2025-11-03",
+    lastUpdate: "2026-03-10",
+    notes: "Evaluating scholarship distribution model. Pilot results are promising."
+  },
+  {
+    id: 3,
+    title: "Microfinance Evaluation",
+    location: "Dhaka, Bangladesh",
+    lat: 23.8103,
+    lng: 90.4125,
+    status: "completed",
+    partner: "BRAC",
+    startDate: "2025-06-20",
+    lastUpdate: "2026-02-28",
+    notes: "Final report submitted. Results published in working paper series."
+  },
+  {
+    id: 4,
+    title: "Water & Sanitation Study",
+    location: "Kampala, Uganda",
+    lat: 0.3476,
+    lng: 32.5825,
+    status: "scheduled",
+    partner: "UNICEF Uganda",
+    startDate: "2026-04-01",
+    lastUpdate: "2026-03-08",
+    notes: "Baseline survey instrument finalized. Field team recruitment underway."
+  },
+  {
+    id: 5,
+    title: "Agricultural Extension RCT",
+    location: "Hyderabad, India",
+    lat: 17.385,
+    lng: 78.4867,
+    status: "active",
+    partner: "J-PAL South Asia",
+    startDate: "2025-09-10",
+    lastUpdate: "2026-03-14",
+    notes: "Midline data collection in progress. Treatment effects looking significant."
+  },
+  {
+    id: 6,
+    title: "Cash Transfer Follow-up",
+    location: "Busia, Kenya",
+    lat: 0.4608,
+    lng: 34.1115,
+    status: "paused",
+    partner: "GiveDirectly",
+    startDate: "2025-08-01",
+    lastUpdate: "2026-01-20",
+    notes: "Paused due to funding review. Expecting resumption in Q2 2026."
+  },
+  {
+    id: 7,
+    title: "Deworming Long-term Impact",
+    location: "Kakamega, Kenya",
+    lat: 0.2827,
+    lng: 34.7519,
+    status: "completed",
+    partner: "Evidence Action",
+    startDate: "2024-03-15",
+    lastUpdate: "2025-12-01",
+    notes: "20-year follow-up complete. Landmark results on long-term economic outcomes."
+  },
+  {
+    id: 8,
+    title: "Digital Literacy Partnership",
+    location: "Jakarta, Indonesia",
+    lat: -6.2088,
+    lng: 106.8456,
+    status: "scheduled",
+    partner: "Ministry of Communications",
+    startDate: "2026-05-15",
+    lastUpdate: "2026-03-05",
+    notes: "MOU under review. Curriculum design phase starting soon."
+  },
+  {
+    id: 9,
+    title: "Maternal Health Intervention",
+    location: "Accra, Ghana",
+    lat: 5.6037,
+    lng: -0.187,
+    status: "active",
+    partner: "Ghana Health Service",
+    startDate: "2025-10-22",
+    lastUpdate: "2026-03-13",
+    notes: "SMS reminder system rollout proceeding on schedule across 3 districts."
+  },
+  {
+    id: 10,
+    title: "Youth Employment Program",
+    location: "Bogotá, Colombia",
+    lat: 4.711,
+    lng: -74.0721,
+    status: "scheduled",
+    partner: "IDB Lab",
+    startDate: "2026-06-01",
+    lastUpdate: "2026-03-01",
+    notes: "RCT design finalized. IRB approval pending."
+  }
+];

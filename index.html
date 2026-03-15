@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversation Status Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Conversation Status Map</h1>
+    <div id="legend">
+      <span class="legend-item"><span class="dot active"></span> Active</span>
+      <span class="legend-item"><span class="dot scheduled"></span> Scheduled</span>
+      <span class="legend-item"><span class="dot completed"></span> Completed</span>
+      <span class="legend-item"><span class="dot paused"></span> Paused</span>
+    </div>
+  </header>
+  <div id="map"></div>
+  <div id="sidebar" class="hidden">
+    <button id="sidebar-close">&times;</button>
+    <div id="sidebar-content"></div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="conversations.js"></script>
+  <script src="map.js"></script>
+</body>
+</html>
