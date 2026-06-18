@@ -1,0 +1,506 @@
+[
+  {
+    "date": "2026-06-11",
+    "matchday": 1,
+    "group": "A",
+    "home": "Mexico",
+    "away": "Czechia"
+  },
+  {
+    "date": "2026-06-11",
+    "matchday": 1,
+    "group": "A",
+    "home": "South Africa",
+    "away": "South Korea"
+  },
+  {
+    "date": "2026-06-11",
+    "matchday": 1,
+    "group": "G",
+    "home": "Belgium",
+    "away": "Egypt"
+  },
+  {
+    "date": "2026-06-11",
+    "matchday": 1,
+    "group": "G",
+    "home": "Iran",
+    "away": "New Zealand"
+  },
+  {
+    "date": "2026-06-12",
+    "matchday": 1,
+    "group": "B",
+    "home": "Canada",
+    "away": "Switzerland"
+  },
+  {
+    "date": "2026-06-12",
+    "matchday": 1,
+    "group": "B",
+    "home": "Bosnia and Herzegovina",
+    "away": "Qatar"
+  },
+  {
+    "date": "2026-06-12",
+    "matchday": 1,
+    "group": "H",
+    "home": "Uruguay",
+    "away": "Spain"
+  },
+  {
+    "date": "2026-06-12",
+    "matchday": 1,
+    "group": "H",
+    "home": "Cape Verde",
+    "away": "Saudi Arabia"
+  },
+  {
+    "date": "2026-06-13",
+    "matchday": 1,
+    "group": "C",
+    "home": "Brazil",
+    "away": "Haiti"
+  },
+  {
+    "date": "2026-06-13",
+    "matchday": 1,
+    "group": "C",
+    "home": "Scotland",
+    "away": "Morocco"
+  },
+  {
+    "date": "2026-06-13",
+    "matchday": 1,
+    "group": "I",
+    "home": "France",
+    "away": "Norway"
+  },
+  {
+    "date": "2026-06-13",
+    "matchday": 1,
+    "group": "I",
+    "home": "Senegal",
+    "away": "Iraq"
+  },
+  {
+    "date": "2026-06-14",
+    "matchday": 1,
+    "group": "D",
+    "home": "Paraguay",
+    "away": "United States"
+  },
+  {
+    "date": "2026-06-14",
+    "matchday": 1,
+    "group": "D",
+    "home": "Turkiye",
+    "away": "Australia"
+  },
+  {
+    "date": "2026-06-14",
+    "matchday": 1,
+    "group": "J",
+    "home": "Argentina",
+    "away": "Austria"
+  },
+  {
+    "date": "2026-06-14",
+    "matchday": 1,
+    "group": "J",
+    "home": "Algeria",
+    "away": "Jordan"
+  },
+  {
+    "date": "2026-06-15",
+    "matchday": 1,
+    "group": "E",
+    "home": "Ecuador",
+    "away": "Curacao"
+  },
+  {
+    "date": "2026-06-15",
+    "matchday": 1,
+    "group": "E",
+    "home": "Germany",
+    "away": "Cote d'Ivoire"
+  },
+  {
+    "date": "2026-06-15",
+    "matchday": 1,
+    "group": "K",
+    "home": "Colombia",
+    "away": "Portugal"
+  },
+  {
+    "date": "2026-06-15",
+    "matchday": 1,
+    "group": "K",
+    "home": "DR Congo",
+    "away": "Uzbekistan"
+  },
+  {
+    "date": "2026-06-16",
+    "matchday": 1,
+    "group": "F",
+    "home": "Netherlands",
+    "away": "Sweden"
+  },
+  {
+    "date": "2026-06-16",
+    "matchday": 1,
+    "group": "F",
+    "home": "Tunisia",
+    "away": "Japan"
+  },
+  {
+    "date": "2026-06-16",
+    "matchday": 1,
+    "group": "L",
+    "home": "Panama",
+    "away": "England"
+  },
+  {
+    "date": "2026-06-16",
+    "matchday": 1,
+    "group": "L",
+    "home": "Croatia",
+    "away": "Ghana"
+  },
+  {
+    "date": "2026-06-17",
+    "matchday": 2,
+    "group": "A",
+    "home": "Mexico",
+    "away": "South Africa"
+  },
+  {
+    "date": "2026-06-17",
+    "matchday": 2,
+    "group": "A",
+    "home": "South Korea",
+    "away": "Czechia"
+  },
+  {
+    "date": "2026-06-17",
+    "matchday": 2,
+    "group": "G",
+    "home": "Belgium",
+    "away": "Iran"
+  },
+  {
+    "date": "2026-06-17",
+    "matchday": 2,
+    "group": "G",
+    "home": "New Zealand",
+    "away": "Egypt"
+  },
+  {
+    "date": "2026-06-18",
+    "matchday": 2,
+    "group": "B",
+    "home": "Canada",
+    "away": "Bosnia and Herzegovina"
+  },
+  {
+    "date": "2026-06-18",
+    "matchday": 2,
+    "group": "B",
+    "home": "Qatar",
+    "away": "Switzerland"
+  },
+  {
+    "date": "2026-06-18",
+    "matchday": 2,
+    "group": "H",
+    "home": "Uruguay",
+    "away": "Cape Verde"
+  },
+  {
+    "date": "2026-06-18",
+    "matchday": 2,
+    "group": "H",
+    "home": "Saudi Arabia",
+    "away": "Spain"
+  },
+  {
+    "date": "2026-06-19",
+    "matchday": 2,
+    "group": "C",
+    "home": "Brazil",
+    "away": "Scotland"
+  },
+  {
+    "date": "2026-06-19",
+    "matchday": 2,
+    "group": "C",
+    "home": "Morocco",
+    "away": "Haiti"
+  },
+  {
+    "date": "2026-06-19",
+    "matchday": 2,
+    "group": "I",
+    "home": "France",
+    "away": "Senegal"
+  },
+  {
+    "date": "2026-06-19",
+    "matchday": 2,
+    "group": "I",
+    "home": "Iraq",
+    "away": "Norway"
+  },
+  {
+    "date": "2026-06-20",
+    "matchday": 2,
+    "group": "D",
+    "home": "Paraguay",
+    "away": "Turkiye"
+  },
+  {
+    "date": "2026-06-20",
+    "matchday": 2,
+    "group": "D",
+    "home": "Australia",
+    "away": "United States"
+  },
+  {
+    "date": "2026-06-20",
+    "matchday": 2,
+    "group": "J",
+    "home": "Argentina",
+    "away": "Algeria"
+  },
+  {
+    "date": "2026-06-20",
+    "matchday": 2,
+    "group": "J",
+    "home": "Jordan",
+    "away": "Austria"
+  },
+  {
+    "date": "2026-06-21",
+    "matchday": 2,
+    "group": "E",
+    "home": "Ecuador",
+    "away": "Germany"
+  },
+  {
+    "date": "2026-06-21",
+    "matchday": 2,
+    "group": "E",
+    "home": "Cote d'Ivoire",
+    "away": "Curacao"
+  },
+  {
+    "date": "2026-06-21",
+    "matchday": 2,
+    "group": "K",
+    "home": "Colombia",
+    "away": "DR Congo"
+  },
+  {
+    "date": "2026-06-21",
+    "matchday": 2,
+    "group": "K",
+    "home": "Uzbekistan",
+    "away": "Portugal"
+  },
+  {
+    "date": "2026-06-22",
+    "matchday": 2,
+    "group": "F",
+    "home": "Netherlands",
+    "away": "Tunisia"
+  },
+  {
+    "date": "2026-06-22",
+    "matchday": 2,
+    "group": "F",
+    "home": "Japan",
+    "away": "Sweden"
+  },
+  {
+    "date": "2026-06-22",
+    "matchday": 2,
+    "group": "L",
+    "home": "Panama",
+    "away": "Croatia"
+  },
+  {
+    "date": "2026-06-22",
+    "matchday": 2,
+    "group": "L",
+    "home": "Ghana",
+    "away": "England"
+  },
+  {
+    "date": "2026-06-23",
+    "matchday": 3,
+    "group": "A",
+    "home": "Mexico",
+    "away": "South Korea"
+  },
+  {
+    "date": "2026-06-23",
+    "matchday": 3,
+    "group": "A",
+    "home": "Czechia",
+    "away": "South Africa"
+  },
+  {
+    "date": "2026-06-23",
+    "matchday": 3,
+    "group": "G",
+    "home": "Belgium",
+    "away": "New Zealand"
+  },
+  {
+    "date": "2026-06-23",
+    "matchday": 3,
+    "group": "G",
+    "home": "Egypt",
+    "away": "Iran"
+  },
+  {
+    "date": "2026-06-24",
+    "matchday": 3,
+    "group": "B",
+    "home": "Canada",
+    "away": "Qatar"
+  },
+  {
+    "date": "2026-06-24",
+    "matchday": 3,
+    "group": "B",
+    "home": "Switzerland",
+    "away": "Bosnia and Herzegovina"
+  },
+  {
+    "date": "2026-06-24",
+    "matchday": 3,
+    "group": "H",
+    "home": "Uruguay",
+    "away": "Saudi Arabia"
+  },
+  {
+    "date": "2026-06-24",
+    "matchday": 3,
+    "group": "H",
+    "home": "Spain",
+    "away": "Cape Verde"
+  },
+  {
+    "date": "2026-06-25",
+    "matchday": 3,
+    "group": "C",
+    "home": "Brazil",
+    "away": "Morocco"
+  },
+  {
+    "date": "2026-06-25",
+    "matchday": 3,
+    "group": "C",
+    "home": "Haiti",
+    "away": "Scotland"
+  },
+  {
+    "date": "2026-06-25",
+    "matchday": 3,
+    "group": "I",
+    "home": "France",
+    "away": "Iraq"
+  },
+  {
+    "date": "2026-06-25",
+    "matchday": 3,
+    "group": "I",
+    "home": "Norway",
+    "away": "Senegal"
+  },
+  {
+    "date": "2026-06-26",
+    "matchday": 3,
+    "group": "D",
+    "home": "Paraguay",
+    "away": "Australia"
+  },
+  {
+    "date": "2026-06-26",
+    "matchday": 3,
+    "group": "D",
+    "home": "United States",
+    "away": "Turkiye"
+  },
+  {
+    "date": "2026-06-26",
+    "matchday": 3,
+    "group": "J",
+    "home": "Argentina",
+    "away": "Jordan"
+  },
+  {
+    "date": "2026-06-26",
+    "matchday": 3,
+    "group": "J",
+    "home": "Austria",
+    "away": "Algeria"
+  },
+  {
+    "date": "2026-06-27",
+    "matchday": 3,
+    "group": "E",
+    "home": "Ecuador",
+    "away": "Cote d'Ivoire"
+  },
+  {
+    "date": "2026-06-27",
+    "matchday": 3,
+    "group": "E",
+    "home": "Curacao",
+    "away": "Germany"
+  },
+  {
+    "date": "2026-06-27",
+    "matchday": 3,
+    "group": "K",
+    "home": "Colombia",
+    "away": "Uzbekistan"
+  },
+  {
+    "date": "2026-06-27",
+    "matchday": 3,
+    "group": "K",
+    "home": "Portugal",
+    "away": "DR Congo"
+  },
+  {
+    "date": "2026-06-28",
+    "matchday": 3,
+    "group": "F",
+    "home": "Netherlands",
+    "away": "Japan"
+  },
+  {
+    "date": "2026-06-28",
+    "matchday": 3,
+    "group": "F",
+    "home": "Sweden",
+    "away": "Tunisia"
+  },
+  {
+    "date": "2026-06-28",
+    "matchday": 3,
+    "group": "L",
+    "home": "Panama",
+    "away": "Ghana"
+  },
+  {
+    "date": "2026-06-28",
+    "matchday": 3,
+    "group": "L",
+    "home": "England",
+    "away": "Croatia"
+  }
+]

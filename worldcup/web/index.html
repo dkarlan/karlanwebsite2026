@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Cup Happiness Index 2026</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="kicker">World Cup 2026</p>
+      <h1>Who should you root for?</h1>
+      <p class="lede">
+        A title lifts a country's mood. The lift is bigger where more people care
+        and where people have less. This index ranks all 48 teams by the
+        happiness a championship would add, then weighs it by the odds of getting
+        there.
+      </p>
+      <div id="headline" class="headline"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="controls">
+      <div class="toggle" id="view-toggle">
+        <button data-view="rooting" class="active">If they win the Cup</button>
+        <button data-view="expected">Expected impact</button>
+        <button data-view="eta15">Tilt to the poor</button>
+      </div>
+      <p class="view-note" id="view-note"></p>
+    </section>
+
+    <section id="ranking" class="ranking"></section>
+
+    <section class="tonight">
+      <div class="tonight-head">
+        <h2>Matches</h2>
+        <input type="date" id="match-date" />
+      </div>
+      <p class="view-note">For each match, root for the side whose win adds more
+        aggregate happiness. The stakes bar shows how much is on the table.</p>
+      <div id="matches"></div>
+    </section>
+
+    <footer id="meta" class="meta"></footer>
+  </main>
+
+  <div id="drawer" class="drawer hidden">
+    <button id="drawer-close">&times;</button>
+    <div id="drawer-body"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
