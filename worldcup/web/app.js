@@ -28,6 +28,7 @@ let DATA = null;
 let byName = {};
 let view = "surprise";
 let timeframe = "live";           // "live" or "pre"
+let shownName = null;             // country whose detail card is open (click to toggle)
 const selected = new Set();        // countries ticked for comparison
 
 function activeKey() {
@@ -107,11 +108,14 @@ async function load() {
   document.getElementById("compare-btn").addEventListener("click", renderCompareTable);
 
   const chart = document.getElementById("chart");
-  chart.addEventListener("mouseover", (e) => {
+  chart.addEventListener("click", (e) => {
+    if (e.target.classList.contains("col-check")) return;   // checkbox: handled below
     const el = e.target.closest("[data-name]");
-    if (el) showCard(byName[el.dataset.name], el);
+    if (!el) return;
+    const n = el.dataset.name;
+    if (shownName === n) { hideCard(); shownName = null; }
+    else { showCard(byName[n], el); shownName = n; }
   });
-  chart.addEventListener("mouseleave", hideCard);
   chart.addEventListener("change", (e) => {
     if (!e.target.classList.contains("col-check")) return;
     const n = e.target.dataset.name;
@@ -159,10 +163,11 @@ function renderHeadline() {
   const top = teamsByView()[0];
   document.getElementById("headline").innerHTML = view === "rooting"
     ? `For the biggest prize if they win, root for <b>${top.name}</b>.`
-    : `Right now, root for <b>${top.name}</b>: few expect much of them, the following is large and incomes low, so every round they survive lands where it counts.`;
+    : `Right now, root for <b>${top.name}</b>: odds are low for them, the following is large and incomes low, so every round they survive lands where it counts.`;
 }
 
 function renderChart() {
+  hideCard(); shownName = null;
   let note = VIEWS[view].note;
   if (view !== "rooting") {
     note += timeframe === "pre"

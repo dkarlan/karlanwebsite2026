@@ -407,3 +407,9 @@ html { overflow-x: clip; }
 
 .compare-bar { max-width: 860px; margin: 12px auto 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .compare-hint { color: var(--muted); font-size: 0.85rem; }
+
+/* Click (not hover) opens the detail card; hover just signals clickability */
+.barcell, .namecell, .abbr { cursor: pointer; }
+.barcell .bar { transition: width .12s ease, filter .12s ease, height .2s ease; }
+.barcell:hover .bar { width: 94%; filter: brightness(1.12); }
+.namecell:hover span, .abbr:hover { color: var(--accent); }
