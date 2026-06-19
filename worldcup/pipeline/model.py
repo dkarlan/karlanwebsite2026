@@ -17,7 +17,8 @@ Per country i:
        lingers longer for a country unused to winning, so its title is discounted
        less and worth more today. See config.py for the citations.
 
-W_net_i nets out a documented dark-side externality. Outputs web/rankings.json
+W_net_i applies an optional externality haircut, currently zero (the dark-side
+cost from Card & Dahl 2011 is not modelled; see config). Outputs web/rankings.json
 and prints the ranking. Run after the fetch/build steps (or via run_all.py).
 """
 import csv
@@ -178,6 +179,7 @@ def main():
             "interest": round(float(t["interest"]), 3),
             "wc_titles": int(t["wc_titles"]) if t["wc_titles"] else 0,
             "last_major_year": t["last_major_year"] or None,
+            "best_finish": t.get("best_finish", ""),
             "history": round(history, 3),
             "novelty": round(1.0 - history, 3),
             "memory_half_life": round(math.log(2) / b["decay"], 1),

@@ -48,7 +48,7 @@ def build_workbook():
 
     cols = ["name", "confederation", "group", "host", "population", "consumption",
             "elo", "interest", "diaspora_m", "history", "novelty", "wc_titles",
-            "last_major_year"]
+            "last_major_year", "best_finish"]
     rows = []
     for t in teams:
         w = wb.get(t["name"], {})
@@ -67,6 +67,7 @@ def build_workbook():
             "novelty": p.get("novelty", ""),
             "wc_titles": p.get("wc_titles", ""),
             "last_major_year": p.get("last_major_year", ""),
+            "best_finish": p.get("best_finish", ""),
         })
 
     out = os.path.join(DATA, "workbook.csv")

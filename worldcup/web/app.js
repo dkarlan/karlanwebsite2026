@@ -1,36 +1,27 @@
 // World Cup Happiness Index 2026 - live "who to root for" tool.
 // Reads rankings.json (written by the pipeline). Two ways to value the joy:
-//   Beating expectations (default): a deep run weighted by how unlikely it was,
-//     with later rounds counting more. Underdogs with big, needy followings rise.
-//   If they win the Cup: the marginal happiness a title would add, full stop.
-// Both use fans reached x marginal-utility weight x the present value of the
-// lingering memory of a win. Win probability never weights the score; under
-// "beating expectations" it only sets the bar a team is measured against.
+//   Performance, relative to expectations (default): a deep run weighted by how
+//     unlikely it was, with later rounds counting more. Underdogs rise.
+//   Performance, absolute: the happiness a title itself would add, full stop.
+// Both use fans reached x marginal-utility weight (always tilted toward the poor)
+// x the present value of the lingering memory of a win. Win probability never
+// weights the score; under the relative view it only sets the bar.
 
 const HOME_ADV = 60;  // Elo bump for host nations, matches the model
 
 const VIEWS = {
   surprise: {
     key: "surprise_index",
-    eta15: false,
-    label: "Beating expectations",
+    label: "Performance, relative to expectations",
     note: "Joy from overperforming: a deep run weighted by how unlikely it was, " +
       "with later rounds counting more. The bar is each team's pre-tournament odds; " +
       "those odds set the bar, they never shrink the score.",
   },
   rooting: {
     key: "rooting_index",
-    eta15: false,
-    label: "If they win the Cup",
-    note: "The happiness a title would add, full stop: fans reached, weighted up " +
-      "where people have less, valued by the lingering memory of a win.",
-  },
-  tilt: {
-    key: "surprise_index_eta15",
-    eta15: true,
-    label: "Tilt to the poor",
-    note: "Beating expectations, with a stronger preference for low-income " +
-      "countries (utility curvature eta = 1.5 instead of 1).",
+    label: "Performance, absolute",
+    note: "The happiness a title itself would add, full stop: fans reached, weighted " +
+      "up where people have less, valued by the lingering memory of a win.",
   },
 };
 
@@ -38,12 +29,30 @@ let DATA = null;
 let view = "surprise";
 let timeframe = "live";   // "live" (results so far) or "pre" (frozen pre-tournament)
 
-// The index field for the active method and timeframe. "If they win the Cup" is a
-// fixed prize and ignores the timeframe; the surprise views switch on it.
+// The index field for the active method and timeframe. The absolute view is a
+// fixed prize and ignores the timeframe; the relative view switches on it.
 function activeKey() {
   if (view === "rooting") return "rooting_index";
-  const base = view === "tilt" ? "surprise_index_eta15" : "surprise_index";
-  return timeframe === "pre" ? base.replace("surprise_index", "surprise_index_pre") : base;
+  return timeframe === "pre" ? "surprise_index_pre" : "surprise_index";
+}
+
+// A team's best prior World Cup result, as a short phrase.
+function bestPrior(code) {
+  return {
+    won: "won", final: "lost in final", semi: "lost in semis",
+    quarter: "lost in quarters", round16: "lost in round of 16",
+    group: "lost in group", first: "first time",
+  }[code] || "unknown";
+}
+
+// Expected finish, from expected depth (0 to 6) to a round name.
+function expStage(d) {
+  if (d < 0.5) return "Group";
+  if (d < 1.5) return "Round of 32";
+  if (d < 2.5) return "Round of 16";
+  if (d < 3.5) return "Quarterfinals";
+  if (d < 4.5) return "Semifinals";
+  return "Final";
 }
 
 function fmtInt(n) { return n.toLocaleString("en-US"); }
@@ -115,7 +124,7 @@ function bindToggle() {
 
 function secondaryCell(t) {
   if (view === "rooting") return `${t.memory_half_life}y<br><small>memory</small>`;
-  return `${t.expected_depth.toFixed(1)}<br><small>exp. run</small>`;
+  return `${expStage(t.expected_depth)}<br><small>expected to reach</small>`;
 }
 
 function renderRanking() {
@@ -139,11 +148,10 @@ function renderRanking() {
     const tags = [];
     if (t.host) tags.push('<span class="badge host">HOST</span>');
     if (t.eliminated) tags.push('<span class="badge out">OUT</span>');
-    else if (t.wc_titles === 0) tags.push(`<span class="badge">${t.last_major_year === null ? "DEBUT-ERA" : "NEVER WON"}</span>`);
     el.innerHTML = `
       <span class="rank">${i + 1}</span>
       <div class="name">${t.name}${tags.join("")}
-        <small>${t.confederation} &middot; Group ${t.group}</small></div>
+        <small>${t.confederation} &middot; Group ${t.group} &middot; Best prior: ${bestPrior(t.best_finish)}</small></div>
       <div class="bar-wrap">
         <div class="bar" style="width:${pct}%"></div>
         <span class="bar-val">${t[key].toFixed(1)}</span>
@@ -165,11 +173,11 @@ function setupDates() {
   renderMatches(input.value);
 }
 
-// Per-side score for a match, in the active view. "If they win the Cup" roots for
-// the bigger prize; the surprise views weight that prize by how big an upset the
-// win would be tonight.
+// Per-side score for a match, in the active view. The absolute view roots for the
+// bigger prize; the relative view weights that prize by how big an upset the win
+// would be tonight.
 function matchScore(t, opp) {
-  const base = VIEWS[view].eta15 ? t.rooting_index_eta15 : t.rooting_index;
+  const base = t.rooting_index;
   if (view === "rooting") return base;
   return base * (1 - pWin(t, opp));
 }
@@ -226,13 +234,13 @@ function openDrawer(t) {
   body.innerHTML = `
     <h3>${t.name}</h3>
     <p class="sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</p>
-    ${kv("Beating expectations (live)", t.surprise_index.toFixed(1))}
-    ${kv("Beating expectations (pre-tournament)", t.surprise_index_pre.toFixed(1))}
-    ${kv("If they win the Cup", t.rooting_index.toFixed(1))}
+    ${kv("Performance, relative (live)", t.surprise_index.toFixed(1))}
+    ${kv("Performance, relative (pre-tournament)", t.surprise_index_pre.toFixed(1))}
+    ${kv("Performance, absolute", t.rooting_index.toFixed(1))}
     <div class="kv-group">Run vs expectations</div>
-    ${kv("Expected run (knockout rounds)", t.expected_depth.toFixed(1) + " of 6")}
+    ${kv("Expected to reach", expStage(t.expected_depth))}
+    ${kv("Best prior World Cup", bestPrior(t.best_finish))}
     ${kv("Status", status)}
-    ${kv("Surprise score (live / pre)", t.surprise.toFixed(1) + " / " + t.surprise_pre.toFixed(1))}
     <div class="kv-group">Memory of a win</div>
     ${kv("World Cup titles", t.wc_titles)}
     ${kv("Last major trophy", lastTitle)}

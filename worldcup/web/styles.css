@@ -63,12 +63,12 @@ body {
 .reading {
   margin-top: 22px;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 14px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
   font-size: 0.85rem;
 }
-.reading-label { color: #9fd3c8; font-weight: 600; }
+.reading-label { color: #9fd3c8; font-weight: 600; margin-bottom: 2px; }
 .reading a {
   color: #d4dbe2;
   text-decoration: none;
@@ -95,7 +95,8 @@ header {
 
 header h1 { font-size: 2.2rem; line-height: 1.1; margin: 8px 0 14px; }
 
-.standfirst { max-width: 640px; color: #d4dbe2; font-size: 1.08rem; }
+.standfirst { max-width: 640px; color: #fff; font-size: 1.18rem; font-weight: 600; }
+.standfirst-sub { margin-top: 6px; max-width: 640px; color: #b9c4cf; font-size: 0.92rem; }
 .byline {
   margin-top: 10px; color: #9fd3c8; font-size: 0.78rem; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase;

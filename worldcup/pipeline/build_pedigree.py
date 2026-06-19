@@ -42,6 +42,7 @@ def main():
             "wc_titles": facts["wc_titles"],
             "last_major_year": facts["last_major_year"] if facts["last_major_year"] else "",
             "debut": int(bool(facts["debut"])),
+            "best_finish": facts.get("best_finish", ""),
         })
 
     out = os.path.join(DATA, "pedigree.csv")

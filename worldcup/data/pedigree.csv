@@ -1,49 +1,49 @@
-name,history,novelty,wc_titles,last_major_year,debut
-Argentina,0.8519,0.1481,3,2024,0
-Brazil,0.9722,0.0278,5,2019,0
-Colombia,0.0185,0.9815,0,2001,0
-Ecuador,0.0,1.0,0,,0
-Paraguay,0.037,0.963,0,1979,0
-Uruguay,0.5741,0.4259,2,2011,0
-Mexico,0.2222,0.7778,0,2023,0
-United States,0.1481,0.8519,0,2021,0
-Canada,0.0185,0.9815,0,2000,0
-Panama,0.0,1.0,0,,0
-Haiti,0.0185,0.9815,0,1973,0
-Curacao,0.0,1.0,0,,1
-Spain,0.2315,0.7685,1,2024,0
-France,0.4259,0.5741,2,2018,0
-England,0.1574,0.8426,1,1966,0
-Portugal,0.037,0.963,0,2016,0
-Netherlands,0.1759,0.8241,0,1988,0
-Germany,0.8148,0.1852,4,2014,0
-Norway,0.0,1.0,0,,0
-Croatia,0.0648,0.9352,0,,0
-Belgium,0.0185,0.9815,0,,0
-Switzerland,0.0,1.0,0,,0
-Austria,0.0185,0.9815,0,,0
-Turkiye,0.0185,0.9815,0,,0
-Scotland,0.0,1.0,0,,0
-Czechia,0.1296,0.8704,0,1976,0
-Sweden,0.0648,0.9352,0,,0
-Bosnia and Herzegovina,0.0,1.0,0,,0
-Morocco,0.037,0.963,0,1976,0
-Senegal,0.0185,0.9815,0,2021,0
-Algeria,0.037,0.963,0,2019,0
-Cote d'Ivoire,0.0556,0.9444,0,2023,0
-Egypt,0.1296,0.8704,0,2010,0
-Ghana,0.0741,0.9259,0,1982,0
-Tunisia,0.0185,0.9815,0,2004,0
-South Africa,0.0185,0.9815,0,1996,0
-DR Congo,0.037,0.963,0,1974,0
-Cape Verde,0.0,1.0,0,,1
-Japan,0.0741,0.9259,0,2011,0
-Iran,0.0556,0.9444,0,1976,0
-South Korea,0.0556,0.9444,0,1960,0
-Australia,0.0185,0.9815,0,2015,0
-Qatar,0.037,0.963,0,2023,0
-Saudi Arabia,0.0556,0.9444,0,1996,0
-Uzbekistan,0.0,1.0,0,,1
-Iraq,0.0185,0.9815,0,2007,0
-Jordan,0.0,1.0,0,,1
-New Zealand,0.0926,0.9074,0,2016,0
+name,history,novelty,wc_titles,last_major_year,debut,best_finish
+Argentina,0.8519,0.1481,3,2024,0,won
+Brazil,0.9722,0.0278,5,2019,0,won
+Colombia,0.0185,0.9815,0,2001,0,quarter
+Ecuador,0.0,1.0,0,,0,round16
+Paraguay,0.037,0.963,0,1979,0,quarter
+Uruguay,0.5741,0.4259,2,2011,0,won
+Mexico,0.2222,0.7778,0,2023,0,quarter
+United States,0.1481,0.8519,0,2021,0,semi
+Canada,0.0185,0.9815,0,2000,0,group
+Panama,0.0,1.0,0,,0,group
+Haiti,0.0185,0.9815,0,1973,0,group
+Curacao,0.0,1.0,0,,1,first
+Spain,0.2315,0.7685,1,2024,0,won
+France,0.4259,0.5741,2,2018,0,won
+England,0.1574,0.8426,1,1966,0,won
+Portugal,0.037,0.963,0,2016,0,semi
+Netherlands,0.1759,0.8241,0,1988,0,final
+Germany,0.8148,0.1852,4,2014,0,won
+Norway,0.0,1.0,0,,0,round16
+Croatia,0.0648,0.9352,0,,0,final
+Belgium,0.0185,0.9815,0,,0,semi
+Switzerland,0.0,1.0,0,,0,quarter
+Austria,0.0185,0.9815,0,,0,semi
+Turkiye,0.0185,0.9815,0,,0,semi
+Scotland,0.0,1.0,0,,0,group
+Czechia,0.1296,0.8704,0,1976,0,final
+Sweden,0.0648,0.9352,0,,0,final
+Bosnia and Herzegovina,0.0,1.0,0,,0,group
+Morocco,0.037,0.963,0,1976,0,semi
+Senegal,0.0185,0.9815,0,2021,0,quarter
+Algeria,0.037,0.963,0,2019,0,round16
+Cote d'Ivoire,0.0556,0.9444,0,2023,0,group
+Egypt,0.1296,0.8704,0,2010,0,group
+Ghana,0.0741,0.9259,0,1982,0,quarter
+Tunisia,0.0185,0.9815,0,2004,0,group
+South Africa,0.0185,0.9815,0,1996,0,group
+DR Congo,0.037,0.963,0,1974,0,group
+Cape Verde,0.0,1.0,0,,1,first
+Japan,0.0741,0.9259,0,2011,0,round16
+Iran,0.0556,0.9444,0,1976,0,group
+South Korea,0.0556,0.9444,0,1960,0,semi
+Australia,0.0185,0.9815,0,2015,0,round16
+Qatar,0.037,0.963,0,2023,0,group
+Saudi Arabia,0.0556,0.9444,0,1996,0,round16
+Uzbekistan,0.0,1.0,0,,1,first
+Iraq,0.0185,0.9815,0,2007,0,group
+Jordan,0.0,1.0,0,,1,first
+New Zealand,0.0926,0.9074,0,2016,0,group

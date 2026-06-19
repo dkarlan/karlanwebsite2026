@@ -48,11 +48,11 @@ C_REF = 10000.0
 #     r_i = R_LO + (R_HI - R_LO) * history_i,    history_i in [0,1]
 #
 # Low pedigree  -> low rate  -> long memory (half-life ln2/R_LO ~ 14 years).
-# Serial winner -> high rate -> short memory (half-life ln2/R_HI ~ 1.4 years).
+# Serial winner -> high rate -> shorter memory (half-life ln2/R_HI ~ 4 years).
 # H0 only sets the units, so the half-life band (R_LO, R_HI) is the real lever.
 H0 = 0.10
 R_LO = 0.05
-R_HI = 0.50
+R_HI = 0.173
 
 # ---------------------------------------------------------------------------
 # Pedigree score (history_i): history of success in international play
@@ -78,12 +78,14 @@ DIASPORA_WEIGHT = 1.0
 CONTINENTAL_WEIGHT = 0.05
 
 # ---------------------------------------------------------------------------
-# Dark-side externality (net welfare)
+# Dark-side externality (NOT currently incorporated)
 # ---------------------------------------------------------------------------
-# A modest haircut for documented negative externalities around high-stakes
-# tournament matches (fan violence and the Card & Dahl 2011 effect). Flagged as
-# illustrative; expressed as a fraction of gross welfare.
-DARKSIDE_FRACTION = 0.04
+# Card & Dahl (2011) show that upset losses by a favored team raise domestic
+# violence. That real cost is not modelled here. A flat fraction would only scale
+# every team equally and cancel out of the normalized index, so it is left at zero
+# rather than pretending to net it out. Captured as a caveat in the writeup and a
+# priority for a future version, where it would fall harder on the favored side.
+DARKSIDE_FRACTION = 0.0
 
 # ---------------------------------------------------------------------------
 # Soccer-interest composite weights (build_interest.py)
