@@ -32,6 +32,15 @@ ETA_SENSITIVITY = 1.5
 # country: MU_i = (C_REF/c_i)^ETA. Roughly global median GNI per capita (PPP).
 C_REF = 10000.0
 
+# Consumption floor (a subsistence level). Below it, a country's consumption is
+# treated as the floor, so all the very poorest get the same, top marginal-utility
+# weight instead of an ever-rising one. This flattens the weighting among the
+# poorest few (so super-poor and merely-poor are treated alike) while leaving every
+# richer country, and the gap between the poor and the rich, exactly as the curve
+# sets them. Raise it to flatten more of the field; lower it toward zero for the
+# pure isoelastic curve.
+CONSUMPTION_FLOOR = 5000.0
+
 # ---------------------------------------------------------------------------
 # Per-fan value of a title (present value of a lingering memory)
 # ---------------------------------------------------------------------------
@@ -99,9 +108,10 @@ CONTINENTAL_WEIGHTS = {
 #
 #     index_i = 100 * (W_i / W_max) ** SCORE_CONCAVITY
 #
-# Lower it toward 0 to compress harder (a closer-looking race); raise it toward 1
-# to show the raw gaps. At 0.25 the second-placed team lands near 70.
-SCORE_CONCAVITY = 0.25
+# Currently off (1.0 = identity, raw gaps shown). The spread now comes from the
+# consumption floor above, a structural change to the weighting, rather than a
+# display transform. Lower it below 1 only if you want extra cosmetic compression.
+SCORE_CONCAVITY = 1.0
 
 # ---------------------------------------------------------------------------
 # Dark-side externality (NOT currently incorporated)

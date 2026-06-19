@@ -82,7 +82,9 @@ def surprise_score(probs, reached_depth, eliminated):
 
 
 def mu_weight(consumption, eta):
-    c = max(float(consumption), 500.0)        # floor to avoid blow-ups
+    # Consumption floor: the poorest are all treated as the floor, so the weighting
+    # flattens among them instead of rising without bound.
+    c = max(float(consumption), config.CONSUMPTION_FLOOR)
     return (config.C_REF / c) ** eta
 
 
