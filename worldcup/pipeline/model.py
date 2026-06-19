@@ -107,7 +107,7 @@ def fan_population(teams):
         n = t["name"]
         diaspora = float(t["diaspora_m"]) * 1e6 * float(t["interest"]) * config.DIASPORA_WEIGHT
         neighbours = sum(home[o] for o in by_conf[t["confederation"]] if o != n)
-        solidarity = config.CONTINENTAL_WEIGHT * neighbours
+        solidarity = config.CONTINENTAL_WEIGHTS.get(t["confederation"], 0.05) * neighbours
         out[n] = {
             "home_fans": home[n],
             "diaspora_fans": diaspora,
@@ -162,6 +162,12 @@ def main():
     max_pre = max(base[n]["w_net"] * surprise_pre[n] for n in teams) or 1.0
     max_pre_b = max(band[n]["w_net"] * surprise_pre[n] for n in teams) or 1.0
 
+    # Display on a compressed scale (keeps order and the leader at 100).
+    p = config.SCORE_CONCAVITY
+
+    def scaled(num, den):
+        return round(100 * (num / den) ** p, 1) if den else 0.0
+
     out_teams = []
     for n, t in teams.items():
         b = base[n]
@@ -195,12 +201,12 @@ def main():
             "surprise": round(surprise_live[n], 2),
             "surprise_pre": round(surprise_pre[n], 2),
             "w_net": b["w_net"],
-            "rooting_index": round(100 * b["w_net"] / max_wnet, 1),
-            "rooting_index_eta15": round(100 * band[n]["w_net"] / max_wnet_band, 1),
-            "surprise_index": round(100 * b["w_net"] * surprise_live[n] / max_live, 1),
-            "surprise_index_eta15": round(100 * band[n]["w_net"] * surprise_live[n] / max_live_b, 1),
-            "surprise_index_pre": round(100 * b["w_net"] * surprise_pre[n] / max_pre, 1),
-            "surprise_index_pre_eta15": round(100 * band[n]["w_net"] * surprise_pre[n] / max_pre_b, 1),
+            "rooting_index": scaled(b["w_net"], max_wnet),
+            "rooting_index_eta15": scaled(band[n]["w_net"], max_wnet_band),
+            "surprise_index": scaled(b["w_net"] * surprise_live[n], max_live),
+            "surprise_index_eta15": scaled(band[n]["w_net"] * surprise_live[n], max_live_b),
+            "surprise_index_pre": scaled(b["w_net"] * surprise_pre[n], max_pre),
+            "surprise_index_pre_eta15": scaled(band[n]["w_net"] * surprise_pre[n], max_pre_b),
         })
 
     out_teams.sort(key=lambda x: x["surprise_index"], reverse=True)
@@ -225,7 +231,8 @@ def main():
                 "stage_weight_exp": config.STAGE_WEIGHT_EXP,
                 "mc_iterations": config.MC_ITERATIONS,
                 "diaspora_weight": config.DIASPORA_WEIGHT,
-                "continental_weight": config.CONTINENTAL_WEIGHT,
+                "continental_weights": config.CONTINENTAL_WEIGHTS,
+                "score_concavity": config.SCORE_CONCAVITY,
                 "darkside_fraction": config.DARKSIDE_FRACTION,
             },
         },

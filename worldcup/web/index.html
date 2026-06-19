@@ -47,21 +47,28 @@
         </div>
       </div>
       <p class="view-note" id="view-note"></p>
+    </section>
+
+    <div class="topline">
+      <div id="headline" class="headline"></div>
+      <figure class="hero-photo">
+        <img src="img/drc-fan.jpg" alt="DR Congo's viral statue fan" onerror="this.closest('figure').classList.add('noimg')" />
+        <figcaption>DR Congo's viral fan</figcaption>
+      </figure>
+    </div>
+
+    <section class="chart-wrap">
+      <p class="chart-legend">Bar height is the score, tallest first (leader fixed at
+        100). Under each bar: country, <span class="lg-prior">Best Prior</span> result
+        and its <span class="lg-exp">2026 Expectation</span>. Hover any bar for the
+        full detail.</p>
+      <div id="chart"></div>
+      <div id="tooltip" class="tooltip hidden"></div>
       <div class="compare-bar">
+        <span class="compare-hint">Tick the boxes under the bars, then</span>
         <button id="compare-btn" class="compare-btn">Show Table Comparing Selected Countries</button>
         <span id="compare-count" class="compare-count"></span>
       </div>
-    </section>
-
-    <div id="headline" class="headline"></div>
-
-    <section class="chart-wrap">
-      <p class="chart-legend">Bar height is the score, tallest first. Under each bar:
-        country, <span class="lg-prior">Best Prior</span> and
-        <span class="lg-exp">Expected to Reach</span>. Hover a bar for the full
-        detail; tick its box to add it to the comparison table. Scroll sideways for
-        the rest of the field.</p>
-      <div id="chart" class="chart-scroll"></div>
     </section>
 
     <section id="compare-table" class="compare-table hidden"></section>
@@ -214,8 +221,6 @@
 
     <footer id="meta" class="meta"></footer>
   </main>
-
-  <div id="tooltip" class="tooltip hidden"></div>
 
   <script src="app.js"></script>
 </body>

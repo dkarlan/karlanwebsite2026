@@ -73,9 +73,35 @@ PEDIGREE_CAP = 54.0        # points mapping to history = 1 (Brazil-level pedigre
 # ---------------------------------------------------------------------------
 # Engaged home fans = population * interest. Diaspora fans count at DIASPORA_WEIGHT
 # of the home interest share. Continental solidarity: co-confederation neighbours
-# feel CONTINENTAL_WEIGHT of their own engaged-fan mass.
+# feel a share of their own engaged-fan mass when a regional side wins. The share
+# is set per confederation: Africa and Asia carry the most, on the premise that
+# neither continent has ever won a World Cup, so continental pride is more at
+# stake. Europe and South America, with many past winners and fierce intra-rivalry,
+# carry the least.
 DIASPORA_WEIGHT = 1.0
-CONTINENTAL_WEIGHT = 0.05
+CONTINENTAL_WEIGHTS = {
+    "CAF": 0.20,        # Africa: never won, strong shared pride
+    "AFC": 0.20,        # Asia: never won, strong shared pride
+    "CONCACAF": 0.06,   # never won, but a smaller, looser bloc
+    "OFC": 0.05,
+    "CONMEBOL": 0.02,   # five-time winners present, intra-rivalry, little shared joy
+    "UEFA": 0.02,       # many past winners, intra-rivalry, little shared joy
+}
+
+# ---------------------------------------------------------------------------
+# Display scale (gap compression)
+# ---------------------------------------------------------------------------
+# Raw welfare is dominated by the largest, poorest country (DR Congo), which leaves
+# every other team looking identical near zero. The numbers are also noisy estimates
+# of a contestable quantity, so the size of that lead is not to be taken literally.
+# We therefore display each view on a compressed scale, keeping the order and the
+# leader at 100 but lifting and spreading the rest so the comparisons are legible:
+#
+#     index_i = 100 * (W_i / W_max) ** SCORE_CONCAVITY
+#
+# Lower it toward 0 to compress harder (a closer-looking race); raise it toward 1
+# to show the raw gaps. At 0.25 the second-placed team lands near 70.
+SCORE_CONCAVITY = 0.25
 
 # ---------------------------------------------------------------------------
 # Dark-side externality (NOT currently incorporated)

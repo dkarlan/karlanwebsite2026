@@ -344,3 +344,66 @@ main { padding: 28px 0 60px; }
 @media (max-width: 620px) {
   .col { flex-basis: 64px; width: 64px; }
 }
+
+/* ============ v2: flipped chart, pinned card, photo ============ */
+html { overflow-x: clip; }
+
+.topline { display: flex; gap: 14px; align-items: stretch; }
+.topline #headline { flex: 1; }
+.hero-photo { flex: 0 0 134px; width: 134px; margin: 0; text-align: center; }
+.hero-photo img { width: 100%; height: 92px; object-fit: cover; border-radius: 8px; display: block; }
+.hero-photo figcaption { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+.hero-photo.noimg img { display: none; }
+.hero-photo.noimg::before {
+  content: "Add DR Congo fan photo: web/img/drc-fan.jpg";
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  height: 92px; border: 1px dashed #c7ccd2; border-radius: 8px; color: var(--muted);
+  font-size: 0.66rem; padding: 6px;
+}
+
+/* Full-width chart band so 48 bars fit with no horizontal scroll */
+.chart-wrap { position: relative; width: 100vw; margin-left: calc(50% - 50vw); padding: 0 24px; margin-top: 14px; }
+.chart-legend { max-width: 860px; margin: 0 auto 8px; }
+
+#chart {
+  display: grid;
+  grid-template-rows: 150px 118px 16px 16px 24px;
+  column-gap: 1px;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  padding: 10px 10px 8px;
+}
+#chart .g-label {
+  align-self: center; text-align: right; padding-right: 8px;
+  font-size: 0.72rem; font-weight: 600; color: var(--muted); white-space: nowrap;
+}
+.barcell { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+.barcell .bval { font-size: 0.58rem; color: var(--muted); margin-bottom: 1px; }
+.barcell .bar { width: 72%; min-height: 2px; background: var(--bar); border-radius: 2px 2px 0 0; }
+.barcell.top .bar { background: var(--gold); }
+.barcell.out .bar { background: #d8a7a7; }
+.namecell { display: flex; justify-content: center; align-items: flex-start; overflow: hidden; padding-top: 4px; }
+.namecell span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 0.66rem; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.abbr { text-align: center; font-size: 0.66rem; line-height: 1.4; overflow: hidden; white-space: nowrap; }
+.abbr.prior { color: #6b7280; }
+.abbr.exp { color: var(--accent); font-weight: 700; }
+.checkcell { display: flex; justify-content: center; align-items: center; }
+.checkcell .col-check { cursor: pointer; }
+
+#tooltip {
+  position: absolute; z-index: 50; width: 226px;
+  background: #fff; border: 1px solid var(--line); border-radius: 8px;
+  padding: 8px 10px; box-shadow: 0 8px 26px rgba(0,0,0,0.18);
+  font-size: 0.72rem; pointer-events: none;
+}
+#tooltip.hidden { display: none; }
+#tooltip .tip-title { font-weight: 700; font-size: 0.92rem; }
+#tooltip .tip-sub { color: var(--muted); font-size: 0.7rem; margin-bottom: 5px; }
+#tooltip .kv { display: flex; justify-content: space-between; gap: 10px; padding: 1px 0; }
+#tooltip .kv .k { color: var(--muted); }
+#tooltip .kv .v { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.compare-bar { max-width: 860px; margin: 12px auto 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.compare-hint { color: var(--muted); font-size: 0.85rem; }

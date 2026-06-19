@@ -60,9 +60,16 @@ function expStage(d) {
 }
 function stageAbbr(full) {
   return {
-    "Won it": "Won", "Final": "Final", "Semifinals": "SF", "Quarterfinals": "QF",
+    "Won it": "Won", "Final": "Fin", "Semifinals": "SF", "Quarterfinals": "QF",
     "Round of 16": "R16", "Round of 32": "R32", "Group stage": "Grp", "First time": "1st",
   }[full] || full;
+}
+function shortName(n) {
+  return {
+    "Bosnia and Herzegovina": "Bosnia", "United States": "USA", "South Africa": "S. Africa",
+    "South Korea": "S. Korea", "Saudi Arabia": "Saudi", "New Zealand": "N. Zealand",
+    "Cote d'Ivoire": "Ivory Coast",
+  }[n] || n;
 }
 function statusText(t) {
   return t.eliminated ? "Out"
@@ -98,6 +105,21 @@ async function load() {
   byName = Object.fromEntries(DATA.teams.map((t) => [t.name, t]));
   bindToggle();
   document.getElementById("compare-btn").addEventListener("click", renderCompareTable);
+
+  const chart = document.getElementById("chart");
+  chart.addEventListener("mouseover", (e) => {
+    const el = e.target.closest("[data-name]");
+    if (el) showCard(byName[el.dataset.name], el);
+  });
+  chart.addEventListener("mouseleave", hideCard);
+  chart.addEventListener("change", (e) => {
+    if (!e.target.classList.contains("col-check")) return;
+    const n = e.target.dataset.name;
+    if (e.target.checked) selected.add(n); else selected.delete(n);
+    updateCompareCount();
+    if (!document.getElementById("compare-table").classList.contains("hidden")) renderCompareTable();
+  });
+
   refresh();
   setupDates();
   renderMeta();
@@ -153,33 +175,24 @@ function renderChart() {
   const teams = teamsByView();
   const max = Math.max(...teams.map((t) => t[key])) || 1;
   const chart = document.getElementById("chart");
-  chart.innerHTML = '<div class="chart">' + teams.map((t, i) => {
-    const h = Math.max(2, (t[key] / max) * 100);
-    const cls = "col" + (i === 0 ? " top" : "") + (t.eliminated ? " out" : "");
-    const checked = selected.has(t.name) ? "checked" : "";
-    return `<div class="${cls}" data-name="${t.name}">
-        <div class="col-val">${t[key].toFixed(1)}</div>
-        <div class="barbox"><div class="bar" style="height:${h}%"></div></div>
-        <div class="col-name">${t.name}</div>
-        <div class="col-prior">${stageAbbr(bestPrior(t.best_finish))}</div>
-        <div class="col-exp">${stageAbbr(expStage(t.expected_depth))}</div>
-        <input type="checkbox" class="col-check" ${checked} data-name="${t.name}" aria-label="compare ${t.name}">
-      </div>`;
-  }).join("") + "</div>";
+  chart.style.gridTemplateColumns = `96px repeat(${teams.length}, minmax(0, 1fr))`;
 
-  chart.querySelectorAll(".col").forEach((col) => {
-    const t = byName[col.dataset.name];
-    col.addEventListener("mouseenter", () => showTooltip(t, col));
-    col.addEventListener("mouseleave", hideTooltip);
-  });
-  chart.querySelectorAll(".col-check").forEach((cb) => {
-    cb.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (cb.checked) selected.add(cb.dataset.name); else selected.delete(cb.dataset.name);
-      updateCompareCount();
-      if (!document.getElementById("compare-table").classList.contains("hidden")) renderCompareTable();
-    });
-  });
+  const bars = teams.map((t, i) => {
+    const h = Math.max(2, (t[key] / max) * 100);
+    const cls = "barcell" + (i === 0 ? " top" : "") + (t.eliminated ? " out" : "");
+    return `<div class="${cls}" data-name="${t.name}"><div class="bval">${t[key].toFixed(0)}</div><div class="bar" style="height:${h}%"></div></div>`;
+  }).join("");
+  const names = teams.map((t) => `<div class="namecell" data-name="${t.name}"><span>${shortName(t.name)}</span></div>`).join("");
+  const priors = teams.map((t) => `<div class="abbr prior" data-name="${t.name}">${stageAbbr(bestPrior(t.best_finish))}</div>`).join("");
+  const exps = teams.map((t) => `<div class="abbr exp" data-name="${t.name}">${stageAbbr(expStage(t.expected_depth))}</div>`).join("");
+  const checks = teams.map((t) => `<div class="checkcell"><input type="checkbox" class="col-check" ${selected.has(t.name) ? "checked" : ""} data-name="${t.name}" aria-label="compare ${t.name}"></div>`).join("");
+
+  chart.innerHTML =
+    `<div class="g-blank"></div>${bars}` +
+    `<div class="g-blank"></div>${names}` +
+    `<div class="g-label">Best Prior</div>${priors}` +
+    `<div class="g-label">2026 Expectation</div>${exps}` +
+    `<div class="g-blank"></div>${checks}`;
   updateCompareCount();
 }
 
@@ -188,22 +201,25 @@ function updateCompareCount() {
     selected.size ? `${selected.size} selected` : "none selected";
 }
 
-function showTooltip(t, col) {
+function showCard(t, el) {
   const tip = document.getElementById("tooltip");
   tip.innerHTML =
     `<div class="tip-title">${t.name}</div>` +
     `<div class="tip-sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</div>` +
     detailRows(t).map(([k, v]) => `<div class="kv"><span class="k">${k}</span><span class="v">${v}</span></div>`).join("");
   tip.classList.remove("hidden");
-  const r = col.getBoundingClientRect();
-  const tw = 250, th = tip.offsetHeight;
-  let left = Math.max(8, Math.min(r.left + r.width / 2 - tw / 2, window.innerWidth - tw - 8));
-  let top = r.top - th - 8;
-  if (top < 8) top = Math.min(r.bottom + 8, window.innerHeight - th - 8);
+  // Anchor to the top of the bars, near the hovered one, so it never covers the
+  // checkbox row at the bottom.
+  const wrap = document.querySelector(".chart-wrap").getBoundingClientRect();
+  const chartBox = document.getElementById("chart").getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  const w = 226;
+  let left = r.left - wrap.left + r.width / 2 - w / 2;
+  left = Math.max(6, Math.min(left, wrap.width - w - 6));
   tip.style.left = left + "px";
-  tip.style.top = top + "px";
+  tip.style.top = (chartBox.top - wrap.top + 6) + "px";
 }
-function hideTooltip() { document.getElementById("tooltip").classList.add("hidden"); }
+function hideCard() { document.getElementById("tooltip").classList.add("hidden"); }
 
 function renderCompareTable() {
   const el = document.getElementById("compare-table");
