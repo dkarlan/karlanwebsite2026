@@ -1,0 +1,75 @@
+name: World Cup Happiness Index - live update
+
+# Refreshes the live "beating expectations" ranking during the 2026 World Cup.
+# Runs every 10 minutes, but only in June and July and only across the hours when
+# matches are played (roughly 15:00 to 06:00 UTC, covering North American
+# kickoffs). It is otherwise a cheap no-op: a date guard skips it outside the
+# tournament window, and it commits only when results.json actually changes, so
+# off-days and dead time produce no commits.
+#
+# Requires a repository secret FOOTBALL_DATA_TOKEN (free football-data.org key).
+# Without it the fetch is a no-op and nothing is committed.
+#
+# Note: scheduled workflows only run from the repository's default branch, so this
+# file and the worldcup/ app must be on the branch that deankarlan.com deploys.
+
+on:
+  schedule:
+    - cron: "*/10 0-6,15-23 * 6,7 *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: worldcup-live
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tournament window guard
+        id: guard
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import datetime as dt
+          today = dt.date.today()
+          start, end = dt.date(2026, 6, 11), dt.date(2026, 7, 19)
+          print("run=" + ("true" if start <= today <= end else "false"))
+          PY
+
+      - uses: actions/setup-python@v5
+        if: steps.guard.outputs.run == 'true'
+        with:
+          python-version: "3.11"
+
+      - name: Fetch live results
+        if: steps.guard.outputs.run == 'true'
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+        working-directory: worldcup/pipeline
+        run: python fetch_results.py
+
+      - name: Recompute rankings if results changed
+        if: steps.guard.outputs.run == 'true'
+        id: recompute
+        run: |
+          if git diff --quiet -- worldcup/data/results.json; then
+            echo "No result changes; nothing to do."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            python worldcup/pipeline/model.py
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push
+        if: steps.recompute.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add worldcup/data/results.json worldcup/web/rankings.json
+          git commit -m "World Cup live update: refresh standings from latest results"
+          git push
