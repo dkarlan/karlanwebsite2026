@@ -348,20 +348,6 @@ main { padding: 28px 0 60px; }
 /* ============ v2: flipped chart, pinned card, photo ============ */
 html { overflow-x: clip; }
 
-.topline { display: flex; gap: 14px; align-items: stretch; }
-.topline #headline { flex: 1; }
-.hero-photo { flex: 0 0 134px; width: 134px; margin: 0; text-align: center; }
-.hero-photo img { width: 100%; height: 120px; object-fit: cover; object-position: center 22%; border-radius: 8px; display: block; }
-.hero-photo figcaption { font-size: 0.66rem; color: var(--muted); margin-top: 4px; line-height: 1.3; }
-.hero-photo figcaption a { color: var(--muted); }
-.hero-photo.noimg img { display: none; }
-.hero-photo.noimg::before {
-  content: "Licensed DR Congo fan photo goes here: web/img/drc-fan.jpg";
-  display: flex; align-items: center; justify-content: center; text-align: center;
-  height: 92px; border: 1px dashed #c7ccd2; border-radius: 8px; color: var(--muted);
-  font-size: 0.66rem; padding: 6px;
-}
-
 /* Full-width chart band so 48 bars fit with no horizontal scroll */
 .chart-wrap { position: relative; width: 100vw; margin-left: calc(50% - 50vw); padding: 0 24px; margin-top: 14px; }
 .chart-legend { max-width: 860px; margin: 0 auto 8px; }
@@ -422,3 +408,29 @@ html { overflow-x: clip; }
   border-radius: 8px;
 }
 #ct-close:hover { background: #0c6457; }
+
+/* Compact future-matches list */
+#matches { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin-top: 8px; background: var(--card); }
+.match {
+  display: grid; grid-template-columns: 70px 52px 1fr; align-items: center; gap: 10px;
+  padding: 7px 12px; font-size: 0.86rem;
+  background: transparent; border: none; border-bottom: 1px solid var(--line);
+  border-radius: 0; margin: 0;
+}
+.match:last-child { border-bottom: none; }
+.match:nth-child(even) { background: #fafbfc; }
+.m-date { color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
+.m-grp { color: var(--muted); font-size: 0.78rem; }
+.m-pair { display: grid; grid-template-columns: 1fr 18px 1fr; align-items: center; gap: 6px; }
+.m-team { color: var(--ink); }
+.m-team.right { text-align: right; }
+.m-team i { font-style: normal; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.78rem; }
+.m-team.pick { font-weight: 700; color: var(--accent); }
+.m-team.pick i { color: var(--accent); }
+.m-v { text-align: center; color: var(--muted); font-size: 0.74rem; }
+
+@media (max-width: 620px) {
+  .match { grid-template-columns: 58px 1fr; row-gap: 2px; }
+  .match .m-grp { display: none; }
+  .m-pair { grid-column: 1 / -1; }
+}

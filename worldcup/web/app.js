@@ -129,7 +129,6 @@ async function load() {
   });
 
   refresh();
-  setupDates();
   renderMeta();
 }
 
@@ -142,7 +141,7 @@ function refresh() {
   document.getElementById("time-toggle").classList.toggle("muted", view === "rooting");
   renderHeadline();
   renderChart();
-  renderMatches(document.getElementById("match-date").value);
+  renderMatches();
   if (!document.getElementById("compare-table").classList.contains("hidden")) renderCompareTable();
 }
 
@@ -251,48 +250,39 @@ function renderCompareTable() {
   el.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-function setupDates() {
-  const input = document.getElementById("match-date");
-  const dates = [...new Set(DATA.fixtures.map((f) => f.date))].sort();
-  const today = "2026-06-19";
-  input.min = dates[0];
-  input.max = dates[dates.length - 1];
-  input.value = dates.includes(today) ? today : dates[0];
-  input.addEventListener("change", () => renderMatches(input.value));
-  renderMatches(input.value);
+const TODAY = "2026-06-19";
+function fmtDate(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  const wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][dt.getUTCDay()];
+  const mon = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][m - 1];
+  return `${wd} ${d} ${mon}`;
 }
 
-function matchScore(t, opp) {
-  const base = t.rooting_index;
-  return view === "rooting" ? base : base * (1 - pWin(t, opp));
-}
-
-function renderMatches(dateStr) {
+function renderMatches() {
   const host = document.getElementById("matches");
-  const todays = DATA.fixtures.filter((f) => f.date === dateStr);
+  const upcoming = DATA.fixtures
+    .filter((f) => f.date >= TODAY)
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.group < b.group ? -1 : 1));
   host.innerHTML = "";
-  if (!todays.length) {
-    host.innerHTML = '<p class="empty">No group-stage matches on this date.</p>';
+  if (!upcoming.length) {
+    host.innerHTML = '<p class="empty">No upcoming fixtures with both teams set.</p>';
     return;
   }
   const key = activeKey();
-  todays.forEach((f) => {
+  upcoming.forEach((f) => {
     const h = byName[f.home], a = byName[f.away];
-    const homePick = matchScore(h, a) >= matchScore(a, h);
-    const pick = homePick ? h : a;
-    const upset = view !== "rooting" && (homePick ? pWin(h, a) < 0.5 : pWin(a, h) < 0.5);
+    const homePick = h[key] >= a[key];   // root for the higher score from the table
     const el = document.createElement("div");
     el.className = "match";
-    el.innerHTML = `
-      <div class="match-top"><span>Group ${f.group}</span><span>Matchday ${f.matchday}</span></div>
-      <div class="match-teams">
-        <div class="side ${homePick ? "pick" : ""}"><div class="tn">${h.name}</div><div class="ti">index ${h[key].toFixed(0)}</div></div>
-        <div class="vs">v</div>
-        <div class="side right ${homePick ? "" : "pick"}"><div class="tn">${a.name}</div><div class="ti">index ${a[key].toFixed(0)}</div></div>
-      </div>
-      <div class="pick-line">Root for <b>${pick.name}</b>${
-        upset ? ", the underdog: an against-the-odds win here would be the bigger surprise." : " for the most happiness on offer."
-      }</div>`;
+    el.innerHTML =
+      `<span class="m-date">${fmtDate(f.date)}</span>` +
+      `<span class="m-grp">Grp ${f.group}</span>` +
+      `<span class="m-pair">` +
+        `<span class="m-team ${homePick ? "pick" : ""}">${h.name} <i>${h[key].toFixed(0)}</i></span>` +
+        `<span class="m-v">v</span>` +
+        `<span class="m-team right ${homePick ? "" : "pick"}">${a.name} <i>${a[key].toFixed(0)}</i></span>` +
+      `</span>`;
     host.appendChild(el);
   });
 }
