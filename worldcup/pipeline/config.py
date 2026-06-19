@@ -33,19 +33,26 @@ ETA_SENSITIVITY = 1.5
 C_REF = 10000.0
 
 # ---------------------------------------------------------------------------
-# Per-fan value of a title (novelty-scaled)
+# Per-fan value of a title (present value of a lingering memory)
 # ---------------------------------------------------------------------------
-# The happiness a title brings one engaged fan, in Cantril-ladder points: a base
-# value scaled up by novelty, so a long-awaited or first-ever win is worth more.
-# Happiness tracks prediction error, so an unexpected, unaccustomed win lands
-# harder (Rutledge et al. 2014 PNAS; Mellers et al. 1997; Koszegi & Rabin 2006).
+# A title is not a one-off jolt; it is a glow that lingers and slowly fades. We
+# value it as the present value of that fading stream of happiness, discounting
+# future happiness at rate r_i:
 #
-#     value_i = H0 * (1 + NOVELTY_ALPHA * novelty_i),   novelty_i = 1 - history_i
+#     V_i = integral_0^inf  H0 * e^(-r_i t) dt  =  H0 / r_i
 #
-# H0 only sets the units (it scales every team equally), so NOVELTY_ALPHA is the
-# real lever: at 0.8 a pure first-timer's title is worth 1.8x a serial winner's.
+# The essence sits in the discount rate. For a country unused to winning, the
+# memory lingers far longer, so we discount it less and the title is worth more
+# today. Pedigree sets the rate:
+#
+#     r_i = R_LO + (R_HI - R_LO) * history_i,    history_i in [0,1]
+#
+# Low pedigree  -> low rate  -> long memory (half-life ln2/R_LO ~ 14 years).
+# Serial winner -> high rate -> short memory (half-life ln2/R_HI ~ 1.4 years).
+# H0 only sets the units, so the half-life band (R_LO, R_HI) is the real lever.
 H0 = 0.10
-NOVELTY_ALPHA = 0.8
+R_LO = 0.05
+R_HI = 0.50
 
 # ---------------------------------------------------------------------------
 # Pedigree score (history_i): history of success in international play

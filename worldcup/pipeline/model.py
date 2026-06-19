@@ -12,15 +12,17 @@ Per country i:
        diaspora fans, plus a continental-solidarity share of neighbours.
   MU_i marginal-utility weight, MU_i = (C_REF/c_i)^eta, with c_i consumption per
        head. A windfall counts for more where people have less.
-  V_i  per-fan value of the title, a base shock scaled up by novelty:
-       V_i = H0 * (1 + NOVELTY_ALPHA * novelty_i), novelty_i = 1 - history_i. A
-       long-awaited or first-ever win is worth more. See config.py for citations.
+  V_i  per-fan value of the title: the present value of a fading glow,
+       V_i = H0 / r_i, with r_i the discount rate set by pedigree. The memory
+       lingers longer for a country unused to winning, so its title is discounted
+       less and worth more today. See config.py for the citations.
 
 W_net_i nets out a documented dark-side externality. Outputs web/rankings.json
 and prints the ranking. Run after the fetch/build steps (or via run_all.py).
 """
 import csv
 import json
+import math
 import os
 from datetime import datetime, timezone
 
@@ -45,9 +47,13 @@ def mu_weight(consumption, eta):
 
 
 def title_value(history):
-    """Per-fan happiness value of a title, scaled up by novelty."""
-    novelty = 1.0 - history
-    return config.H0 * (1.0 + config.NOVELTY_ALPHA * novelty)
+    """Per-fan present value of a title and its discount rate.
+
+    The title is a glow that fades at rate r; its present value is H0 / r. A
+    low-pedigree team's memory lingers (low r), so its title is worth more.
+    """
+    r = config.R_LO + (config.R_HI - config.R_LO) * history
+    return config.H0 / r, r
 
 
 def fan_population(teams):
@@ -78,12 +84,12 @@ def compute(teams, eta):
         n = t["name"]
         history = float(t["history"]) if t["history"] else 0.0
         mu = mu_weight(t["consumption"], eta)
-        tv = title_value(history)
+        tv, r = title_value(history)
         N = fans[n]["N"]
         w_gross = N * mu * tv
         w_net = w_gross * (1.0 - config.DARKSIDE_FRACTION)
         rows[n] = {
-            "N": N, "mu": mu, "title_value": tv,
+            "N": N, "mu": mu, "title_value": tv, "decay": r,
             "w_gross": w_gross, "w_net": w_net, **fans[n],
         }
     return rows
@@ -114,12 +120,13 @@ def main():
             "last_major_year": t["last_major_year"] or None,
             "history": round(history, 3),
             "novelty": round(1.0 - history, 3),
+            "memory_half_life": round(math.log(2) / b["decay"], 1),
             "fan_population": round(b["N"]),
             "home_fans": round(b["home_fans"]),
             "diaspora_fans": round(b["diaspora_fans"]),
             "solidarity_fans": round(b["solidarity_fans"]),
             "mu_weight": round(b["mu"], 3),
-            "title_value": round(b["title_value"], 3),
+            "present_value": round(b["title_value"], 3),
             "w_net": b["w_net"],
             "rooting_index": round(100 * b["w_net"] / max_wnet, 1),
             "rooting_index_eta15": round(100 * band[n]["w_net"] / max_wnet_band, 1),
@@ -139,7 +146,8 @@ def main():
                 "eta": config.ETA,
                 "eta_sensitivity": config.ETA_SENSITIVITY,
                 "h0": config.H0,
-                "novelty_alpha": config.NOVELTY_ALPHA,
+                "r_lo": config.R_LO,
+                "r_hi": config.R_HI,
                 "diaspora_weight": config.DIASPORA_WEIGHT,
                 "continental_weight": config.CONTINENTAL_WEIGHT,
                 "darkside_fraction": config.DARKSIDE_FRACTION,
@@ -154,10 +162,10 @@ def main():
 
     print(f"\nWorld Cup Happiness Index 2026  (eta={config.ETA})")
     print("Who to root for - marginal happiness to the world if they win\n")
-    print(f"{'#':>2}  {'Team':22} {'Index':>6} {'Novelty':>7} {'Fans(M)':>8} {'GNIpc':>7}")
+    print(f"{'#':>2}  {'Team':22} {'Index':>6} {'Half-life':>9} {'Fans(M)':>8} {'GNIpc':>7}")
     for i, x in enumerate(out_teams[:15], 1):
         print(f"{i:>2}  {x['name']:22} {x['rooting_index']:>6} "
-              f"{x['novelty']:>7} {x['fan_population']/1e6:>8.0f} {x['consumption']:>7}")
+              f"{x['memory_half_life']:>7}y {x['fan_population']/1e6:>8.0f} {x['consumption']:>7}")
     print(f"\nWrote {os.path.join(WEB, 'rankings.json')}")
 
 

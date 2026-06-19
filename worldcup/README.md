@@ -19,11 +19,11 @@ win that would matter most.
 
 With the default parameters the pick is **DR Congo**: about 109 million people,
 deep football interest, very low consumption, and no World Cup pedigree to take
-for granted, so a title would land where the marginal value of joy is highest.
-The 2014 answer moved from Nigeria to its larger, poorer neighbour. Serial
-winners like Brazil sit lower: a title there is worth less per fan, since the
-country is rich and used to winning, though Brazil's sheer reach keeps it in the
-mix.
+for granted, so a title would land where the marginal value of joy is highest and
+the memory would linger for years. The 2014 answer moved from Nigeria to its
+larger, poorer neighbour. Serial winners like Brazil and Germany fall far down the
+list: rich, and so used to winning that the glow of another title fades in a
+season.
 
 ## The model
 
@@ -38,32 +38,42 @@ For each country *i*:
   with `c_i` consumption per head. Default `eta = 1`, sensitivity to 1.5. A
   windfall counts for more where people have less. This is the contestable
   assumption and it is stated openly in `config.py`.
-- **V_i** per-fan value of the title: a base shock scaled up by novelty,
+- **V_i** per-fan value of the title: a title is a glow that lingers and slowly
+  fades, so we take its present value, discounting future happiness at rate `r_i`,
 
-      V_i = H0 * (1 + NOVELTY_ALPHA * novelty_i),   novelty_i = 1 - history_i
+      V_i = integral_0^inf H0 e^(-r_i t) dt = H0 / r_i,   r_i = R_LO + (R_HI - R_LO) history_i
 
-  `H0` only sets the units, so `NOVELTY_ALPHA` is the lever. At 0.8 a pure
-  first-timer's title is worth 1.8x a serial winner's.
+  `H0` only sets the units, so the discount rate is the lever.
 
 `W_net_i` nets out a documented dark-side externality.
 
-### Why novelty
+### Why the memory lingers
 
-Happiness tracks prediction error, so a long-awaited or first-ever win lands
-harder than a serial winner's next one (Rutledge, Skandali, Dayan & Dolan 2014,
-PNAS; Mellers et al. 1997; Koszegi & Rabin 2006). The win is also short-lived in
-daily mood either way (Stieger et al. 2015), so the model values the title as a
-single novelty-scaled shock rather than tracking how long it lasts.
+A championship is not a one-off jolt; it is a glow that fades over time. The
+essence sits in how fast it fades. For a country unused to winning, the memory
+lingers far longer, so we discount it less and the title is worth more in present
+value. A serial winner adapts quickly, the joy fades in a season, and another
+title adds little.
+
+This rests on three findings: happiness tracks prediction error, so an
+unaccustomed win lands harder (Rutledge, Skandali, Dayan & Dolan 2014, PNAS;
+Mellers et al. 1997; Koszegi & Rabin 2006); joy fades through hedonic adaptation,
+and repeated rewards adapt faster (Frederick & Loewenstein 1999); and a
+surprising, consequential win is encoded durably (flashbulb memory, Brown & Kulik
+1977). The daily-mood spike is brief either way (Stieger et al. 2015), so the
+lasting value is the low-level remembered and identity glow, which is what the
+discount rate captures.
 
 `history_i` in [0,1] is the pedigree score (`data/pedigree.json`,
 `build_pedigree.py`): World Cup titles, final appearances, continental titles and
-a World Cup semifinal flag, summed and capped. A multiple-time winner sits near
-1, a debutant at 0. `novelty_i = 1 - history_i`.
+a World Cup semifinal flag, summed and capped. A multiple-time winner sits near 1
+(short memory), a debutant at 0 (long memory).
 
 Four upgrades over 2014: (1) fan population reaches beyond home borders, (2) the
 happiness bump is modelled, not assumed, (3) the figure is net of a documented
-externality, (4) it rewards novelty, so a first-ever or long-awaited win counts
-for more than a serial winner's.
+externality, (4) it values the lingering memory of a win, so a first-ever or
+long-awaited title, remembered for years, counts for far more than a serial
+winner's, which fades in a season.
 
 ## Layout
 
@@ -121,8 +131,9 @@ Everything lives in `config.py`, each value commented with its reasoning. The
 biggest levers:
 
 - `ETA` (1 to 1.5): how hard the index favours low-income countries.
-- `NOVELTY_ALPHA`: how much a novel win is worth over a routine one (0 turns
-  novelty off entirely; 0.8 makes a pure first-timer's title worth 1.8x).
+- `R_LO` / `R_HI`: the discount rates at the no-pedigree and serial-winner ends,
+  i.e. the memory half-lives (default about 14 years versus 1.4 years). The
+  closer they are, the less pedigree matters.
 - `PEDIGREE_WEIGHTS` / `PEDIGREE_CAP`: what counts as a "history of success".
 - `DIASPORA_WEIGHT`, `CONTINENTAL_WEIGHT`: how far fandom reaches beyond home.
 
@@ -152,16 +163,20 @@ Change a number, rerun `python model.py`, and the ranking and the tool update.
   theory (surprise amplifies emotional reactions).
 - Koszegi & Rabin (2006, QJE), a model of reference-dependent preferences
   (expectations as the reference point).
+- Frederick & Loewenstein (1999), hedonic adaptation (joy fades, and repeated
+  rewards adapt faster: the discount rate rises with pedigree).
+- Brown & Kulik (1977, Cognition), flashbulb memories (surprising, consequential
+  wins are encoded durably: the glow lingers).
 - Stieger, Goetz & Gehrig (2015, Frontiers in Psychology), soccer results affect
-  well-being only briefly (the daily-mood spike is short, which is why the title
-  is valued as a single novelty-scaled shock).
+  well-being only briefly (the daily-mood spike is short, so the lasting value is
+  the remembered glow that the discount rate captures).
 - Kavetsos & Szymanski (2010), Card & Dahl (2011), Edmans, Garcia & Norli (2007),
   Depetris-Chauvin, Durante & Campante (2020): sporting events and wellbeing, the
   dark-side externality, sentiment magnitude, and the development dividend.
 
 ## Caveats
 
-- `eta` and the novelty premium are value-laden modelling choices, not measured
+- `eta` and the memory half-lives are value-laden modelling choices, not measured
   constants. The mechanisms are well-established; the magnitudes are seeded from
   the literature and exposed for tuning. The tool shows the eta band.
 - Diaspora, solidarity and interest figures are documented estimates; they are the

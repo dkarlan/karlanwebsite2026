@@ -8,9 +8,9 @@ const VIEWS = {
   rooting: {
     key: "rooting_index",
     label: "Marginal happiness",
-    note: "Happiness added to the world by a title: fans reached, times the per-fan " +
-      "lifetime value, weighted up where people have less and where a win would be " +
-      "novel rather than routine.",
+    note: "Happiness added to the world by a title: fans reached, weighted up where " +
+      "people have less, and valued by the present value of the glow, which lingers " +
+      "for years where a win is rare and fades in a season where it is routine.",
   },
   eta15: {
     key: "rooting_index_eta15",
@@ -53,7 +53,8 @@ function renderHeadline() {
     : "a huge following weighted up by low incomes";
   document.getElementById("headline").innerHTML =
     `This year, root for <b>${top.name}</b>: ${why}. A win there would add more ` +
-    `happiness to the world than a win anywhere else.`;
+    `happiness to the world than a win anywhere else, and the glow would linger ` +
+    `for years rather than fade in a season.`;
 }
 
 function bindToggle() {
@@ -89,7 +90,7 @@ function renderRanking() {
         <div class="bar" style="width:${pct}%"></div>
         <span class="bar-val">${t[key].toFixed(1)}</span>
       </div>
-      <div class="p">${t.novelty.toFixed(2)}<br><small>novelty</small></div>`;
+      <div class="p">${t.memory_half_life}y<br><small>memory</small></div>`;
     el.addEventListener("click", () => openDrawer(t));
     host.appendChild(el);
   });
@@ -155,11 +156,11 @@ function openDrawer(t) {
     <p class="sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</p>
     ${kv("Marginal-happiness index", t.rooting_index.toFixed(1))}
     ${kv("Tilt-to-poor index (eta 1.5)", t.rooting_index_eta15.toFixed(1))}
-    <div class="kv-group">Novelty</div>
+    <div class="kv-group">Memory of a win</div>
     ${kv("World Cup titles", t.wc_titles)}
     ${kv("Last major trophy", lastTitle)}
-    ${kv("Novelty (0 to 1)", t.novelty.toFixed(2))}
-    ${kv("Novelty multiplier", (t.title_value / DATA.meta.params.h0).toFixed(2) + "x")}
+    ${kv("Memory half-life", t.memory_half_life + " years")}
+    ${kv("Present value of a title", t.present_value.toFixed(2) + " per fan")}
     <div class="kv-group">Reach and need</div>
     ${kv("Fans reached", fmtM(t.fan_population))}
     ${kv("&nbsp;&nbsp;home", fmtM(t.home_fans))}
@@ -168,10 +169,11 @@ function openDrawer(t) {
     ${kv("Consumption (GNI pc, PPP)", "$" + fmtInt(t.consumption))}
     ${kv("Marginal-utility weight", t.mu_weight.toFixed(2) + "x")}
     ${kv("Elo rating (reference only)", t.elo)}
-    <p class="note">Index = fans reached x marginal-utility weight x the value of
-      a title. Lower consumption raises the utility weight. A team with little
-      history of winning gets a bigger bump, so its joy is worth more. Win
-      probability is not part of the score.</p>`;
+    <p class="note">Index = fans reached x marginal-utility weight x the present
+      value of a title. Lower consumption raises the utility weight. A title is a
+      glow that fades; for a country unused to winning it fades slowly, so its
+      memory lingers and its present value is higher. Win probability is not part
+      of the score.</p>`;
   document.getElementById("drawer").classList.remove("hidden");
 }
 
@@ -180,7 +182,8 @@ function renderMeta() {
   document.getElementById("meta").innerHTML =
     `Updated ${DATA.meta.generated.slice(0, 10)} &middot; ` +
     `basis: ${DATA.meta.basis} &middot; ` +
-    `<code>eta=${p.eta}</code> <code>novelty alpha=${p.novelty_alpha}</code> ` +
+    `<code>eta=${p.eta}</code> ` +
+    `<code>memory half-life ${(Math.log(2) / p.r_lo).toFixed(0)}y to ${(Math.log(2) / p.r_hi).toFixed(1)}y</code> ` +
     `<code>diaspora=${p.diaspora_weight}</code> <code>solidarity=${p.continental_weight}</code>. ` +
     `Methods in the repo README.`;
 }
