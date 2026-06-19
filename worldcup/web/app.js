@@ -111,10 +111,14 @@ async function load() {
   chart.addEventListener("click", (e) => {
     if (e.target.classList.contains("col-check")) return;   // checkbox: handled below
     const el = e.target.closest("[data-name]");
-    if (!el) return;
+    if (!el) { hideCard(); shownName = null; return; }       // empty chart space
     const n = el.dataset.name;
     if (shownName === n) { hideCard(); shownName = null; }
     else { showCard(byName[n], el); shownName = n; }
+  });
+  // Click anywhere else on the page closes the open detail card.
+  document.addEventListener("click", (e) => {
+    if (shownName !== null && !e.target.closest("#chart")) { hideCard(); shownName = null; }
   });
   chart.addEventListener("change", (e) => {
     if (!e.target.classList.contains("col-check")) return;
@@ -240,7 +244,7 @@ function renderCompareTable() {
     `<tr><th>${lab}</th>${bodies.map((b) => `<td>${b[ri]}</td>`).join("")}</tr>`).join("");
   el.innerHTML =
     `<div class="ct-head"><h3>Comparing ${cols.length} ${cols.length === 1 ? "country" : "countries"}</h3>` +
-    `<button id="ct-close" aria-label="close">&times;</button></div>` +
+    `<button id="ct-close" aria-label="close comparison">Close &times;</button></div>` +
     `<div class="ct-scroll"><table><thead><tr><th></th>${cols.map((t) => `<th>${t.name}</th>`).join("")}</tr></thead>` +
     `<tbody>${rows}</tbody></table></div>`;
   document.getElementById("ct-close").addEventListener("click", () => el.classList.add("hidden"));

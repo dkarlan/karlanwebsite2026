@@ -413,3 +413,11 @@ html { overflow-x: clip; }
 .barcell .bar { transition: width .12s ease, filter .12s ease, height .2s ease; }
 .barcell:hover .bar { width: 94%; filter: brightness(1.12); }
 .namecell:hover span, .abbr:hover { color: var(--accent); }
+
+/* Prominent close button on the comparison table */
+#ct-close {
+  background: var(--accent); color: #fff; border: none; cursor: pointer;
+  font-size: 0.9rem; font-weight: 700; line-height: 1; padding: 8px 14px;
+  border-radius: 8px;
+}
+#ct-close:hover { background: #0c6457; }
