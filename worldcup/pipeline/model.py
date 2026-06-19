@@ -82,9 +82,10 @@ def surprise_score(probs, reached_depth, eliminated):
 
 
 def mu_weight(consumption, eta):
-    # Consumption floor: the poorest are all treated as the floor, so the weighting
-    # flattens among them instead of rising without bound.
-    c = max(float(consumption), config.CONSUMPTION_FLOOR)
+    # Stone-Geary subsistence offset: add a fixed amount before weighting, so the
+    # poorest are compressed together (but never identical) and the poor-rich gap
+    # is preserved.
+    c = float(consumption) + config.CONSUMPTION_OFFSET
     return (config.C_REF / c) ** eta
 
 
