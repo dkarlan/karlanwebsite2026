@@ -351,8 +351,9 @@ html { overflow-x: clip; }
 .topline { display: flex; gap: 14px; align-items: stretch; }
 .topline #headline { flex: 1; }
 .hero-photo { flex: 0 0 134px; width: 134px; margin: 0; text-align: center; }
-.hero-photo img { width: 100%; height: 92px; object-fit: cover; border-radius: 8px; display: block; }
-.hero-photo figcaption { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+.hero-photo img { width: 100%; height: 120px; object-fit: cover; object-position: center 22%; border-radius: 8px; display: block; }
+.hero-photo figcaption { font-size: 0.66rem; color: var(--muted); margin-top: 4px; line-height: 1.3; }
+.hero-photo figcaption a { color: var(--muted); }
 .hero-photo.noimg img { display: none; }
 .hero-photo.noimg::before {
   content: "Licensed DR Congo fan photo goes here: web/img/drc-fan.jpg";
