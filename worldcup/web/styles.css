@@ -95,17 +95,59 @@ header {
 
 header h1 { font-size: 2.2rem; line-height: 1.1; margin: 8px 0 14px; }
 
-.lede { max-width: 620px; color: #d4dbe2; font-size: 1.02rem; }
-
-.headline {
-  margin-top: 22px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 12px;
-  padding: 16px 18px;
-  font-size: 1.05rem;
+.standfirst { max-width: 640px; color: #d4dbe2; font-size: 1.08rem; }
+.byline {
+  margin-top: 10px; color: #9fd3c8; font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
 }
-.headline b { color: #ffd97a; }
+
+/* Readable main text */
+.essay { max-width: 680px; margin: 32px auto 8px; }
+.essay p { margin-bottom: 16px; font-size: 1.06rem; line-height: 1.7; color: #283039; }
+.essay p:first-child::first-letter {
+  font-size: 3.1rem; line-height: 0.8; font-weight: 700;
+  float: left; margin: 4px 8px 0 0; color: var(--accent);
+}
+
+.toolintro { margin-top: 26px; }
+.toolintro h2 { font-size: 1.4rem; margin-bottom: 10px; }
+
+/* Live pick callout, now in the light body */
+#headline.headline {
+  background: var(--accent-soft);
+  border: 1px solid #bfe3db;
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 1.04rem;
+  color: var(--ink);
+}
+#headline.headline b { color: var(--accent); font-weight: 700; }
+
+/* Technical appendix (native expand/collapse) */
+.appendix {
+  margin-top: 40px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 4px 18px;
+}
+.appendix summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 14px 0;
+  color: var(--ink);
+  list-style: none;
+}
+.appendix summary::-webkit-details-marker { display: none; }
+.appendix summary::before { content: "+ "; color: var(--accent); font-weight: 700; }
+.appendix[open] summary::before { content: "- "; }
+.appendix-body { padding: 4px 0 16px; max-width: 680px; }
+.appendix-body h3 { font-size: 1rem; margin: 18px 0 6px; color: var(--accent); }
+.appendix-body p, .appendix-body li { font-size: 0.94rem; line-height: 1.6; color: #3a434e; }
+.appendix-body ul { margin: 6px 0 6px 18px; }
+.appendix-body li { margin-bottom: 6px; }
 
 main { padding: 28px 0 60px; }
 

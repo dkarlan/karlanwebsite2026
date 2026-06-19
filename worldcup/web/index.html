@@ -28,16 +28,8 @@
     <div class="wrap">
       <p class="kicker">World Cup 2026</p>
       <h1>Who should you root for?</h1>
-      <p class="lede">
-        A title lifts a country's mood. The lift is bigger where more people care,
-        where people have less, and where the joy lingers because a win would be a
-        first rather than a habit. By default this ranks all 48 teams by the joy of
-        beating expectations: a deep run counts for more the less it was expected,
-        and the more it was a long shot. Win probability sets the bar a team is
-        measured against. It never shrinks the score, so underdogs are rewarded,
-        not penalized.
-      </p>
-      <div id="headline" class="headline"></div>
+      <p class="standfirst">A data-driven answer for the 48-team World Cup, updated as the games are played.</p>
+      <p class="byline">By Dean Karlan</p>
       <div class="reading">
         <span class="reading-label">The story so far:</span>
         <a href="https://www.nytimes.com/2014/06/26/upshot/why-you-should-root-for-nigeria-or-brazil-mexico-or-ghana.html" target="_blank" rel="noopener">2014 The original (NYT Upshot)</a>
@@ -49,6 +41,66 @@
   </header>
 
   <main class="wrap">
+    <article class="essay">
+      <p>In 2014 I wrote a short piece for The New York Times with a simple premise.
+        A World Cup is watched by billions, and a title sets off real joy in the
+        winning country. If you have no dog in the fight, you get to choose your
+        dog. So pick the one whose win does the most good. Add up the happiness a
+        championship would create, and root for the country at the top. That year
+        the math pointed to Nigeria.</p>
+
+      <p>The 2026 tournament is bigger and, for this exercise, better. Forty-eight
+        teams instead of thirty-two, and a field that reaches deeper into the
+        places the model cares about most: lower-income countries, and first-timers
+        like Cape Verde, Curacao, Jordan and Uzbekistan. So the question is worth
+        asking again. Who does the math pick now, and how far did the answer move?</p>
+
+      <p>The logic is the same, with sharper tools. A title's value to the world
+        rises with three things. How many people care, which is population times
+        how much a country follows the game. How much a windfall is worth to them,
+        which is larger where incomes are lower, because the same joy means more to
+        someone who has less. And how long the joy lasts. A country that wins all
+        the time forgets quickly. A country that has never won remembers for a
+        generation. We put that last idea where it belongs, in the discount rate.
+        The memory of an unaccustomed win fades slowly, so its value today is
+        higher.</p>
+
+      <p>Three more refinements separate this from a guess on the back of an
+        envelope. Fans are not only the home population, so we add the diaspora and
+        a share of the neighbors who feel a regional win as their own. The size of
+        the happiness bump is estimated from the research on sport and wellbeing,
+        not assumed. And the number is net of the losing finalist and the
+        documented dark side of big matches, not a pure feel-good figure.</p>
+
+      <p>The headline answer has moved from Nigeria to its larger, poorer neighbor:
+        the Democratic Republic of the Congo. Nearly a hundred million people, a
+        deep love of the game, very low incomes, and no World Cup pedigree to take
+        for granted. A title there would land where the marginal value of joy is
+        highest, and it would be remembered for years.</p>
+
+      <p>But a champion is crowned only once. The tournament gives joy every night,
+        and the best of it comes from surprise. So the default view of the tool
+        below is not who should win the whole thing. It is who is beating
+        expectations. Each team starts with a bar, its pre-tournament odds of
+        reaching each round. Clearing a low bar is what thrills. A long shot that
+        reaches the quarterfinals delivers more joy than a favorite who was
+        supposed to be there all along, and the deeper the run, the more it counts.
+        The odds set the bar. They never shrink the reward, so underdogs are
+        rewarded, not penalized.</p>
+
+      <p>Two honest notes. The weight on lower incomes is a value judgment, not a
+        measurement, so the tool lets you turn the dial yourself. And this is still
+        a thought experiment, now run on real data rather than a napkin.</p>
+
+      <p>So this year, root for the Democratic Republic of the Congo. Or open the
+        tool and let it tell you who to pull for tonight.</p>
+    </article>
+
+    <section class="toolintro">
+      <h2>The tool</h2>
+      <div id="headline" class="headline"></div>
+    </section>
+
     <section class="controls">
       <div class="toggle-row">
         <div class="toggle" id="view-toggle">
@@ -76,6 +128,64 @@
         underdog, whose win would be the bigger surprise.</p>
       <div id="matches"></div>
     </section>
+
+    <details class="appendix">
+      <summary>Technical appendix: how the index is built</summary>
+      <div class="appendix-body">
+        <h3>The model</h3>
+        <p>For each country <em>i</em>, the value of a title is the product of three
+          terms, <strong>W = N x MU x V</strong>.</p>
+        <ul>
+          <li><strong>N, reach.</strong> Engaged home fans, which is population
+            times how much the country follows the game, plus the diaspora, plus a
+            small share of co-confederation neighbors who share a regional win.</li>
+          <li><strong>MU, need.</strong> The marginal utility of a windfall under
+            isoelastic utility, MU = (c_ref / c)^eta, where c is consumption per
+            head. The default curvature is eta = 1, with a sensitivity test at 1.5.
+            Lower income, higher weight.</li>
+          <li><strong>V, memory.</strong> A title is a glow that fades. Its value is
+            the present value of that fading stream, V = H0 / r, discounted at rate
+            r. Pedigree sets the rate. A serial winner's joy fades in about a year
+            and a half; a country with no history holds it for about fourteen years.</li>
+        </ul>
+
+        <h3>Beating expectations (the default view)</h3>
+        <p>The bar is each team's pre-tournament chance of reaching each knockout
+          round, from an Elo simulation of the real bracket. The surprise of a run
+          is how unlikely it was, summed over the rounds the team reaches and
+          weighted so deeper rounds count for more. The odds set the bar. They never
+          weight the welfare, so the method rewards underdogs rather than favorites.
+          A second toggle compares the live standing with the frozen pre-tournament
+          one.</p>
+
+        <h3>Net, not gross</h3>
+        <p>The figure is net of a documented dark-side externality around
+          high-stakes matches, drawing on Card and Dahl (2011) on upset losses and
+          family violence.</p>
+
+        <h3>Data</h3>
+        <p>Population and consumption from the World Bank. Soccer interest
+          triangulated from Google Trends, registered-player counts and a culture
+          score. Team strength and the expectation bar from the World Football Elo
+          Ratings. Pedigree from World Cup and continental records. Live results
+          from football-data.org.</p>
+
+        <h3>The evidence behind the joy</h3>
+        <p>That happiness tracks surprise: Rutledge, Skandali, Dayan and Dolan
+          (2014), Mellers et al. (1997), Koszegi and Rabin (2006). That it fades,
+          faster with repetition: Frederick and Loewenstein (1999). That a shocking,
+          meaningful win is remembered for years: Brown and Kulik (1977). That the
+          daily mood bump itself is brief: Stieger, Goetz and Gehrig (2015). On the
+          size of the wellbeing effect of national sporting success: Kavetsos and
+          Szymanski (2010).</p>
+
+        <h3>Caveats</h3>
+        <p>The weight on lower incomes, eta, is a value judgment, not a measurement.
+          Diaspora, interest and pedigree figures are documented estimates. The
+          expectation bar is frozen from before the tournament, so it does not drift
+          as results come in. Full code and data are in the project repository.</p>
+      </div>
+    </details>
 
     <footer id="meta" class="meta"></footer>
   </main>
