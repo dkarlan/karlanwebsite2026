@@ -36,6 +36,15 @@ const VIEWS = {
 
 let DATA = null;
 let view = "surprise";
+let timeframe = "live";   // "live" (results so far) or "pre" (frozen pre-tournament)
+
+// The index field for the active method and timeframe. "If they win the Cup" is a
+// fixed prize and ignores the timeframe; the surprise views switch on it.
+function activeKey() {
+  if (view === "rooting") return "rooting_index";
+  const base = view === "tilt" ? "surprise_index_eta15" : "surprise_index";
+  return timeframe === "pre" ? base.replace("surprise_index", "surprise_index_pre") : base;
+}
 
 function fmtInt(n) { return n.toLocaleString("en-US"); }
 function fmtM(n) { return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + "M"; }
@@ -56,7 +65,7 @@ async function load() {
 }
 
 function teamsByView() {
-  const key = VIEWS[view].key;
+  const key = activeKey();
   return [...DATA.teams].sort((a, b) => b[key] - a[key]);
 }
 
@@ -77,15 +86,29 @@ function renderHeadline() {
     `where it counts and lingers for years.`;
 }
 
+function refresh() {
+  // The timeframe toggle only bites on the surprise views; dim it otherwise.
+  document.getElementById("time-toggle").classList.toggle("muted", view === "rooting");
+  renderHeadline();
+  renderRanking();
+  renderMatches(document.getElementById("match-date").value);
+}
+
 function bindToggle() {
   document.querySelectorAll("#view-toggle button").forEach((btn) => {
     btn.addEventListener("click", () => {
       view = btn.dataset.view;
       document.querySelectorAll("#view-toggle button")
         .forEach((b) => b.classList.toggle("active", b === btn));
-      renderHeadline();
-      renderRanking();
-      renderMatches(document.getElementById("match-date").value);
+      refresh();
+    });
+  });
+  document.querySelectorAll("#time-toggle button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      timeframe = btn.dataset.time;
+      document.querySelectorAll("#time-toggle button")
+        .forEach((b) => b.classList.toggle("active", b === btn));
+      refresh();
     });
   });
 }
@@ -96,8 +119,14 @@ function secondaryCell(t) {
 }
 
 function renderRanking() {
-  document.getElementById("view-note").textContent = VIEWS[view].note;
-  const key = VIEWS[view].key;
+  let note = VIEWS[view].note;
+  if (view !== "rooting") {
+    note += timeframe === "pre"
+      ? " Showing the frozen pre-tournament ranking, before any results."
+      : " Showing the live ranking, updated for results so far.";
+  }
+  document.getElementById("view-note").textContent = note;
+  const key = activeKey();
   const teams = teamsByView();
   const max = Math.max(...teams.map((t) => t[key])) || 1;
   const host = document.getElementById("ranking");
@@ -154,6 +183,7 @@ function renderMatches(dateStr) {
     host.innerHTML = '<p class="empty">No group-stage matches on this date.</p>';
     return;
   }
+  const key = activeKey();
   todays.forEach((f) => {
     const h = byName[f.home], a = byName[f.away];
     const hs = matchScore(h, a), as = matchScore(a, h);
@@ -167,12 +197,12 @@ function renderMatches(dateStr) {
       <div class="match-teams">
         <div class="side ${homePick ? "pick" : ""}">
           <div class="tn">${h.name}</div>
-          <div class="ti">index ${(VIEWS[view].eta15 ? h.surprise_index_eta15 : h[VIEWS[view].key]).toFixed(0)}</div>
+          <div class="ti">index ${h[key].toFixed(0)}</div>
         </div>
         <div class="vs">v</div>
         <div class="side right ${homePick ? "" : "pick"}">
           <div class="tn">${a.name}</div>
-          <div class="ti">index ${(VIEWS[view].eta15 ? a.surprise_index_eta15 : a[VIEWS[view].key]).toFixed(0)}</div>
+          <div class="ti">index ${a[key].toFixed(0)}</div>
         </div>
       </div>
       <div class="pick-line">Root for <b>${pick.name}</b>${
@@ -196,13 +226,13 @@ function openDrawer(t) {
   body.innerHTML = `
     <h3>${t.name}</h3>
     <p class="sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</p>
-    ${kv("Beating-expectations index", t.surprise_index.toFixed(1))}
-    ${kv("If-they-win-the-Cup index", t.rooting_index.toFixed(1))}
-    ${kv("Tilt-to-poor index (eta 1.5)", t.surprise_index_eta15.toFixed(1))}
+    ${kv("Beating expectations (live)", t.surprise_index.toFixed(1))}
+    ${kv("Beating expectations (pre-tournament)", t.surprise_index_pre.toFixed(1))}
+    ${kv("If they win the Cup", t.rooting_index.toFixed(1))}
     <div class="kv-group">Run vs expectations</div>
     ${kv("Expected run (knockout rounds)", t.expected_depth.toFixed(1) + " of 6")}
     ${kv("Status", status)}
-    ${kv("Surprise score", t.surprise.toFixed(1))}
+    ${kv("Surprise score (live / pre)", t.surprise.toFixed(1) + " / " + t.surprise_pre.toFixed(1))}
     <div class="kv-group">Memory of a win</div>
     ${kv("World Cup titles", t.wc_titles)}
     ${kv("Last major trophy", lastTitle)}

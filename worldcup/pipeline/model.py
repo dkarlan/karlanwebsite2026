@@ -142,21 +142,24 @@ def main():
     expectations = _load_expectations()
     results = _load_results()
 
-    # Surprise factor per team (independent of eta), and the surprise-weighted
-    # welfare at both eta values.
-    surprise = {}
+    # Surprise factor per team (independent of eta). Two snapshots against the
+    # same frozen pre-tournament bar: "pre" applies no results (every team alive at
+    # full potential, the original pre-tournament ranking); "live" applies the
+    # actual results so far. They coincide until the knockouts begin.
+    surprise_live, surprise_pre = {}, {}
     for n in teams:
+        probs = expectations.get(n, {})
         res = results.get(n, {})
-        surprise[n] = surprise_score(
-            expectations.get(n, {}),
-            int(res.get("reached_depth", 0)),
-            bool(res.get("eliminated", False)),
-        )
+        surprise_live[n] = surprise_score(
+            probs, int(res.get("reached_depth", 0)), bool(res.get("eliminated", False)))
+        surprise_pre[n] = surprise_score(probs, 0, False)
 
     max_wnet = max(r["w_net"] for r in base.values())
     max_wnet_band = max(r["w_net"] for r in band.values())
-    max_surp = max(base[n]["w_net"] * surprise[n] for n in teams) or 1.0
-    max_surp_band = max(band[n]["w_net"] * surprise[n] for n in teams) or 1.0
+    max_live = max(base[n]["w_net"] * surprise_live[n] for n in teams) or 1.0
+    max_live_b = max(band[n]["w_net"] * surprise_live[n] for n in teams) or 1.0
+    max_pre = max(base[n]["w_net"] * surprise_pre[n] for n in teams) or 1.0
+    max_pre_b = max(band[n]["w_net"] * surprise_pre[n] for n in teams) or 1.0
 
     out_teams = []
     for n, t in teams.items():
@@ -187,12 +190,15 @@ def main():
             "expected_depth": round(exp.get("depth", 0.0), 2),
             "reached_depth": int(res.get("reached_depth", 0)),
             "eliminated": bool(res.get("eliminated", False)),
-            "surprise": round(surprise[n], 2),
+            "surprise": round(surprise_live[n], 2),
+            "surprise_pre": round(surprise_pre[n], 2),
             "w_net": b["w_net"],
             "rooting_index": round(100 * b["w_net"] / max_wnet, 1),
             "rooting_index_eta15": round(100 * band[n]["w_net"] / max_wnet_band, 1),
-            "surprise_index": round(100 * b["w_net"] * surprise[n] / max_surp, 1),
-            "surprise_index_eta15": round(100 * band[n]["w_net"] * surprise[n] / max_surp_band, 1),
+            "surprise_index": round(100 * b["w_net"] * surprise_live[n] / max_live, 1),
+            "surprise_index_eta15": round(100 * band[n]["w_net"] * surprise_live[n] / max_live_b, 1),
+            "surprise_index_pre": round(100 * b["w_net"] * surprise_pre[n] / max_pre, 1),
+            "surprise_index_pre_eta15": round(100 * band[n]["w_net"] * surprise_pre[n] / max_pre_b, 1),
         })
 
     out_teams.sort(key=lambda x: x["surprise_index"], reverse=True)
@@ -200,10 +206,13 @@ def main():
     with open(os.path.join(DATA, "fixtures.json"), encoding="utf-8") as fh:
         fixtures = json.load(fh)
 
+    live_changed = any(r.get("eliminated") or int(r.get("reached_depth", 0)) > 0
+                       for r in results.values())
     payload = {
         "meta": {
             "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "title": "World Cup Happiness Index 2026",
+            "live_changed": live_changed,
             "basis": "happiness from beating expectations (default), or from winning the Cup; never weighted by win probability",
             "params": {
                 "eta": config.ETA,

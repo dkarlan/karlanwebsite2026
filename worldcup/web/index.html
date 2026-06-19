@@ -26,10 +26,16 @@
 
   <main class="wrap">
     <section class="controls">
-      <div class="toggle" id="view-toggle">
-        <button data-view="surprise" class="active">Beating expectations</button>
-        <button data-view="rooting">If they win the Cup</button>
-        <button data-view="tilt">Tilt to the poor</button>
+      <div class="toggle-row">
+        <div class="toggle" id="view-toggle">
+          <button data-view="surprise" class="active">Beating expectations</button>
+          <button data-view="rooting">If they win the Cup</button>
+          <button data-view="tilt">Tilt to the poor</button>
+        </div>
+        <div class="toggle small" id="time-toggle" title="Applies to the beating-expectations views">
+          <button data-time="live" class="active">Live</button>
+          <button data-time="pre">Pre-tournament</button>
+        </div>
       </div>
       <p class="view-note" id="view-note"></p>
     </section>

@@ -54,6 +54,10 @@ main { padding: 28px 0 60px; }
 
 .controls { margin-bottom: 18px; }
 
+.toggle-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.toggle.small button { padding: 8px 12px; font-size: 0.82rem; }
+.toggle.muted { opacity: 0.4; }
+
 .toggle {
   display: inline-flex;
   background: var(--card);

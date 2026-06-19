@@ -1,7 +1,8 @@
 {
   "meta": {
-    "generated": "2026-06-19T18:10:12+00:00",
+    "generated": "2026-06-19T18:28:55+00:00",
     "title": "World Cup Happiness Index 2026",
+    "live_changed": false,
     "basis": "happiness from beating expectations (default), or from winning the Cup; never weighted by win probability",
     "params": {
       "eta": 1.0,
@@ -41,11 +42,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.57,
+      "surprise_pre": 20.57,
       "w_net": 532927903.7100184,
       "rooting_index": 100.0,
       "rooting_index_eta15": 100.0,
       "surprise_index": 100.0,
-      "surprise_index_eta15": 100.0
+      "surprise_index_eta15": 100.0,
+      "surprise_index_pre": 100.0,
+      "surprise_index_pre_eta15": 100.0
     },
     {
       "name": "Haiti",
@@ -71,11 +75,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.6,
+      "surprise_pre": 20.6,
       "w_net": 79147981.97431698,
       "rooting_index": 14.9,
       "rooting_index_eta15": 11.0,
       "surprise_index": 14.9,
-      "surprise_index_eta15": 11.0
+      "surprise_index_eta15": 11.0,
+      "surprise_index_pre": 14.9,
+      "surprise_index_pre_eta15": 11.0
     },
     {
       "name": "Senegal",
@@ -101,11 +108,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.82,
+      "surprise_pre": 18.82,
       "w_net": 76795615.92840791,
       "rooting_index": 14.4,
       "rooting_index_eta15": 8.6,
       "surprise_index": 13.2,
-      "surprise_index_eta15": 7.9
+      "surprise_index_eta15": 7.9,
+      "surprise_index_pre": 13.2,
+      "surprise_index_pre_eta15": 7.9
     },
     {
       "name": "Cote d'Ivoire",
@@ -131,11 +141,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 19.54,
+      "surprise_pre": 19.54,
       "w_net": 51636244.36527072,
       "rooting_index": 9.7,
       "rooting_index_eta15": 4.7,
       "surprise_index": 9.2,
-      "surprise_index_eta15": 4.5
+      "surprise_index_eta15": 4.5,
+      "surprise_index_pre": 9.2,
+      "surprise_index_pre_eta15": 4.5
     },
     {
       "name": "Morocco",
@@ -161,11 +174,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.36,
+      "surprise_pre": 18.36,
       "w_net": 52517538.51094351,
       "rooting_index": 9.9,
       "rooting_index_eta15": 4.1,
       "surprise_index": 8.8,
-      "surprise_index_eta15": 3.6
+      "surprise_index_eta15": 3.6,
+      "surprise_index_pre": 8.8,
+      "surprise_index_pre_eta15": 3.6
     },
     {
       "name": "Ghana",
@@ -191,11 +207,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.92,
+      "surprise_pre": 20.92,
       "w_net": 46254750.509850904,
       "rooting_index": 8.7,
       "rooting_index_eta15": 4.1,
       "surprise_index": 8.8,
-      "surprise_index_eta15": 4.2
+      "surprise_index_eta15": 4.2,
+      "surprise_index_pre": 8.8,
+      "surprise_index_pre_eta15": 4.2
     },
     {
       "name": "South Africa",
@@ -221,11 +240,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.86,
+      "surprise_pre": 20.86,
       "w_net": 43708589.22884316,
       "rooting_index": 8.2,
       "rooting_index_eta15": 2.8,
       "surprise_index": 8.3,
-      "surprise_index_eta15": 2.8
+      "surprise_index_eta15": 2.8,
+      "surprise_index_pre": 8.3,
+      "surprise_index_pre_eta15": 2.8
     },
     {
       "name": "Uzbekistan",
@@ -251,11 +273,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.24,
+      "surprise_pre": 20.24,
       "w_net": 38418741.400000006,
       "rooting_index": 7.2,
       "rooting_index_eta15": 2.8,
       "surprise_index": 7.1,
-      "surprise_index_eta15": 2.7
+      "surprise_index_eta15": 2.7,
+      "surprise_index_pre": 7.1,
+      "surprise_index_pre_eta15": 2.7
     },
     {
       "name": "Iraq",
@@ -281,11 +306,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.87,
+      "surprise_pre": 20.87,
       "w_net": 36548645.69696173,
       "rooting_index": 6.9,
       "rooting_index_eta15": 2.4,
       "surprise_index": 7.0,
-      "surprise_index_eta15": 2.4
+      "surprise_index_eta15": 2.4,
+      "surprise_index_pre": 7.0,
+      "surprise_index_pre_eta15": 2.4
     },
     {
       "name": "Egypt",
@@ -311,11 +339,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 19.88,
+      "surprise_pre": 19.88,
       "w_net": 36597536.01283777,
       "rooting_index": 6.9,
       "rooting_index_eta15": 2.1,
       "surprise_index": 6.6,
-      "surprise_index_eta15": 2.1
+      "surprise_index_eta15": 2.1,
+      "surprise_index_pre": 6.6,
+      "surprise_index_pre_eta15": 2.1
     },
     {
       "name": "Iran",
@@ -341,11 +372,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 19.25,
+      "surprise_pre": 19.25,
       "w_net": 37523539.67472112,
       "rooting_index": 7.0,
       "rooting_index_eta15": 2.1,
       "surprise_index": 6.6,
-      "surprise_index_eta15": 2.0
+      "surprise_index_eta15": 2.0,
+      "surprise_index_pre": 6.6,
+      "surprise_index_pre_eta15": 2.0
     },
     {
       "name": "Algeria",
@@ -371,11 +405,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 19.69,
+      "surprise_pre": 19.69,
       "w_net": 31675924.94098077,
       "rooting_index": 5.9,
       "rooting_index_eta15": 1.9,
       "surprise_index": 5.7,
-      "surprise_index_eta15": 1.8
+      "surprise_index_eta15": 1.8,
+      "surprise_index_pre": 5.7,
+      "surprise_index_pre_eta15": 1.8
     },
     {
       "name": "Colombia",
@@ -401,11 +438,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 15.88,
+      "surprise_pre": 15.88,
       "w_net": 32796152.089692906,
       "rooting_index": 6.2,
       "rooting_index_eta15": 1.7,
       "surprise_index": 4.8,
-      "surprise_index_eta15": 1.3
+      "surprise_index_eta15": 1.3,
+      "surprise_index_pre": 4.8,
+      "surprise_index_pre_eta15": 1.3
     },
     {
       "name": "Jordan",
@@ -431,11 +471,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.64,
+      "surprise_pre": 20.64,
       "w_net": 25619920.230085146,
       "rooting_index": 4.8,
       "rooting_index_eta15": 2.0,
       "surprise_index": 4.8,
-      "surprise_index_eta15": 2.0
+      "surprise_index_eta15": 2.0,
+      "surprise_index_pre": 4.8,
+      "surprise_index_pre_eta15": 2.0
     },
     {
       "name": "Ecuador",
@@ -461,11 +504,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 17.97,
+      "surprise_pre": 17.97,
       "w_net": 27376130.52864373,
       "rooting_index": 5.1,
       "rooting_index_eta15": 1.7,
       "surprise_index": 4.5,
-      "surprise_index_eta15": 1.5
+      "surprise_index_eta15": 1.5,
+      "surprise_index_pre": 4.5,
+      "surprise_index_pre_eta15": 1.5
     },
     {
       "name": "Cape Verde",
@@ -491,11 +537,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.69,
+      "surprise_pre": 20.69,
       "w_net": 23323292.129454546,
       "rooting_index": 4.4,
       "rooting_index_eta15": 1.8,
       "surprise_index": 4.4,
-      "surprise_index_eta15": 1.8
+      "surprise_index_eta15": 1.8,
+      "surprise_index_pre": 4.4,
+      "surprise_index_pre_eta15": 1.8
     },
     {
       "name": "Tunisia",
@@ -521,11 +570,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.8,
+      "surprise_pre": 20.8,
       "w_net": 21912930.254929505,
       "rooting_index": 4.1,
       "rooting_index_eta15": 1.4,
       "surprise_index": 4.2,
-      "surprise_index_eta15": 1.5
+      "surprise_index_eta15": 1.5,
+      "surprise_index_pre": 4.2,
+      "surprise_index_pre_eta15": 1.5
     },
     {
       "name": "Turkiye",
@@ -551,11 +603,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.68,
+      "surprise_pre": 18.68,
       "w_net": 22270213.366557814,
       "rooting_index": 4.2,
       "rooting_index_eta15": 0.8,
       "surprise_index": 3.8,
-      "surprise_index_eta15": 0.8
+      "surprise_index_eta15": 0.8,
+      "surprise_index_pre": 3.8,
+      "surprise_index_pre_eta15": 0.8
     },
     {
       "name": "Mexico",
@@ -581,11 +636,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 16.94,
+      "surprise_pre": 16.94,
       "w_net": 21258091.73180281,
       "rooting_index": 4.0,
       "rooting_index_eta15": 1.0,
       "surprise_index": 3.3,
-      "surprise_index_eta15": 0.9
+      "surprise_index_eta15": 0.9,
+      "surprise_index_pre": 3.3,
+      "surprise_index_pre_eta15": 0.9
     },
     {
       "name": "Paraguay",
@@ -611,11 +669,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 19.65,
+      "surprise_pre": 19.65,
       "w_net": 12681990.31268135,
       "rooting_index": 2.4,
       "rooting_index_eta15": 0.7,
       "surprise_index": 2.3,
-      "surprise_index_eta15": 0.7
+      "surprise_index_eta15": 0.7,
+      "surprise_index_pre": 2.3,
+      "surprise_index_pre_eta15": 0.7
     },
     {
       "name": "Bosnia and Herzegovina",
@@ -641,11 +702,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.34,
+      "surprise_pre": 20.34,
       "w_net": 11612984.094885955,
       "rooting_index": 2.2,
       "rooting_index_eta15": 0.6,
       "surprise_index": 2.2,
-      "surprise_index_eta15": 0.6
+      "surprise_index_eta15": 0.6,
+      "surprise_index_pre": 2.2,
+      "surprise_index_pre_eta15": 0.6
     },
     {
       "name": "Brazil",
@@ -671,11 +735,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 15.61,
+      "surprise_pre": 15.61,
       "w_net": 14415761.156762864,
       "rooting_index": 2.7,
       "rooting_index_eta15": 0.8,
       "surprise_index": 2.1,
-      "surprise_index_eta15": 0.6
+      "surprise_index_eta15": 0.6,
+      "surprise_index_pre": 2.1,
+      "surprise_index_pre_eta15": 0.6
     },
     {
       "name": "Japan",
@@ -701,11 +768,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 17.76,
+      "surprise_pre": 17.76,
       "w_net": 11795469.7049063,
       "rooting_index": 2.2,
       "rooting_index_eta15": 0.4,
       "surprise_index": 1.9,
-      "surprise_index_eta15": 0.3
+      "surprise_index_eta15": 0.3,
+      "surprise_index_pre": 1.9,
+      "surprise_index_pre_eta15": 0.3
     },
     {
       "name": "United States",
@@ -731,11 +801,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.97,
+      "surprise_pre": 18.97,
       "w_net": 10282213.134687329,
       "rooting_index": 1.9,
       "rooting_index_eta15": 0.3,
       "surprise_index": 1.8,
-      "surprise_index_eta15": 0.3
+      "surprise_index_eta15": 0.3,
+      "surprise_index_pre": 1.8,
+      "surprise_index_pre_eta15": 0.3
     },
     {
       "name": "Curacao",
@@ -761,11 +834,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.96,
+      "surprise_pre": 20.96,
       "w_net": 5613501.414054055,
       "rooting_index": 1.1,
       "rooting_index_eta15": 0.2,
       "surprise_index": 1.1,
-      "surprise_index_eta15": 0.2
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 1.1,
+      "surprise_index_pre_eta15": 0.2
     },
     {
       "name": "South Korea",
@@ -791,11 +867,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.88,
+      "surprise_pre": 18.88,
       "w_net": 6211213.516279398,
       "rooting_index": 1.2,
       "rooting_index_eta15": 0.2,
       "surprise_index": 1.1,
-      "surprise_index_eta15": 0.2
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 1.1,
+      "surprise_index_pre_eta15": 0.2
     },
     {
       "name": "Panama",
@@ -821,11 +900,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 19.83,
+      "surprise_pre": 19.83,
       "w_net": 5667688.081100358,
       "rooting_index": 1.1,
       "rooting_index_eta15": 0.2,
       "surprise_index": 1.0,
-      "surprise_index_eta15": 0.2
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 1.0,
+      "surprise_index_pre_eta15": 0.2
     },
     {
       "name": "Canada",
@@ -851,11 +933,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.29,
+      "surprise_pre": 18.29,
       "w_net": 5106989.278767446,
       "rooting_index": 1.0,
       "rooting_index_eta15": 0.2,
       "surprise_index": 0.9,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.9,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Portugal",
@@ -881,11 +966,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 16.38,
+      "surprise_pre": 16.38,
       "w_net": 5738405.25370846,
       "rooting_index": 1.1,
       "rooting_index_eta15": 0.2,
       "surprise_index": 0.9,
-      "surprise_index_eta15": 0.2
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 0.9,
+      "surprise_index_pre_eta15": 0.2
     },
     {
       "name": "Scotland",
@@ -911,11 +999,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 21.0,
+      "surprise_pre": 21.0,
       "w_net": 4912534.4359778715,
       "rooting_index": 0.9,
       "rooting_index_eta15": 0.2,
       "surprise_index": 0.9,
-      "surprise_index_eta15": 0.2
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 0.9,
+      "surprise_index_pre_eta15": 0.2
     },
     {
       "name": "England",
@@ -941,11 +1032,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 13.31,
+      "surprise_pre": 13.31,
       "w_net": 6492154.495480455,
       "rooting_index": 1.2,
       "rooting_index_eta15": 0.2,
       "surprise_index": 0.8,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.8,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Saudi Arabia",
@@ -971,11 +1065,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.73,
+      "surprise_pre": 20.73,
       "w_net": 4392206.427707386,
       "rooting_index": 0.8,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.8,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.8,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Belgium",
@@ -1001,11 +1098,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 17.77,
+      "surprise_pre": 17.77,
       "w_net": 4016262.3545490927,
       "rooting_index": 0.8,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.7,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.7,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Australia",
@@ -1031,11 +1131,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.86,
+      "surprise_pre": 18.86,
       "w_net": 4097207.5912322444,
       "rooting_index": 0.8,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.7,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.7,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Croatia",
@@ -1061,11 +1164,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.21,
+      "surprise_pre": 18.21,
       "w_net": 3720340.8329071654,
       "rooting_index": 0.7,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.6,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.6,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Switzerland",
@@ -1091,11 +1197,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 17.74,
+      "surprise_pre": 17.74,
       "w_net": 3482718.730009878,
       "rooting_index": 0.7,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.6,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.6,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Austria",
@@ -1121,11 +1230,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.71,
+      "surprise_pre": 18.71,
       "w_net": 3674375.612271934,
       "rooting_index": 0.7,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.6,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.6,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Czechia",
@@ -1151,11 +1263,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 19.84,
+      "surprise_pre": 19.84,
       "w_net": 2789561.378855837,
       "rooting_index": 0.5,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.5,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.5,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Sweden",
@@ -1181,11 +1296,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 19.62,
+      "surprise_pre": 19.62,
       "w_net": 2674189.685861546,
       "rooting_index": 0.5,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.5,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.5,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Spain",
@@ -1211,11 +1329,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 10.22,
+      "surprise_pre": 10.22,
       "w_net": 4534964.319797991,
       "rooting_index": 0.9,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.4,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.4,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Norway",
@@ -1241,11 +1362,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 17.55,
+      "surprise_pre": 17.55,
       "w_net": 2616643.5834428533,
       "rooting_index": 0.5,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.4,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.4,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Argentina",
@@ -1271,11 +1395,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 10.49,
+      "surprise_pre": 10.49,
       "w_net": 3244676.0718195387,
       "rooting_index": 0.6,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.3,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.3,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "France",
@@ -1301,11 +1428,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 12.45,
+      "surprise_pre": 12.45,
       "w_net": 3064648.853272001,
       "rooting_index": 0.6,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.3,
-      "surprise_index_eta15": 0.1
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.3,
+      "surprise_index_pre_eta15": 0.1
     },
     {
       "name": "Netherlands",
@@ -1331,11 +1461,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 16.75,
+      "surprise_pre": 16.75,
       "w_net": 1951902.6921620565,
       "rooting_index": 0.4,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.3,
-      "surprise_index_eta15": 0.0
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.3,
+      "surprise_index_pre_eta15": 0.0
     },
     {
       "name": "Germany",
@@ -1361,11 +1494,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 16.87,
+      "surprise_pre": 16.87,
       "w_net": 1760211.6457878035,
       "rooting_index": 0.3,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.3,
-      "surprise_index_eta15": 0.0
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.3,
+      "surprise_index_pre_eta15": 0.0
     },
     {
       "name": "Uruguay",
@@ -1391,11 +1527,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 18.44,
+      "surprise_pre": 18.44,
       "w_net": 1306905.4968885619,
       "rooting_index": 0.2,
       "rooting_index_eta15": 0.1,
       "surprise_index": 0.2,
-      "surprise_index_eta15": 0.0
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.2,
+      "surprise_index_pre_eta15": 0.0
     },
     {
       "name": "Qatar",
@@ -1421,11 +1560,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.89,
+      "surprise_pre": 20.89,
       "w_net": 1224357.2122563047,
       "rooting_index": 0.2,
       "rooting_index_eta15": 0.0,
       "surprise_index": 0.2,
-      "surprise_index_eta15": 0.0
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.2,
+      "surprise_index_pre_eta15": 0.0
     },
     {
       "name": "New Zealand",
@@ -1451,11 +1593,14 @@
       "reached_depth": 0,
       "eliminated": false,
       "surprise": 20.69,
+      "surprise_pre": 20.69,
       "w_net": 230059.47680599944,
       "rooting_index": 0.0,
       "rooting_index_eta15": 0.0,
       "surprise_index": 0.0,
-      "surprise_index_eta15": 0.0
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.0,
+      "surprise_index_pre_eta15": 0.0
     }
   ],
   "fixtures": [
