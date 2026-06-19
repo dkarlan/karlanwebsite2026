@@ -33,21 +33,19 @@ ETA_SENSITIVITY = 1.5
 C_REF = 10000.0
 
 # ---------------------------------------------------------------------------
-# NPV of remembered happiness (replaces the old flat per-fan shock h)
+# Per-fan value of a title (novelty-scaled)
 # ---------------------------------------------------------------------------
-# Per engaged fan, the lifetime value of a title is the net present value of a
-# joy stream that starts at intensity s_i and decays at rate r_i:
+# The happiness a title brings one engaged fan, in Cantril-ladder points: a base
+# value scaled up by novelty, so a long-awaited or first-ever win is worth more.
+# Happiness tracks prediction error, so an unexpected, unaccustomed win lands
+# harder (Rutledge et al. 2014 PNAS; Mellers et al. 1997; Koszegi & Rabin 2006).
 #
-#     LU_i = integral_0^inf  s_i * e^(-r_i t) dt  =  s_i / r_i
+#     value_i = H0 * (1 + NOVELTY_ALPHA * novelty_i),   novelty_i = 1 - history_i
 #
-#   s_i = NPV_H0 * (1 + NPV_ALPHA * novelty_i)     novelty raises the spike
-#   r_i = NPV_R_LO + (NPV_R_HI - NPV_R_LO) * history_i   pedigree speeds the fade
-#
-# novelty_i = 1 - history_i, with history_i in [0,1] the pedigree score below.
-NPV_H0 = 0.10          # base spike, Cantril-ladder points per engaged fan
-NPV_ALPHA = 0.8        # novelty premium: a pure first-timer's spike is 1.8x a serial winner's
-NPV_R_LO = 0.05        # decay for no-pedigree teams  (half-life ln2/r ~ 14 years)
-NPV_R_HI = 0.50        # decay for serial winners      (half-life ~ 1.4 years)
+# H0 only sets the units (it scales every team equally), so NOVELTY_ALPHA is the
+# real lever: at 0.8 a pure first-timer's title is worth 1.8x a serial winner's.
+H0 = 0.10
+NOVELTY_ALPHA = 0.8
 
 # ---------------------------------------------------------------------------
 # Pedigree score (history_i): history of success in international play

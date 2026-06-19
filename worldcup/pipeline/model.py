@@ -6,23 +6,21 @@ is how much joy a title would add, not how likely it is.
 
 Per country i:
 
-    W_i = N_i x MU_i x LU_i
+    W_i = N_i x MU_i x V_i
 
   N_i  affected fan population: engaged home fans (population x interest), plus
        diaspora fans, plus a continental-solidarity share of neighbours.
   MU_i marginal-utility weight, MU_i = (C_REF/c_i)^eta, with c_i consumption per
        head. A windfall counts for more where people have less.
-  LU_i per-fan lifetime value of the title, the NPV of a decaying joy stream,
-       LU_i = s_i / r_i. Novelty raises the spike s_i; pedigree raises the decay
-       rate r_i, so a first-timer's joy is large and long, a serial winner's
-       small and brief. See config.py for the citations.
+  V_i  per-fan value of the title, a base shock scaled up by novelty:
+       V_i = H0 * (1 + NOVELTY_ALPHA * novelty_i), novelty_i = 1 - history_i. A
+       long-awaited or first-ever win is worth more. See config.py for citations.
 
 W_net_i nets out a documented dark-side externality. Outputs web/rankings.json
 and prints the ranking. Run after the fetch/build steps (or via run_all.py).
 """
 import csv
 import json
-import math
 import os
 from datetime import datetime, timezone
 
@@ -46,12 +44,10 @@ def mu_weight(consumption, eta):
     return (config.C_REF / c) ** eta
 
 
-def lifetime_utility(history):
-    """NPV of the remembered-joy stream for one engaged fan."""
+def title_value(history):
+    """Per-fan happiness value of a title, scaled up by novelty."""
     novelty = 1.0 - history
-    s = config.NPV_H0 * (1.0 + config.NPV_ALPHA * novelty)
-    r = config.NPV_R_LO + (config.NPV_R_HI - config.NPV_R_LO) * history
-    return s / r, s, r
+    return config.H0 * (1.0 + config.NOVELTY_ALPHA * novelty)
 
 
 def fan_population(teams):
@@ -82,12 +78,12 @@ def compute(teams, eta):
         n = t["name"]
         history = float(t["history"]) if t["history"] else 0.0
         mu = mu_weight(t["consumption"], eta)
-        lu, s, r = lifetime_utility(history)
+        tv = title_value(history)
         N = fans[n]["N"]
-        w_gross = N * mu * lu
+        w_gross = N * mu * tv
         w_net = w_gross * (1.0 - config.DARKSIDE_FRACTION)
         rows[n] = {
-            "N": N, "mu": mu, "lu": lu, "spike": s, "decay": r,
+            "N": N, "mu": mu, "title_value": tv,
             "w_gross": w_gross, "w_net": w_net, **fans[n],
         }
     return rows
@@ -105,7 +101,6 @@ def main():
     for n, t in teams.items():
         b = base[n]
         history = float(t["history"]) if t["history"] else 0.0
-        half_life = round(math.log(2) / b["decay"], 1)
         out_teams.append({
             "name": n,
             "confederation": t["confederation"],
@@ -119,13 +114,12 @@ def main():
             "last_major_year": t["last_major_year"] or None,
             "history": round(history, 3),
             "novelty": round(1.0 - history, 3),
-            "memory_half_life": half_life,
             "fan_population": round(b["N"]),
             "home_fans": round(b["home_fans"]),
             "diaspora_fans": round(b["diaspora_fans"]),
             "solidarity_fans": round(b["solidarity_fans"]),
             "mu_weight": round(b["mu"], 3),
-            "lifetime_utility": round(b["lu"], 3),
+            "title_value": round(b["title_value"], 3),
             "w_net": b["w_net"],
             "rooting_index": round(100 * b["w_net"] / max_wnet, 1),
             "rooting_index_eta15": round(100 * band[n]["w_net"] / max_wnet_band, 1),
@@ -144,10 +138,8 @@ def main():
             "params": {
                 "eta": config.ETA,
                 "eta_sensitivity": config.ETA_SENSITIVITY,
-                "npv_h0": config.NPV_H0,
-                "npv_alpha": config.NPV_ALPHA,
-                "npv_r_lo": config.NPV_R_LO,
-                "npv_r_hi": config.NPV_R_HI,
+                "h0": config.H0,
+                "novelty_alpha": config.NOVELTY_ALPHA,
                 "diaspora_weight": config.DIASPORA_WEIGHT,
                 "continental_weight": config.CONTINENTAL_WEIGHT,
                 "darkside_fraction": config.DARKSIDE_FRACTION,
@@ -162,10 +154,10 @@ def main():
 
     print(f"\nWorld Cup Happiness Index 2026  (eta={config.ETA})")
     print("Who to root for - marginal happiness to the world if they win\n")
-    print(f"{'#':>2}  {'Team':22} {'Index':>6} {'Novelty':>7} {'Half-life':>9} {'GNIpc':>7}")
+    print(f"{'#':>2}  {'Team':22} {'Index':>6} {'Novelty':>7} {'Fans(M)':>8} {'GNIpc':>7}")
     for i, x in enumerate(out_teams[:15], 1):
         print(f"{i:>2}  {x['name']:22} {x['rooting_index']:>6} "
-              f"{x['novelty']:>7} {x['memory_half_life']:>7}y {x['consumption']:>7}")
+              f"{x['novelty']:>7} {x['fan_population']/1e6:>8.0f} {x['consumption']:>7}")
     print(f"\nWrote {os.path.join(WEB, 'rankings.json')}")
 
 
