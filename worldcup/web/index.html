@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>World Cup Happiness Index 2026</title>
+  <title>2026 Utilitarian World Cup Fan Guide</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Site navigation, mirrored from deankarlan.com so this page sits inside it.
-       The "World Cup" item is the new entry, placed next to OCE@USAID Museum. -->
+  <!-- Site navigation, mirrored from deankarlan.com so this page sits inside it. -->
   <nav class="site-nav">
     <div class="nav-inner">
       <span class="site-name">Dean Karlan</span>
@@ -31,17 +30,43 @@
       <p class="standfirst">Not sure who to root for? Maximize consequential global happiness!</p>
       <p class="standfirst-sub">A data-and-philosophy driven guide for the 48-team World Cup, with updates as the tournament progresses.</p>
       <p class="byline">By Dean Karlan</p>
-      <div class="reading">
-        <span class="reading-label">Links to similar prior year guides by me and others:</span>
-        <a href="https://www.nytimes.com/2014/06/26/upshot/why-you-should-root-for-nigeria-or-brazil-mexico-or-ghana.html" target="_blank" rel="noopener">2014 The original (NYTimes Upshot, by Karlan)</a>
-        <a href="https://www.nytimes.com/2014/07/05/upshot/which-world-cup-team-to-root-for-reconsidered.html" target="_blank" rel="noopener">2014 Reconsidered (NYTimes Upshot, by Karlan)</a>
-        <a href="https://blog.uehiro.ox.ac.uk/2018/06/the-utilitarians-guide-to-the-fifa-world-cup/" target="_blank" rel="noopener">2018 A Utilitarian's Guide (Oxford, by Zohny)</a>
-        <a href="https://www.cgdev.org/blog/why-you-should-support-brazil-or-cameroon-2022-world-cup" target="_blank" rel="noopener">2022 Support Brazil or Cameroon (CGD, by Crawfurd, Mitchell and Wickstead)</a>
-      </div>
     </div>
   </header>
 
   <main class="wrap">
+    <!-- Results first -->
+    <section class="controls">
+      <div class="toggle-row">
+        <div class="toggle" id="view-toggle">
+          <button data-view="surprise" class="active">Performance, relative to expectations</button>
+          <button data-view="rooting">Performance, absolute</button>
+        </div>
+        <div class="toggle small" id="time-toggle" title="Applies to the relative-to-expectations view">
+          <button data-time="live" class="active">Live</button>
+          <button data-time="pre">Pre-tournament</button>
+        </div>
+      </div>
+      <p class="view-note" id="view-note"></p>
+      <div class="compare-bar">
+        <button id="compare-btn" class="compare-btn">Show Table Comparing Selected Countries</button>
+        <span id="compare-count" class="compare-count"></span>
+      </div>
+    </section>
+
+    <div id="headline" class="headline"></div>
+
+    <section class="chart-wrap">
+      <p class="chart-legend">Bar height is the score, tallest first. Under each bar:
+        country, <span class="lg-prior">Best Prior</span> and
+        <span class="lg-exp">Expected to Reach</span>. Hover a bar for the full
+        detail; tick its box to add it to the comparison table. Scroll sideways for
+        the rest of the field.</p>
+      <div id="chart" class="chart-scroll"></div>
+    </section>
+
+    <section id="compare-table" class="compare-table hidden"></section>
+
+    <!-- Narrative -->
     <article class="essay">
       <p>In 2014 I wrote a short piece for The New York Times with a simple premise.
         A World Cup is watched by billions, and a title sets off real joy in the
@@ -64,63 +89,49 @@
         someone who has less (or, one arrives at the same implication if instead you
         just prefer to increase the utility more for those who have less to begin
         with, in line with utilitarianism as well as several other philosophical
-        constructs). And how long the joy lasts. A country that wins all
-        the time forgets quickly. A country that has never won remembers for a
-        generation. We put that last idea where it belongs, in the discount rate.
-        The memory of an unaccustomed win fades slowly, so its value today is
-        higher.</p>
+        constructs). And how long the joy lasts. A country that wins all the time
+        forgets quickly. A country that has never won remembers for a generation. We
+        put that last idea where it belongs, in the discount rate. The memory of an
+        unaccustomed win fades slowly, so its value today is higher.</p>
 
       <p>One refinement matters most. Fans are not only the home population, so we
         add the diaspora and a share of the neighbors who feel a regional win as
         their own. A deep run by Morocco lifts North Africa and the millions of
         Moroccans abroad, not only the home crowd.</p>
 
-      <p>The headline answer: Democratic Republic of Congo! Nearly a hundred million people, a
-        deep love of the game, very low incomes, and no World Cup pedigree to take
-        for granted. A title there would land where the marginal value of joy is
-        highest, and it would be remembered for years.</p>
+      <p>The headline answer: Democratic Republic of Congo! Nearly a hundred million
+        people, a deep love of the game, very low incomes, and no World Cup pedigree
+        to take for granted. A title there would land where the marginal value of
+        joy is highest, and it would be remembered for years.</p>
 
       <p>But a champion is crowned only once. The tournament gives joy every night,
-        and the best of it comes from surprise. So the default view of the tool
-        below is not who should win the whole thing. It is who is beating
-        expectations. Each team starts with a bar, its pre-tournament odds of
-        reaching each round. Clearing a low bar is what thrills. A long shot that
-        reaches the quarterfinals delivers more joy than a favorite who was
-        supposed to be there all along, and the deeper the run, the more it counts.
-        The odds set the bar. They never shrink the reward, so underdogs are
-        rewarded, not penalized.</p>
+        and the best of it comes from surprise. So the default view above is not who
+        should win the whole thing. It is who is beating expectations. Each team
+        starts with a bar, its pre-tournament odds of reaching each round. Clearing
+        a low bar is what thrills. A long shot that reaches the quarterfinals
+        delivers more joy than a favorite who was supposed to be there all along,
+        and the deeper the run, the more it counts. The odds set the bar. They never
+        shrink the reward, so underdogs are rewarded, not penalized.</p>
 
-      <p>Note: The weight on lower incomes is a value judgment, not a
-        measurement, so the tool lets you turn the dial yourself.</p>
+      <p>Note: The weight on lower incomes is a value judgment, not a measurement,
+        so the tool lets you turn the dial yourself.</p>
 
-      <p>So this year, root for the Democratic Republic of the Congo. Or open the
-        tool and let it tell you who to pull for tonight.</p>
+      <p>So this year, root for the Democratic Republic of the Congo. Or use the
+        guide above to see who to pull for tonight.</p>
     </article>
 
-    <section class="toolintro">
-      <h2>The tool</h2>
-      <div id="headline" class="headline"></div>
-    </section>
+    <div class="reading">
+      <span class="reading-label">Links to similar prior year guides by me and others:</span>
+      <a href="https://www.nytimes.com/2014/06/26/upshot/why-you-should-root-for-nigeria-or-brazil-mexico-or-ghana.html" target="_blank" rel="noopener">2014 The original (NYTimes Upshot, by Karlan)</a>
+      <a href="https://www.nytimes.com/2014/07/05/upshot/which-world-cup-team-to-root-for-reconsidered.html" target="_blank" rel="noopener">2014 Reconsidered (NYTimes Upshot, by Karlan)</a>
+      <a href="https://blog.uehiro.ox.ac.uk/2018/06/the-utilitarians-guide-to-the-fifa-world-cup/" target="_blank" rel="noopener">2018 A Utilitarian's Guide (Oxford, by Zohny)</a>
+      <a href="https://www.cgdev.org/blog/why-you-should-support-brazil-or-cameroon-2022-world-cup" target="_blank" rel="noopener">2022 Support Brazil or Cameroon (CGD, by Crawfurd, Mitchell and Wickstead)</a>
+    </div>
 
-    <section class="controls">
-      <div class="toggle-row">
-        <div class="toggle" id="view-toggle">
-          <button data-view="surprise" class="active">Performance, relative to expectations</button>
-          <button data-view="rooting">Performance, absolute</button>
-        </div>
-        <div class="toggle small" id="time-toggle" title="Applies to the performance-relative-to-expectations view">
-          <button data-time="live" class="active">Live</button>
-          <button data-time="pre">Pre-tournament</button>
-        </div>
-      </div>
-      <p class="view-note" id="view-note"></p>
-    </section>
-
-    <section id="ranking" class="ranking"></section>
-
+    <!-- Future matches -->
     <section class="tonight">
       <div class="tonight-head">
-        <h2>Matches</h2>
+        <h2>Future Matches</h2>
         <input type="date" id="match-date" />
       </div>
       <p class="view-note">For each match, the side to root for under the view you
@@ -204,10 +215,7 @@
     <footer id="meta" class="meta"></footer>
   </main>
 
-  <div id="drawer" class="drawer hidden">
-    <button id="drawer-close">&times;</button>
-    <div id="drawer-body"></div>
-  </div>
+  <div id="tooltip" class="tooltip hidden"></div>
 
   <script src="app.js"></script>
 </body>

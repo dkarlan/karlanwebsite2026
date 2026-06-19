@@ -1,11 +1,10 @@
-// World Cup Happiness Index 2026 - live "who to root for" tool.
-// Reads rankings.json (written by the pipeline). Two ways to value the joy:
-//   Performance, relative to expectations (default): a deep run weighted by how
-//     unlikely it was, with later rounds counting more. Underdogs rise.
-//   Performance, absolute: the happiness a title itself would add, full stop.
-// Both use fans reached x marginal-utility weight (always tilted toward the poor)
-// x the present value of the lingering memory of a win. Win probability never
-// weights the score; under the relative view it only sets the bar.
+// World Cup Happiness Index 2026 - results-first guide.
+// Reads rankings.json (written by the pipeline). A flipped bar chart, one bar per
+// country, sorted by the active view. Each bar shows the country, its Best Prior
+// World Cup result and where it is Expected to Reach; hover for the full detail.
+// Tick countries and hit the compare button for a side-by-side table.
+// Two views: Performance relative to expectations (default) and absolute. Win
+// probability never weights the score; under the relative view it only sets the bar.
 
 const HOME_ADV = 60;  // Elo bump for host nations, matches the model
 
@@ -26,34 +25,14 @@ const VIEWS = {
 };
 
 let DATA = null;
+let byName = {};
 let view = "surprise";
-let timeframe = "live";   // "live" (results so far) or "pre" (frozen pre-tournament)
+let timeframe = "live";           // "live" or "pre"
+const selected = new Set();        // countries ticked for comparison
 
-// The index field for the active method and timeframe. The absolute view is a
-// fixed prize and ignores the timeframe; the relative view switches on it.
 function activeKey() {
   if (view === "rooting") return "rooting_index";
   return timeframe === "pre" ? "surprise_index_pre" : "surprise_index";
-}
-
-// A team's best prior World Cup result, as a round name (same vocabulary as the
-// expected-finish below, so the two read as a direct comparison).
-function bestPrior(code) {
-  return {
-    won: "Won it", final: "Final", semi: "Semifinals",
-    quarter: "Quarterfinals", round16: "Round of 16",
-    group: "Group stage", first: "First time",
-  }[code] || "unknown";
-}
-
-// Expected finish, from expected depth (0 to 6) to a round name.
-function expStage(d) {
-  if (d < 0.5) return "Group stage";
-  if (d < 1.5) return "Round of 32";
-  if (d < 2.5) return "Round of 16";
-  if (d < 3.5) return "Quarterfinals";
-  if (d < 4.5) return "Semifinals";
-  return "Final";
 }
 
 function fmtInt(n) { return n.toLocaleString("en-US"); }
@@ -64,12 +43,62 @@ function pWin(a, b) {
   return 1 / (1 + Math.pow(10, -(ea - eb) / 400));
 }
 
+// Best prior World Cup result and expected finish, in one shared round vocabulary.
+function bestPrior(code) {
+  return {
+    won: "Won it", final: "Final", semi: "Semifinals", quarter: "Quarterfinals",
+    round16: "Round of 16", group: "Group stage", first: "First time",
+  }[code] || "unknown";
+}
+function expStage(d) {
+  if (d < 0.5) return "Group stage";
+  if (d < 1.5) return "Round of 32";
+  if (d < 2.5) return "Round of 16";
+  if (d < 3.5) return "Quarterfinals";
+  if (d < 4.5) return "Semifinals";
+  return "Final";
+}
+function stageAbbr(full) {
+  return {
+    "Won it": "Won", "Final": "Final", "Semifinals": "SF", "Quarterfinals": "QF",
+    "Round of 16": "R16", "Round of 32": "R32", "Group stage": "Grp", "First time": "1st",
+  }[full] || full;
+}
+function statusText(t) {
+  return t.eliminated ? "Out"
+    : (t.reached_depth > 0 ? "Still in (knockouts)" : "Still in (group stage)");
+}
+
+// One source of truth for every data value, used by the hover card and the
+// comparison table.
+function detailRows(t) {
+  return [
+    ["Performance, relative (live)", t.surprise_index.toFixed(1)],
+    ["Performance, relative (pre)", t.surprise_index_pre.toFixed(1)],
+    ["Performance, absolute", t.rooting_index.toFixed(1)],
+    ["Expected to Reach", expStage(t.expected_depth)],
+    ["Best Prior World Cup", bestPrior(t.best_finish)],
+    ["Status", statusText(t)],
+    ["World Cup titles", String(t.wc_titles)],
+    ["Last major trophy", t.last_major_year === null ? "none" : String(t.last_major_year)],
+    ["Memory half-life", t.memory_half_life + " yrs"],
+    ["Fans reached", fmtM(t.fan_population)],
+    ["&nbsp;&nbsp;home", fmtM(t.home_fans)],
+    ["&nbsp;&nbsp;diaspora", fmtM(t.diaspora_fans)],
+    ["&nbsp;&nbsp;continental solidarity", fmtM(t.solidarity_fans)],
+    ["Consumption (GNI pc, PPP)", "$" + fmtInt(t.consumption)],
+    ["Marginal-utility weight", t.mu_weight.toFixed(2) + "x"],
+    ["Elo rating", String(t.elo)],
+  ];
+}
+
 async function load() {
   const res = await fetch("rankings.json");
   DATA = await res.json();
+  byName = Object.fromEntries(DATA.teams.map((t) => [t.name, t]));
   bindToggle();
-  renderHeadline();
-  renderRanking();
+  document.getElementById("compare-btn").addEventListener("click", renderCompareTable);
+  refresh();
   setupDates();
   renderMeta();
 }
@@ -79,87 +108,122 @@ function teamsByView() {
   return [...DATA.teams].sort((a, b) => b[key] - a[key]);
 }
 
-function renderHeadline() {
-  const top = teamsByView()[0];
-  if (view === "rooting") {
-    const why = top.wc_titles === 0
-      ? "a huge, devoted following, low incomes, and no title to take for granted"
-      : "a huge following weighted up by low incomes";
-    document.getElementById("headline").innerHTML =
-      `If you only care about the win itself, root for <b>${top.name}</b>: ${why}. ` +
-      `The glow would linger for years rather than fade in a season.`;
-    return;
-  }
-  document.getElementById("headline").innerHTML =
-    `Root for <b>${top.name}</b>: few expect much of them, their following is large ` +
-    `and their incomes low, so every round they survive is a jolt of joy that lands ` +
-    `where it counts and lingers for years.`;
-}
-
 function refresh() {
-  // The timeframe toggle only bites on the surprise views; dim it otherwise.
   document.getElementById("time-toggle").classList.toggle("muted", view === "rooting");
   renderHeadline();
-  renderRanking();
+  renderChart();
   renderMatches(document.getElementById("match-date").value);
+  if (!document.getElementById("compare-table").classList.contains("hidden")) renderCompareTable();
 }
 
 function bindToggle() {
   document.querySelectorAll("#view-toggle button").forEach((btn) => {
     btn.addEventListener("click", () => {
       view = btn.dataset.view;
-      document.querySelectorAll("#view-toggle button")
-        .forEach((b) => b.classList.toggle("active", b === btn));
+      document.querySelectorAll("#view-toggle button").forEach((b) => b.classList.toggle("active", b === btn));
       refresh();
     });
   });
   document.querySelectorAll("#time-toggle button").forEach((btn) => {
     btn.addEventListener("click", () => {
       timeframe = btn.dataset.time;
-      document.querySelectorAll("#time-toggle button")
-        .forEach((b) => b.classList.toggle("active", b === btn));
+      document.querySelectorAll("#time-toggle button").forEach((b) => b.classList.toggle("active", b === btn));
       refresh();
     });
   });
 }
 
-function renderRanking() {
+function renderHeadline() {
+  const top = teamsByView()[0];
+  document.getElementById("headline").innerHTML = view === "rooting"
+    ? `For the biggest prize if they win, root for <b>${top.name}</b>.`
+    : `Right now, root for <b>${top.name}</b>: few expect much of them, the following is large and incomes low, so every round they survive lands where it counts.`;
+}
+
+function renderChart() {
   let note = VIEWS[view].note;
   if (view !== "rooting") {
     note += timeframe === "pre"
-      ? " Showing the frozen pre-tournament ranking, before any results."
+      ? " Showing the frozen pre-tournament ranking."
       : " Showing the live ranking, updated for results so far.";
   }
   document.getElementById("view-note").textContent = note;
+
   const key = activeKey();
   const teams = teamsByView();
   const max = Math.max(...teams.map((t) => t[key])) || 1;
-  const host = document.getElementById("ranking");
-  host.innerHTML = "";
-
-  teams.forEach((t, i) => {
-    const pct = Math.max(1.5, (t[key] / max) * 100);
-    const el = document.createElement("div");
-    el.className = "row" + (i === 0 ? " top" : "");
-    const tags = [];
-    if (t.host) tags.push('<span class="badge host">HOST</span>');
-    if (t.eliminated) tags.push('<span class="badge out">OUT</span>');
-    el.innerHTML = `
-      <span class="rank">${i + 1}</span>
-      <div class="name">${t.name}${tags.join("")}
-        <small>${t.confederation} &middot; Group ${t.group}</small>
-        <div class="compare">
-          <span class="cmp"><span class="cmp-k">Best prior:</span> ${bestPrior(t.best_finish)}</span>
-          <span class="cmp"><span class="cmp-k">Expected to reach:</span> ${expStage(t.expected_depth)}</span>
-        </div>
-      </div>
-      <div class="bar-wrap">
-        <div class="bar" style="width:${pct}%"></div>
-        <span class="bar-val">${t[key].toFixed(1)}</span>
+  const chart = document.getElementById("chart");
+  chart.innerHTML = '<div class="chart">' + teams.map((t, i) => {
+    const h = Math.max(2, (t[key] / max) * 100);
+    const cls = "col" + (i === 0 ? " top" : "") + (t.eliminated ? " out" : "");
+    const checked = selected.has(t.name) ? "checked" : "";
+    return `<div class="${cls}" data-name="${t.name}">
+        <div class="col-val">${t[key].toFixed(1)}</div>
+        <div class="barbox"><div class="bar" style="height:${h}%"></div></div>
+        <div class="col-name">${t.name}</div>
+        <div class="col-prior">${stageAbbr(bestPrior(t.best_finish))}</div>
+        <div class="col-exp">${stageAbbr(expStage(t.expected_depth))}</div>
+        <input type="checkbox" class="col-check" ${checked} data-name="${t.name}" aria-label="compare ${t.name}">
       </div>`;
-    el.addEventListener("click", () => openDrawer(t));
-    host.appendChild(el);
+  }).join("") + "</div>";
+
+  chart.querySelectorAll(".col").forEach((col) => {
+    const t = byName[col.dataset.name];
+    col.addEventListener("mouseenter", () => showTooltip(t, col));
+    col.addEventListener("mouseleave", hideTooltip);
   });
+  chart.querySelectorAll(".col-check").forEach((cb) => {
+    cb.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (cb.checked) selected.add(cb.dataset.name); else selected.delete(cb.dataset.name);
+      updateCompareCount();
+      if (!document.getElementById("compare-table").classList.contains("hidden")) renderCompareTable();
+    });
+  });
+  updateCompareCount();
+}
+
+function updateCompareCount() {
+  document.getElementById("compare-count").textContent =
+    selected.size ? `${selected.size} selected` : "none selected";
+}
+
+function showTooltip(t, col) {
+  const tip = document.getElementById("tooltip");
+  tip.innerHTML =
+    `<div class="tip-title">${t.name}</div>` +
+    `<div class="tip-sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</div>` +
+    detailRows(t).map(([k, v]) => `<div class="kv"><span class="k">${k}</span><span class="v">${v}</span></div>`).join("");
+  tip.classList.remove("hidden");
+  const r = col.getBoundingClientRect();
+  const tw = 250, th = tip.offsetHeight;
+  let left = Math.max(8, Math.min(r.left + r.width / 2 - tw / 2, window.innerWidth - tw - 8));
+  let top = r.top - th - 8;
+  if (top < 8) top = Math.min(r.bottom + 8, window.innerHeight - th - 8);
+  tip.style.left = left + "px";
+  tip.style.top = top + "px";
+}
+function hideTooltip() { document.getElementById("tooltip").classList.add("hidden"); }
+
+function renderCompareTable() {
+  const el = document.getElementById("compare-table");
+  el.classList.remove("hidden");
+  const cols = teamsByView().filter((t) => selected.has(t.name));
+  if (!cols.length) {
+    el.innerHTML = '<p class="empty">Tick the box under any countries in the chart, then this table compares them side by side.</p>';
+    return;
+  }
+  const labels = detailRows(cols[0]).map(([k]) => k);
+  const bodies = cols.map((t) => detailRows(t).map(([, v]) => v));
+  const rows = labels.map((lab, ri) =>
+    `<tr><th>${lab}</th>${bodies.map((b) => `<td>${b[ri]}</td>`).join("")}</tr>`).join("");
+  el.innerHTML =
+    `<div class="ct-head"><h3>Comparing ${cols.length} ${cols.length === 1 ? "country" : "countries"}</h3>` +
+    `<button id="ct-close" aria-label="close">&times;</button></div>` +
+    `<div class="ct-scroll"><table><thead><tr><th></th>${cols.map((t) => `<th>${t.name}</th>`).join("")}</tr></thead>` +
+    `<tbody>${rows}</tbody></table></div>`;
+  document.getElementById("ct-close").addEventListener("click", () => el.classList.add("hidden"));
+  el.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function setupDates() {
@@ -173,18 +237,13 @@ function setupDates() {
   renderMatches(input.value);
 }
 
-// Per-side score for a match, in the active view. The absolute view roots for the
-// bigger prize; the relative view weights that prize by how big an upset the win
-// would be tonight.
 function matchScore(t, opp) {
   const base = t.rooting_index;
-  if (view === "rooting") return base;
-  return base * (1 - pWin(t, opp));
+  return view === "rooting" ? base : base * (1 - pWin(t, opp));
 }
 
 function renderMatches(dateStr) {
   const host = document.getElementById("matches");
-  const byName = Object.fromEntries(DATA.teams.map((t) => [t.name, t]));
   const todays = DATA.fixtures.filter((f) => f.date === dateStr);
   host.innerHTML = "";
   if (!todays.length) {
@@ -194,8 +253,7 @@ function renderMatches(dateStr) {
   const key = activeKey();
   todays.forEach((f) => {
     const h = byName[f.home], a = byName[f.away];
-    const hs = matchScore(h, a), as = matchScore(a, h);
-    const homePick = hs >= as;
+    const homePick = matchScore(h, a) >= matchScore(a, h);
     const pick = homePick ? h : a;
     const upset = view !== "rooting" && (homePick ? pWin(h, a) < 0.5 : pWin(a, h) < 0.5);
     const el = document.createElement("div");
@@ -203,76 +261,25 @@ function renderMatches(dateStr) {
     el.innerHTML = `
       <div class="match-top"><span>Group ${f.group}</span><span>Matchday ${f.matchday}</span></div>
       <div class="match-teams">
-        <div class="side ${homePick ? "pick" : ""}">
-          <div class="tn">${h.name}</div>
-          <div class="ti">index ${h[key].toFixed(0)}</div>
-        </div>
+        <div class="side ${homePick ? "pick" : ""}"><div class="tn">${h.name}</div><div class="ti">index ${h[key].toFixed(0)}</div></div>
         <div class="vs">v</div>
-        <div class="side right ${homePick ? "" : "pick"}">
-          <div class="tn">${a.name}</div>
-          <div class="ti">index ${a[key].toFixed(0)}</div>
-        </div>
+        <div class="side right ${homePick ? "" : "pick"}"><div class="tn">${a.name}</div><div class="ti">index ${a[key].toFixed(0)}</div></div>
       </div>
       <div class="pick-line">Root for <b>${pick.name}</b>${
-        upset ? ", the underdog: an against-the-odds win here would be the bigger surprise." :
-        " for the most happiness on offer."
+        upset ? ", the underdog: an against-the-odds win here would be the bigger surprise." : " for the most happiness on offer."
       }</div>`;
-    el.querySelectorAll(".side").forEach((s, idx) => {
-      s.style.cursor = "pointer";
-      s.addEventListener("click", () => openDrawer(idx === 0 ? h : a));
-    });
     host.appendChild(el);
   });
-}
-
-function openDrawer(t) {
-  const body = document.getElementById("drawer-body");
-  const kv = (k, v) => `<div class="kv"><span class="k">${k}</span><span class="v">${v}</span></div>`;
-  const lastTitle = t.last_major_year === null ? "none on record" : t.last_major_year;
-  const status = t.eliminated ? "out"
-    : (t.reached_depth > 0 ? "still in (knockouts)" : "still in (group stage)");
-  body.innerHTML = `
-    <h3>${t.name}</h3>
-    <p class="sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</p>
-    ${kv("Performance, relative (live)", t.surprise_index.toFixed(1))}
-    ${kv("Performance, relative (pre-tournament)", t.surprise_index_pre.toFixed(1))}
-    ${kv("Performance, absolute", t.rooting_index.toFixed(1))}
-    <div class="kv-group">Run vs expectations</div>
-    ${kv("Expected to reach", expStage(t.expected_depth))}
-    ${kv("Best prior World Cup", bestPrior(t.best_finish))}
-    ${kv("Status", status)}
-    <div class="kv-group">Memory of a win</div>
-    ${kv("World Cup titles", t.wc_titles)}
-    ${kv("Last major trophy", lastTitle)}
-    ${kv("Memory half-life", t.memory_half_life + " years")}
-    <div class="kv-group">Reach and need</div>
-    ${kv("Fans reached", fmtM(t.fan_population))}
-    ${kv("&nbsp;&nbsp;home", fmtM(t.home_fans))}
-    ${kv("&nbsp;&nbsp;diaspora", fmtM(t.diaspora_fans))}
-    ${kv("&nbsp;&nbsp;continental solidarity", fmtM(t.solidarity_fans))}
-    ${kv("Consumption (GNI pc, PPP)", "$" + fmtInt(t.consumption))}
-    ${kv("Marginal-utility weight", t.mu_weight.toFixed(2) + "x")}
-    ${kv("Elo rating (reference only)", t.elo)}
-    <p class="note">Beating-expectations index = fans reached x marginal-utility
-      weight x the present value of a title x how far the team beats its
-      pre-tournament odds, with deeper rounds counting more. Lower consumption
-      raises the utility weight; an unaccustomed win lingers longer in memory. Win
-      probability sets the bar but never weights the score.</p>`;
-  document.getElementById("drawer").classList.remove("hidden");
 }
 
 function renderMeta() {
   const p = DATA.meta.params;
   document.getElementById("meta").innerHTML =
-    `Updated ${DATA.meta.generated.slice(0, 10)} &middot; ` +
-    `basis: ${DATA.meta.basis} &middot; ` +
+    `Updated ${DATA.meta.generated.slice(0, 10)} &middot; basis: ${DATA.meta.basis} &middot; ` +
     `<code>eta=${p.eta}</code> ` +
     `<code>memory half-life ${(Math.log(2) / p.r_lo).toFixed(0)}y to ${(Math.log(2) / p.r_hi).toFixed(1)}y</code> ` +
     `<code>later-round weight exp=${p.stage_weight_exp}</code> ` +
-    `<code>${fmtInt(p.mc_iterations)} sims for the bar</code>. Methods in the repo README.`;
+    `<code>${fmtInt(p.mc_iterations)} sims for the bar</code>. Methods in the appendix above.`;
 }
-
-document.getElementById("drawer-close")
-  .addEventListener("click", () => document.getElementById("drawer").classList.add("hidden"));
 
 load();

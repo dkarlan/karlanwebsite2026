@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>World Cup Happiness Index 2026</title>
+  <title>2026 Utilitarian World Cup Fan Guide</title>
   <style>
 :root {
   --ink: #14181f;
@@ -68,21 +68,21 @@ body {
 
 /* Background / further-reading links on the front page */
 .reading {
-  margin-top: 22px;
+  margin: 30px 0 8px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 7px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
-.reading-label { color: #9fd3c8; font-weight: 600; margin-bottom: 2px; }
+.reading-label { color: var(--ink); font-weight: 700; margin-bottom: 2px; }
 .reading a {
-  color: #d4dbe2;
+  color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid var(--accent-soft);
   padding-bottom: 1px;
 }
-.reading a:hover { color: #fff; border-bottom-color: #fff; }
+.reading a:hover { border-bottom-color: var(--accent); }
 
 .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
 
@@ -280,11 +280,82 @@ main { padding: 28px 0 60px; }
   .site-nav li a.two-line br { display: none; }
 }
 
+/* ---- Compare bar ---- */
+.compare-bar { margin-top: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.compare-btn {
+  background: var(--accent); color: #fff; border: none; border-radius: 8px;
+  padding: 9px 14px; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+}
+.compare-btn:hover { background: #0c6457; }
+.compare-count { color: var(--muted); font-size: 0.85rem; }
+
+/* ---- Flipped bar chart ---- */
+.chart-wrap { margin-top: 14px; }
+.chart-legend { color: var(--muted); font-size: 0.85rem; margin-bottom: 8px; }
+.chart-legend .lg-prior { color: #6b7280; font-weight: 700; }
+.chart-legend .lg-exp { color: var(--accent); font-weight: 700; }
+
+.chart-scroll {
+  overflow-x: auto;
+  padding: 6px 2px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+}
+.chart { display: flex; align-items: flex-end; gap: 3px; min-width: min-content; }
+.col {
+  flex: 0 0 76px; width: 76px; display: flex; flex-direction: column;
+  align-items: center; padding: 4px 2px 6px; border-radius: 6px; cursor: default;
+}
+.col:hover { background: #eef5f3; }
+.col-val { font-size: 0.72rem; font-weight: 700; color: var(--ink); height: 15px; }
+.barbox { height: 200px; width: 100%; display: flex; align-items: flex-end; justify-content: center; }
+.bar { width: 62%; min-height: 2px; background: var(--bar); border-radius: 3px 3px 0 0; transition: height 0.2s; }
+.col.top .bar { background: var(--gold); }
+.col.out .bar { background: #d8a7a7; }
+.col-name {
+  font-size: 0.72rem; font-weight: 600; text-align: center; margin-top: 5px;
+  line-height: 1.12; height: 26px; overflow: hidden; color: var(--ink);
+}
+.col-prior { font-size: 0.7rem; color: #6b7280; margin-top: 2px; }
+.col-exp { font-size: 0.7rem; color: var(--accent); font-weight: 600; }
+.col-check { margin-top: 5px; cursor: pointer; }
+
+/* ---- Hover detail card ---- */
+.tooltip {
+  position: fixed; z-index: 300; width: 250px; background: #fff;
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.18); font-size: 0.8rem; pointer-events: none;
+}
+.tooltip.hidden { display: none; }
+.tooltip .tip-title { font-weight: 700; font-size: 0.98rem; }
+.tooltip .tip-sub { color: var(--muted); font-size: 0.78rem; margin-bottom: 6px; }
+.tooltip .kv { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #f1f3f5; }
+.tooltip .kv .k { color: var(--muted); }
+.tooltip .kv .v { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ---- Comparison table ---- */
+.compare-table { margin: 18px 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px 14px; }
+.compare-table.hidden { display: none; }
+.compare-table .ct-head { display: flex; align-items: center; justify-content: space-between; }
+.compare-table h3 { font-size: 1.05rem; }
+#ct-close { background: none; border: none; font-size: 1.5rem; color: var(--muted); cursor: pointer; line-height: 1; }
+.ct-scroll { overflow-x: auto; }
+.compare-table table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+.compare-table th, .compare-table td { padding: 7px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
+.compare-table thead th { color: var(--ink); font-weight: 700; border-bottom: 2px solid var(--line); position: sticky; top: 0; background: var(--card); }
+.compare-table tbody th { text-align: left; color: var(--muted); font-weight: 500; }
+.compare-table tbody td { font-weight: 600; font-variant-numeric: tabular-nums; }
+.compare-table .empty { color: var(--muted); padding: 10px 2px; }
+
+@media (max-width: 620px) {
+  .col { flex-basis: 64px; width: 64px; }
+}
+
 </style>
 </head>
 <body>
-  <!-- Site navigation, mirrored from deankarlan.com so this page sits inside it.
-       The "World Cup" item is the new entry, placed next to OCE@USAID Museum. -->
+  <!-- Site navigation, mirrored from deankarlan.com so this page sits inside it. -->
   <nav class="site-nav">
     <div class="nav-inner">
       <span class="site-name">Dean Karlan</span>
@@ -307,17 +378,43 @@ main { padding: 28px 0 60px; }
       <p class="standfirst">Not sure who to root for? Maximize consequential global happiness!</p>
       <p class="standfirst-sub">A data-and-philosophy driven guide for the 48-team World Cup, with updates as the tournament progresses.</p>
       <p class="byline">By Dean Karlan</p>
-      <div class="reading">
-        <span class="reading-label">Links to similar prior year guides by me and others:</span>
-        <a href="https://www.nytimes.com/2014/06/26/upshot/why-you-should-root-for-nigeria-or-brazil-mexico-or-ghana.html" target="_blank" rel="noopener">2014 The original (NYTimes Upshot, by Karlan)</a>
-        <a href="https://www.nytimes.com/2014/07/05/upshot/which-world-cup-team-to-root-for-reconsidered.html" target="_blank" rel="noopener">2014 Reconsidered (NYTimes Upshot, by Karlan)</a>
-        <a href="https://blog.uehiro.ox.ac.uk/2018/06/the-utilitarians-guide-to-the-fifa-world-cup/" target="_blank" rel="noopener">2018 A Utilitarian's Guide (Oxford, by Zohny)</a>
-        <a href="https://www.cgdev.org/blog/why-you-should-support-brazil-or-cameroon-2022-world-cup" target="_blank" rel="noopener">2022 Support Brazil or Cameroon (CGD, by Crawfurd, Mitchell and Wickstead)</a>
-      </div>
     </div>
   </header>
 
   <main class="wrap">
+    <!-- Results first -->
+    <section class="controls">
+      <div class="toggle-row">
+        <div class="toggle" id="view-toggle">
+          <button data-view="surprise" class="active">Performance, relative to expectations</button>
+          <button data-view="rooting">Performance, absolute</button>
+        </div>
+        <div class="toggle small" id="time-toggle" title="Applies to the relative-to-expectations view">
+          <button data-time="live" class="active">Live</button>
+          <button data-time="pre">Pre-tournament</button>
+        </div>
+      </div>
+      <p class="view-note" id="view-note"></p>
+      <div class="compare-bar">
+        <button id="compare-btn" class="compare-btn">Show Table Comparing Selected Countries</button>
+        <span id="compare-count" class="compare-count"></span>
+      </div>
+    </section>
+
+    <div id="headline" class="headline"></div>
+
+    <section class="chart-wrap">
+      <p class="chart-legend">Bar height is the score, tallest first. Under each bar:
+        country, <span class="lg-prior">Best Prior</span> and
+        <span class="lg-exp">Expected to Reach</span>. Hover a bar for the full
+        detail; tick its box to add it to the comparison table. Scroll sideways for
+        the rest of the field.</p>
+      <div id="chart" class="chart-scroll"></div>
+    </section>
+
+    <section id="compare-table" class="compare-table hidden"></section>
+
+    <!-- Narrative -->
     <article class="essay">
       <p>In 2014 I wrote a short piece for The New York Times with a simple premise.
         A World Cup is watched by billions, and a title sets off real joy in the
@@ -340,63 +437,49 @@ main { padding: 28px 0 60px; }
         someone who has less (or, one arrives at the same implication if instead you
         just prefer to increase the utility more for those who have less to begin
         with, in line with utilitarianism as well as several other philosophical
-        constructs). And how long the joy lasts. A country that wins all
-        the time forgets quickly. A country that has never won remembers for a
-        generation. We put that last idea where it belongs, in the discount rate.
-        The memory of an unaccustomed win fades slowly, so its value today is
-        higher.</p>
+        constructs). And how long the joy lasts. A country that wins all the time
+        forgets quickly. A country that has never won remembers for a generation. We
+        put that last idea where it belongs, in the discount rate. The memory of an
+        unaccustomed win fades slowly, so its value today is higher.</p>
 
       <p>One refinement matters most. Fans are not only the home population, so we
         add the diaspora and a share of the neighbors who feel a regional win as
         their own. A deep run by Morocco lifts North Africa and the millions of
         Moroccans abroad, not only the home crowd.</p>
 
-      <p>The headline answer: Democratic Republic of Congo! Nearly a hundred million people, a
-        deep love of the game, very low incomes, and no World Cup pedigree to take
-        for granted. A title there would land where the marginal value of joy is
-        highest, and it would be remembered for years.</p>
+      <p>The headline answer: Democratic Republic of Congo! Nearly a hundred million
+        people, a deep love of the game, very low incomes, and no World Cup pedigree
+        to take for granted. A title there would land where the marginal value of
+        joy is highest, and it would be remembered for years.</p>
 
       <p>But a champion is crowned only once. The tournament gives joy every night,
-        and the best of it comes from surprise. So the default view of the tool
-        below is not who should win the whole thing. It is who is beating
-        expectations. Each team starts with a bar, its pre-tournament odds of
-        reaching each round. Clearing a low bar is what thrills. A long shot that
-        reaches the quarterfinals delivers more joy than a favorite who was
-        supposed to be there all along, and the deeper the run, the more it counts.
-        The odds set the bar. They never shrink the reward, so underdogs are
-        rewarded, not penalized.</p>
+        and the best of it comes from surprise. So the default view above is not who
+        should win the whole thing. It is who is beating expectations. Each team
+        starts with a bar, its pre-tournament odds of reaching each round. Clearing
+        a low bar is what thrills. A long shot that reaches the quarterfinals
+        delivers more joy than a favorite who was supposed to be there all along,
+        and the deeper the run, the more it counts. The odds set the bar. They never
+        shrink the reward, so underdogs are rewarded, not penalized.</p>
 
-      <p>Note: The weight on lower incomes is a value judgment, not a
-        measurement, so the tool lets you turn the dial yourself.</p>
+      <p>Note: The weight on lower incomes is a value judgment, not a measurement,
+        so the tool lets you turn the dial yourself.</p>
 
-      <p>So this year, root for the Democratic Republic of the Congo. Or open the
-        tool and let it tell you who to pull for tonight.</p>
+      <p>So this year, root for the Democratic Republic of the Congo. Or use the
+        guide above to see who to pull for tonight.</p>
     </article>
 
-    <section class="toolintro">
-      <h2>The tool</h2>
-      <div id="headline" class="headline"></div>
-    </section>
+    <div class="reading">
+      <span class="reading-label">Links to similar prior year guides by me and others:</span>
+      <a href="https://www.nytimes.com/2014/06/26/upshot/why-you-should-root-for-nigeria-or-brazil-mexico-or-ghana.html" target="_blank" rel="noopener">2014 The original (NYTimes Upshot, by Karlan)</a>
+      <a href="https://www.nytimes.com/2014/07/05/upshot/which-world-cup-team-to-root-for-reconsidered.html" target="_blank" rel="noopener">2014 Reconsidered (NYTimes Upshot, by Karlan)</a>
+      <a href="https://blog.uehiro.ox.ac.uk/2018/06/the-utilitarians-guide-to-the-fifa-world-cup/" target="_blank" rel="noopener">2018 A Utilitarian's Guide (Oxford, by Zohny)</a>
+      <a href="https://www.cgdev.org/blog/why-you-should-support-brazil-or-cameroon-2022-world-cup" target="_blank" rel="noopener">2022 Support Brazil or Cameroon (CGD, by Crawfurd, Mitchell and Wickstead)</a>
+    </div>
 
-    <section class="controls">
-      <div class="toggle-row">
-        <div class="toggle" id="view-toggle">
-          <button data-view="surprise" class="active">Performance, relative to expectations</button>
-          <button data-view="rooting">Performance, absolute</button>
-        </div>
-        <div class="toggle small" id="time-toggle" title="Applies to the performance-relative-to-expectations view">
-          <button data-time="live" class="active">Live</button>
-          <button data-time="pre">Pre-tournament</button>
-        </div>
-      </div>
-      <p class="view-note" id="view-note"></p>
-    </section>
-
-    <section id="ranking" class="ranking"></section>
-
+    <!-- Future matches -->
     <section class="tonight">
       <div class="tonight-head">
-        <h2>Matches</h2>
+        <h2>Future Matches</h2>
         <input type="date" id="match-date" />
       </div>
       <p class="view-note">For each match, the side to root for under the view you
@@ -480,10 +563,7 @@ main { padding: 28px 0 60px; }
     <footer id="meta" class="meta"></footer>
   </main>
 
-  <div id="drawer" class="drawer hidden">
-    <button id="drawer-close">&times;</button>
-    <div id="drawer-body"></div>
-  </div>
+  <div id="tooltip" class="tooltip hidden"></div>
 
   <script>window.__RANKINGS__ = {
   "meta": {
@@ -2646,14 +2726,13 @@ main { padding: 28px 0 60px; }
   ]
 };</script>
   <script>
-// World Cup Happiness Index 2026 - live "who to root for" tool.
-// Reads rankings.json (written by the pipeline). Two ways to value the joy:
-//   Performance, relative to expectations (default): a deep run weighted by how
-//     unlikely it was, with later rounds counting more. Underdogs rise.
-//   Performance, absolute: the happiness a title itself would add, full stop.
-// Both use fans reached x marginal-utility weight (always tilted toward the poor)
-// x the present value of the lingering memory of a win. Win probability never
-// weights the score; under the relative view it only sets the bar.
+// World Cup Happiness Index 2026 - results-first guide.
+// Reads rankings.json (written by the pipeline). A flipped bar chart, one bar per
+// country, sorted by the active view. Each bar shows the country, its Best Prior
+// World Cup result and where it is Expected to Reach; hover for the full detail.
+// Tick countries and hit the compare button for a side-by-side table.
+// Two views: Performance relative to expectations (default) and absolute. Win
+// probability never weights the score; under the relative view it only sets the bar.
 
 const HOME_ADV = 60;  // Elo bump for host nations, matches the model
 
@@ -2674,34 +2753,14 @@ const VIEWS = {
 };
 
 let DATA = null;
+let byName = {};
 let view = "surprise";
-let timeframe = "live";   // "live" (results so far) or "pre" (frozen pre-tournament)
+let timeframe = "live";           // "live" or "pre"
+const selected = new Set();        // countries ticked for comparison
 
-// The index field for the active method and timeframe. The absolute view is a
-// fixed prize and ignores the timeframe; the relative view switches on it.
 function activeKey() {
   if (view === "rooting") return "rooting_index";
   return timeframe === "pre" ? "surprise_index_pre" : "surprise_index";
-}
-
-// A team's best prior World Cup result, as a round name (same vocabulary as the
-// expected-finish below, so the two read as a direct comparison).
-function bestPrior(code) {
-  return {
-    won: "Won it", final: "Final", semi: "Semifinals",
-    quarter: "Quarterfinals", round16: "Round of 16",
-    group: "Group stage", first: "First time",
-  }[code] || "unknown";
-}
-
-// Expected finish, from expected depth (0 to 6) to a round name.
-function expStage(d) {
-  if (d < 0.5) return "Group stage";
-  if (d < 1.5) return "Round of 32";
-  if (d < 2.5) return "Round of 16";
-  if (d < 3.5) return "Quarterfinals";
-  if (d < 4.5) return "Semifinals";
-  return "Final";
 }
 
 function fmtInt(n) { return n.toLocaleString("en-US"); }
@@ -2712,11 +2771,61 @@ function pWin(a, b) {
   return 1 / (1 + Math.pow(10, -(ea - eb) / 400));
 }
 
+// Best prior World Cup result and expected finish, in one shared round vocabulary.
+function bestPrior(code) {
+  return {
+    won: "Won it", final: "Final", semi: "Semifinals", quarter: "Quarterfinals",
+    round16: "Round of 16", group: "Group stage", first: "First time",
+  }[code] || "unknown";
+}
+function expStage(d) {
+  if (d < 0.5) return "Group stage";
+  if (d < 1.5) return "Round of 32";
+  if (d < 2.5) return "Round of 16";
+  if (d < 3.5) return "Quarterfinals";
+  if (d < 4.5) return "Semifinals";
+  return "Final";
+}
+function stageAbbr(full) {
+  return {
+    "Won it": "Won", "Final": "Final", "Semifinals": "SF", "Quarterfinals": "QF",
+    "Round of 16": "R16", "Round of 32": "R32", "Group stage": "Grp", "First time": "1st",
+  }[full] || full;
+}
+function statusText(t) {
+  return t.eliminated ? "Out"
+    : (t.reached_depth > 0 ? "Still in (knockouts)" : "Still in (group stage)");
+}
+
+// One source of truth for every data value, used by the hover card and the
+// comparison table.
+function detailRows(t) {
+  return [
+    ["Performance, relative (live)", t.surprise_index.toFixed(1)],
+    ["Performance, relative (pre)", t.surprise_index_pre.toFixed(1)],
+    ["Performance, absolute", t.rooting_index.toFixed(1)],
+    ["Expected to Reach", expStage(t.expected_depth)],
+    ["Best Prior World Cup", bestPrior(t.best_finish)],
+    ["Status", statusText(t)],
+    ["World Cup titles", String(t.wc_titles)],
+    ["Last major trophy", t.last_major_year === null ? "none" : String(t.last_major_year)],
+    ["Memory half-life", t.memory_half_life + " yrs"],
+    ["Fans reached", fmtM(t.fan_population)],
+    ["&nbsp;&nbsp;home", fmtM(t.home_fans)],
+    ["&nbsp;&nbsp;diaspora", fmtM(t.diaspora_fans)],
+    ["&nbsp;&nbsp;continental solidarity", fmtM(t.solidarity_fans)],
+    ["Consumption (GNI pc, PPP)", "$" + fmtInt(t.consumption)],
+    ["Marginal-utility weight", t.mu_weight.toFixed(2) + "x"],
+    ["Elo rating", String(t.elo)],
+  ];
+}
+
 async function load() {
   DATA = window.__RANKINGS__;
+  byName = Object.fromEntries(DATA.teams.map((t) => [t.name, t]));
   bindToggle();
-  renderHeadline();
-  renderRanking();
+  document.getElementById("compare-btn").addEventListener("click", renderCompareTable);
+  refresh();
   setupDates();
   renderMeta();
 }
@@ -2726,87 +2835,122 @@ function teamsByView() {
   return [...DATA.teams].sort((a, b) => b[key] - a[key]);
 }
 
-function renderHeadline() {
-  const top = teamsByView()[0];
-  if (view === "rooting") {
-    const why = top.wc_titles === 0
-      ? "a huge, devoted following, low incomes, and no title to take for granted"
-      : "a huge following weighted up by low incomes";
-    document.getElementById("headline").innerHTML =
-      `If you only care about the win itself, root for <b>${top.name}</b>: ${why}. ` +
-      `The glow would linger for years rather than fade in a season.`;
-    return;
-  }
-  document.getElementById("headline").innerHTML =
-    `Root for <b>${top.name}</b>: few expect much of them, their following is large ` +
-    `and their incomes low, so every round they survive is a jolt of joy that lands ` +
-    `where it counts and lingers for years.`;
-}
-
 function refresh() {
-  // The timeframe toggle only bites on the surprise views; dim it otherwise.
   document.getElementById("time-toggle").classList.toggle("muted", view === "rooting");
   renderHeadline();
-  renderRanking();
+  renderChart();
   renderMatches(document.getElementById("match-date").value);
+  if (!document.getElementById("compare-table").classList.contains("hidden")) renderCompareTable();
 }
 
 function bindToggle() {
   document.querySelectorAll("#view-toggle button").forEach((btn) => {
     btn.addEventListener("click", () => {
       view = btn.dataset.view;
-      document.querySelectorAll("#view-toggle button")
-        .forEach((b) => b.classList.toggle("active", b === btn));
+      document.querySelectorAll("#view-toggle button").forEach((b) => b.classList.toggle("active", b === btn));
       refresh();
     });
   });
   document.querySelectorAll("#time-toggle button").forEach((btn) => {
     btn.addEventListener("click", () => {
       timeframe = btn.dataset.time;
-      document.querySelectorAll("#time-toggle button")
-        .forEach((b) => b.classList.toggle("active", b === btn));
+      document.querySelectorAll("#time-toggle button").forEach((b) => b.classList.toggle("active", b === btn));
       refresh();
     });
   });
 }
 
-function renderRanking() {
+function renderHeadline() {
+  const top = teamsByView()[0];
+  document.getElementById("headline").innerHTML = view === "rooting"
+    ? `For the biggest prize if they win, root for <b>${top.name}</b>.`
+    : `Right now, root for <b>${top.name}</b>: few expect much of them, the following is large and incomes low, so every round they survive lands where it counts.`;
+}
+
+function renderChart() {
   let note = VIEWS[view].note;
   if (view !== "rooting") {
     note += timeframe === "pre"
-      ? " Showing the frozen pre-tournament ranking, before any results."
+      ? " Showing the frozen pre-tournament ranking."
       : " Showing the live ranking, updated for results so far.";
   }
   document.getElementById("view-note").textContent = note;
+
   const key = activeKey();
   const teams = teamsByView();
   const max = Math.max(...teams.map((t) => t[key])) || 1;
-  const host = document.getElementById("ranking");
-  host.innerHTML = "";
-
-  teams.forEach((t, i) => {
-    const pct = Math.max(1.5, (t[key] / max) * 100);
-    const el = document.createElement("div");
-    el.className = "row" + (i === 0 ? " top" : "");
-    const tags = [];
-    if (t.host) tags.push('<span class="badge host">HOST</span>');
-    if (t.eliminated) tags.push('<span class="badge out">OUT</span>');
-    el.innerHTML = `
-      <span class="rank">${i + 1}</span>
-      <div class="name">${t.name}${tags.join("")}
-        <small>${t.confederation} &middot; Group ${t.group}</small>
-        <div class="compare">
-          <span class="cmp"><span class="cmp-k">Best prior:</span> ${bestPrior(t.best_finish)}</span>
-          <span class="cmp"><span class="cmp-k">Expected to reach:</span> ${expStage(t.expected_depth)}</span>
-        </div>
-      </div>
-      <div class="bar-wrap">
-        <div class="bar" style="width:${pct}%"></div>
-        <span class="bar-val">${t[key].toFixed(1)}</span>
+  const chart = document.getElementById("chart");
+  chart.innerHTML = '<div class="chart">' + teams.map((t, i) => {
+    const h = Math.max(2, (t[key] / max) * 100);
+    const cls = "col" + (i === 0 ? " top" : "") + (t.eliminated ? " out" : "");
+    const checked = selected.has(t.name) ? "checked" : "";
+    return `<div class="${cls}" data-name="${t.name}">
+        <div class="col-val">${t[key].toFixed(1)}</div>
+        <div class="barbox"><div class="bar" style="height:${h}%"></div></div>
+        <div class="col-name">${t.name}</div>
+        <div class="col-prior">${stageAbbr(bestPrior(t.best_finish))}</div>
+        <div class="col-exp">${stageAbbr(expStage(t.expected_depth))}</div>
+        <input type="checkbox" class="col-check" ${checked} data-name="${t.name}" aria-label="compare ${t.name}">
       </div>`;
-    el.addEventListener("click", () => openDrawer(t));
-    host.appendChild(el);
+  }).join("") + "</div>";
+
+  chart.querySelectorAll(".col").forEach((col) => {
+    const t = byName[col.dataset.name];
+    col.addEventListener("mouseenter", () => showTooltip(t, col));
+    col.addEventListener("mouseleave", hideTooltip);
   });
+  chart.querySelectorAll(".col-check").forEach((cb) => {
+    cb.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (cb.checked) selected.add(cb.dataset.name); else selected.delete(cb.dataset.name);
+      updateCompareCount();
+      if (!document.getElementById("compare-table").classList.contains("hidden")) renderCompareTable();
+    });
+  });
+  updateCompareCount();
+}
+
+function updateCompareCount() {
+  document.getElementById("compare-count").textContent =
+    selected.size ? `${selected.size} selected` : "none selected";
+}
+
+function showTooltip(t, col) {
+  const tip = document.getElementById("tooltip");
+  tip.innerHTML =
+    `<div class="tip-title">${t.name}</div>` +
+    `<div class="tip-sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</div>` +
+    detailRows(t).map(([k, v]) => `<div class="kv"><span class="k">${k}</span><span class="v">${v}</span></div>`).join("");
+  tip.classList.remove("hidden");
+  const r = col.getBoundingClientRect();
+  const tw = 250, th = tip.offsetHeight;
+  let left = Math.max(8, Math.min(r.left + r.width / 2 - tw / 2, window.innerWidth - tw - 8));
+  let top = r.top - th - 8;
+  if (top < 8) top = Math.min(r.bottom + 8, window.innerHeight - th - 8);
+  tip.style.left = left + "px";
+  tip.style.top = top + "px";
+}
+function hideTooltip() { document.getElementById("tooltip").classList.add("hidden"); }
+
+function renderCompareTable() {
+  const el = document.getElementById("compare-table");
+  el.classList.remove("hidden");
+  const cols = teamsByView().filter((t) => selected.has(t.name));
+  if (!cols.length) {
+    el.innerHTML = '<p class="empty">Tick the box under any countries in the chart, then this table compares them side by side.</p>';
+    return;
+  }
+  const labels = detailRows(cols[0]).map(([k]) => k);
+  const bodies = cols.map((t) => detailRows(t).map(([, v]) => v));
+  const rows = labels.map((lab, ri) =>
+    `<tr><th>${lab}</th>${bodies.map((b) => `<td>${b[ri]}</td>`).join("")}</tr>`).join("");
+  el.innerHTML =
+    `<div class="ct-head"><h3>Comparing ${cols.length} ${cols.length === 1 ? "country" : "countries"}</h3>` +
+    `<button id="ct-close" aria-label="close">&times;</button></div>` +
+    `<div class="ct-scroll"><table><thead><tr><th></th>${cols.map((t) => `<th>${t.name}</th>`).join("")}</tr></thead>` +
+    `<tbody>${rows}</tbody></table></div>`;
+  document.getElementById("ct-close").addEventListener("click", () => el.classList.add("hidden"));
+  el.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function setupDates() {
@@ -2820,18 +2964,13 @@ function setupDates() {
   renderMatches(input.value);
 }
 
-// Per-side score for a match, in the active view. The absolute view roots for the
-// bigger prize; the relative view weights that prize by how big an upset the win
-// would be tonight.
 function matchScore(t, opp) {
   const base = t.rooting_index;
-  if (view === "rooting") return base;
-  return base * (1 - pWin(t, opp));
+  return view === "rooting" ? base : base * (1 - pWin(t, opp));
 }
 
 function renderMatches(dateStr) {
   const host = document.getElementById("matches");
-  const byName = Object.fromEntries(DATA.teams.map((t) => [t.name, t]));
   const todays = DATA.fixtures.filter((f) => f.date === dateStr);
   host.innerHTML = "";
   if (!todays.length) {
@@ -2841,8 +2980,7 @@ function renderMatches(dateStr) {
   const key = activeKey();
   todays.forEach((f) => {
     const h = byName[f.home], a = byName[f.away];
-    const hs = matchScore(h, a), as = matchScore(a, h);
-    const homePick = hs >= as;
+    const homePick = matchScore(h, a) >= matchScore(a, h);
     const pick = homePick ? h : a;
     const upset = view !== "rooting" && (homePick ? pWin(h, a) < 0.5 : pWin(a, h) < 0.5);
     const el = document.createElement("div");
@@ -2850,77 +2988,26 @@ function renderMatches(dateStr) {
     el.innerHTML = `
       <div class="match-top"><span>Group ${f.group}</span><span>Matchday ${f.matchday}</span></div>
       <div class="match-teams">
-        <div class="side ${homePick ? "pick" : ""}">
-          <div class="tn">${h.name}</div>
-          <div class="ti">index ${h[key].toFixed(0)}</div>
-        </div>
+        <div class="side ${homePick ? "pick" : ""}"><div class="tn">${h.name}</div><div class="ti">index ${h[key].toFixed(0)}</div></div>
         <div class="vs">v</div>
-        <div class="side right ${homePick ? "" : "pick"}">
-          <div class="tn">${a.name}</div>
-          <div class="ti">index ${a[key].toFixed(0)}</div>
-        </div>
+        <div class="side right ${homePick ? "" : "pick"}"><div class="tn">${a.name}</div><div class="ti">index ${a[key].toFixed(0)}</div></div>
       </div>
       <div class="pick-line">Root for <b>${pick.name}</b>${
-        upset ? ", the underdog: an against-the-odds win here would be the bigger surprise." :
-        " for the most happiness on offer."
+        upset ? ", the underdog: an against-the-odds win here would be the bigger surprise." : " for the most happiness on offer."
       }</div>`;
-    el.querySelectorAll(".side").forEach((s, idx) => {
-      s.style.cursor = "pointer";
-      s.addEventListener("click", () => openDrawer(idx === 0 ? h : a));
-    });
     host.appendChild(el);
   });
-}
-
-function openDrawer(t) {
-  const body = document.getElementById("drawer-body");
-  const kv = (k, v) => `<div class="kv"><span class="k">${k}</span><span class="v">${v}</span></div>`;
-  const lastTitle = t.last_major_year === null ? "none on record" : t.last_major_year;
-  const status = t.eliminated ? "out"
-    : (t.reached_depth > 0 ? "still in (knockouts)" : "still in (group stage)");
-  body.innerHTML = `
-    <h3>${t.name}</h3>
-    <p class="sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</p>
-    ${kv("Performance, relative (live)", t.surprise_index.toFixed(1))}
-    ${kv("Performance, relative (pre-tournament)", t.surprise_index_pre.toFixed(1))}
-    ${kv("Performance, absolute", t.rooting_index.toFixed(1))}
-    <div class="kv-group">Run vs expectations</div>
-    ${kv("Expected to reach", expStage(t.expected_depth))}
-    ${kv("Best prior World Cup", bestPrior(t.best_finish))}
-    ${kv("Status", status)}
-    <div class="kv-group">Memory of a win</div>
-    ${kv("World Cup titles", t.wc_titles)}
-    ${kv("Last major trophy", lastTitle)}
-    ${kv("Memory half-life", t.memory_half_life + " years")}
-    <div class="kv-group">Reach and need</div>
-    ${kv("Fans reached", fmtM(t.fan_population))}
-    ${kv("&nbsp;&nbsp;home", fmtM(t.home_fans))}
-    ${kv("&nbsp;&nbsp;diaspora", fmtM(t.diaspora_fans))}
-    ${kv("&nbsp;&nbsp;continental solidarity", fmtM(t.solidarity_fans))}
-    ${kv("Consumption (GNI pc, PPP)", "$" + fmtInt(t.consumption))}
-    ${kv("Marginal-utility weight", t.mu_weight.toFixed(2) + "x")}
-    ${kv("Elo rating (reference only)", t.elo)}
-    <p class="note">Beating-expectations index = fans reached x marginal-utility
-      weight x the present value of a title x how far the team beats its
-      pre-tournament odds, with deeper rounds counting more. Lower consumption
-      raises the utility weight; an unaccustomed win lingers longer in memory. Win
-      probability sets the bar but never weights the score.</p>`;
-  document.getElementById("drawer").classList.remove("hidden");
 }
 
 function renderMeta() {
   const p = DATA.meta.params;
   document.getElementById("meta").innerHTML =
-    `Updated ${DATA.meta.generated.slice(0, 10)} &middot; ` +
-    `basis: ${DATA.meta.basis} &middot; ` +
+    `Updated ${DATA.meta.generated.slice(0, 10)} &middot; basis: ${DATA.meta.basis} &middot; ` +
     `<code>eta=${p.eta}</code> ` +
     `<code>memory half-life ${(Math.log(2) / p.r_lo).toFixed(0)}y to ${(Math.log(2) / p.r_hi).toFixed(1)}y</code> ` +
     `<code>later-round weight exp=${p.stage_weight_exp}</code> ` +
-    `<code>${fmtInt(p.mc_iterations)} sims for the bar</code>. Methods in the repo README.`;
+    `<code>${fmtInt(p.mc_iterations)} sims for the bar</code>. Methods in the appendix above.`;
 }
-
-document.getElementById("drawer-close")
-  .addEventListener("click", () => document.getElementById("drawer").classList.add("hidden"));
 
 load();
 
