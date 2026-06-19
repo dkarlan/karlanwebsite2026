@@ -149,6 +149,7 @@ header h1 { font-size: 2.2rem; line-height: 1.1; margin: 8px 0 14px; }
 .appendix-body p, .appendix-body li { font-size: 0.94rem; line-height: 1.6; color: #3a434e; }
 .appendix-body ul { margin: 6px 0 6px 18px; }
 .appendix-body li { margin-bottom: 6px; }
+.appendix-body .produced { margin-top: 20px; font-size: 0.85rem; color: var(--muted); font-style: italic; }
 
 main { padding: 28px 0 60px; }
 
@@ -188,9 +189,9 @@ main { padding: 28px 0 60px; }
   border-radius: 10px;
   padding: 12px 14px;
   display: grid;
-  grid-template-columns: 26px 1.6fr 3fr auto;
+  grid-template-columns: 26px 2fr 2.4fr;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   cursor: pointer;
   transition: border-color 0.15s, transform 0.05s;
 }
@@ -199,6 +200,9 @@ main { padding: 28px 0 60px; }
 .row .rank { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
 .row .name { font-weight: 600; }
 .row .name small { display: block; font-weight: 400; color: var(--muted); font-size: 0.76rem; }
+.row .compare { margin-top: 5px; display: flex; flex-direction: column; gap: 1px; }
+.row .cmp { font-size: 0.8rem; color: #3a434e; font-variant-numeric: tabular-nums; }
+.row .cmp .cmp-k { display: inline-block; min-width: 118px; color: var(--muted); }
 .row .badge {
   display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em;
   color: var(--gold); margin-left: 6px; vertical-align: middle;
@@ -259,8 +263,8 @@ main { padding: 28px 0 60px; }
 .drawer .note { margin-top: 16px; font-size: 0.82rem; color: var(--muted); background: var(--bg); padding: 12px; border-radius: 8px; }
 
 @media (max-width: 620px) {
-  .row { grid-template-columns: 22px 1.4fr 2fr; }
-  .row .p { display: none; }
+  .row { grid-template-columns: 22px 1.5fr 1.5fr; }
+  .row .cmp .cmp-k { min-width: 0; margin-right: 4px; }
   header h1 { font-size: 1.7rem; }
   .site-nav .nav-inner { flex-direction: column; padding: 0.4rem 1rem; }
   .site-nav .site-name { padding: 0.5rem 0; }

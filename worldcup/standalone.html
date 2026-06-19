@@ -156,6 +156,7 @@ header h1 { font-size: 2.2rem; line-height: 1.1; margin: 8px 0 14px; }
 .appendix-body p, .appendix-body li { font-size: 0.94rem; line-height: 1.6; color: #3a434e; }
 .appendix-body ul { margin: 6px 0 6px 18px; }
 .appendix-body li { margin-bottom: 6px; }
+.appendix-body .produced { margin-top: 20px; font-size: 0.85rem; color: var(--muted); font-style: italic; }
 
 main { padding: 28px 0 60px; }
 
@@ -195,9 +196,9 @@ main { padding: 28px 0 60px; }
   border-radius: 10px;
   padding: 12px 14px;
   display: grid;
-  grid-template-columns: 26px 1.6fr 3fr auto;
+  grid-template-columns: 26px 2fr 2.4fr;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   cursor: pointer;
   transition: border-color 0.15s, transform 0.05s;
 }
@@ -206,6 +207,9 @@ main { padding: 28px 0 60px; }
 .row .rank { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
 .row .name { font-weight: 600; }
 .row .name small { display: block; font-weight: 400; color: var(--muted); font-size: 0.76rem; }
+.row .compare { margin-top: 5px; display: flex; flex-direction: column; gap: 1px; }
+.row .cmp { font-size: 0.8rem; color: #3a434e; font-variant-numeric: tabular-nums; }
+.row .cmp .cmp-k { display: inline-block; min-width: 118px; color: var(--muted); }
 .row .badge {
   display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em;
   color: var(--gold); margin-left: 6px; vertical-align: middle;
@@ -266,8 +270,8 @@ main { padding: 28px 0 60px; }
 .drawer .note { margin-top: 16px; font-size: 0.82rem; color: var(--muted); background: var(--bg); padding: 12px; border-radius: 8px; }
 
 @media (max-width: 620px) {
-  .row { grid-template-columns: 22px 1.4fr 2fr; }
-  .row .p { display: none; }
+  .row { grid-template-columns: 22px 1.5fr 1.5fr; }
+  .row .cmp .cmp-k { min-width: 0; margin-right: 4px; }
   header h1 { font-size: 1.7rem; }
   .site-nav .nav-inner { flex-direction: column; padding: 0.4rem 1rem; }
   .site-nav .site-name { padding: 0.5rem 0; }
@@ -427,7 +431,7 @@ main { padding: 28px 0 60px; }
             fourteen.</li>
         </ul>
 
-        <h3>Beating expectations (the default view)</h3>
+        <h3>Performance relative to expectations (the default view)</h3>
         <p>The bar is each team's pre-tournament chance of reaching each knockout
           round, from an Elo simulation of the real bracket. The surprise of a run
           is how unlikely it was, summed over the rounds the team reaches and
@@ -436,12 +440,21 @@ main { padding: 28px 0 60px; }
           A second toggle compares the live standing with the frozen pre-tournament
           one.</p>
 
-        <h3>Data</h3>
-        <p>Population and consumption from the World Bank. Soccer interest
-          triangulated from Google Trends, registered-player counts and a culture
-          score. Team strength and the expectation bar from the World Football Elo
-          Ratings. Pedigree from World Cup and continental records. Live results
-          from football-data.org.</p>
+        <h3>Data sources</h3>
+        <ul>
+          <li>Population and consumption: World Bank World Development Indicators
+            (population, and GNI per capita at purchasing power parity).</li>
+          <li>The 48-team field and the group draw: FIFA (final draw, 5 December
+            2025).</li>
+          <li>Team strength and the expectation bar: World Football Elo Ratings
+            (eloratings.net).</li>
+          <li>Soccer interest: Google Trends, FIFA Big Count registered players, and
+            a curated culture and television-reach score.</li>
+          <li>Diaspora size: United Nations international migrant-stock estimates.</li>
+          <li>Pedigree and best prior finishes: World Cup and continental
+            championship records.</li>
+          <li>Live results and fixtures: football-data.org.</li>
+        </ul>
 
         <h3>The evidence behind the joy</h3>
         <p>That happiness tracks surprise: Rutledge, Skandali, Dayan and Dolan
@@ -452,17 +465,15 @@ main { padding: 28px 0 60px; }
           size of the wellbeing effect of national sporting success: Kavetsos and
           Szymanski (2010).</p>
 
-        <h3>Not yet incorporated</h3>
-        <p>One real cost is left out: upset losses can raise domestic violence
-          (Card and Dahl 2011), and the losing finalist's fans are let down. A
-          priority for the next version.</p>
-
         <h3>Caveats</h3>
-        <p>Diaspora, interest and pedigree figures are documented estimates. The
-          size of the happiness bump is a flat assumed value, informed by the
-          literature rather than estimated team by team. The expectation bar is
-          frozen from before the tournament, so it does not drift as results come
-          in. Full code and data are in the project repository.</p>
+        <ul>
+          <li>Diaspora, interest and pedigree figures are documented estimates.</li>
+          <li>The size of the happiness bump is a flat assumed value.</li>
+          <li>Not yet incorporated: upset losses can raise domestic violence (Card
+            and Dahl 2011), and the losing finalist's fans are let down.</li>
+        </ul>
+
+        <p class="produced">Produced using Claude.ai code.</p>
       </div>
     </details>
 
@@ -2673,18 +2684,19 @@ function activeKey() {
   return timeframe === "pre" ? "surprise_index_pre" : "surprise_index";
 }
 
-// A team's best prior World Cup result, as a short phrase.
+// A team's best prior World Cup result, as a round name (same vocabulary as the
+// expected-finish below, so the two read as a direct comparison).
 function bestPrior(code) {
   return {
-    won: "won", final: "lost in final", semi: "lost in semis",
-    quarter: "lost in quarters", round16: "lost in round of 16",
-    group: "lost in group", first: "first time",
+    won: "Won it", final: "Final", semi: "Semifinals",
+    quarter: "Quarterfinals", round16: "Round of 16",
+    group: "Group stage", first: "First time",
   }[code] || "unknown";
 }
 
 // Expected finish, from expected depth (0 to 6) to a round name.
 function expStage(d) {
-  if (d < 0.5) return "Group";
+  if (d < 0.5) return "Group stage";
   if (d < 1.5) return "Round of 32";
   if (d < 2.5) return "Round of 16";
   if (d < 3.5) return "Quarterfinals";
@@ -2758,11 +2770,6 @@ function bindToggle() {
   });
 }
 
-function secondaryCell(t) {
-  if (view === "rooting") return `${t.memory_half_life}y<br><small>memory</small>`;
-  return `${expStage(t.expected_depth)}<br><small>expected to reach</small>`;
-}
-
 function renderRanking() {
   let note = VIEWS[view].note;
   if (view !== "rooting") {
@@ -2787,12 +2794,16 @@ function renderRanking() {
     el.innerHTML = `
       <span class="rank">${i + 1}</span>
       <div class="name">${t.name}${tags.join("")}
-        <small>${t.confederation} &middot; Group ${t.group} &middot; Best prior: ${bestPrior(t.best_finish)}</small></div>
+        <small>${t.confederation} &middot; Group ${t.group}</small>
+        <div class="compare">
+          <span class="cmp"><span class="cmp-k">Best prior:</span> ${bestPrior(t.best_finish)}</span>
+          <span class="cmp"><span class="cmp-k">Expected to reach:</span> ${expStage(t.expected_depth)}</span>
+        </div>
+      </div>
       <div class="bar-wrap">
         <div class="bar" style="width:${pct}%"></div>
         <span class="bar-val">${t[key].toFixed(1)}</span>
-      </div>
-      <div class="p">${secondaryCell(t)}</div>`;
+      </div>`;
     el.addEventListener("click", () => openDrawer(t));
     host.appendChild(el);
   });

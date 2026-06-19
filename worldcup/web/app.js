@@ -36,18 +36,19 @@ function activeKey() {
   return timeframe === "pre" ? "surprise_index_pre" : "surprise_index";
 }
 
-// A team's best prior World Cup result, as a short phrase.
+// A team's best prior World Cup result, as a round name (same vocabulary as the
+// expected-finish below, so the two read as a direct comparison).
 function bestPrior(code) {
   return {
-    won: "won", final: "lost in final", semi: "lost in semis",
-    quarter: "lost in quarters", round16: "lost in round of 16",
-    group: "lost in group", first: "first time",
+    won: "Won it", final: "Final", semi: "Semifinals",
+    quarter: "Quarterfinals", round16: "Round of 16",
+    group: "Group stage", first: "First time",
   }[code] || "unknown";
 }
 
 // Expected finish, from expected depth (0 to 6) to a round name.
 function expStage(d) {
-  if (d < 0.5) return "Group";
+  if (d < 0.5) return "Group stage";
   if (d < 1.5) return "Round of 32";
   if (d < 2.5) return "Round of 16";
   if (d < 3.5) return "Quarterfinals";
@@ -122,11 +123,6 @@ function bindToggle() {
   });
 }
 
-function secondaryCell(t) {
-  if (view === "rooting") return `${t.memory_half_life}y<br><small>memory</small>`;
-  return `${expStage(t.expected_depth)}<br><small>expected to reach</small>`;
-}
-
 function renderRanking() {
   let note = VIEWS[view].note;
   if (view !== "rooting") {
@@ -151,12 +147,16 @@ function renderRanking() {
     el.innerHTML = `
       <span class="rank">${i + 1}</span>
       <div class="name">${t.name}${tags.join("")}
-        <small>${t.confederation} &middot; Group ${t.group} &middot; Best prior: ${bestPrior(t.best_finish)}</small></div>
+        <small>${t.confederation} &middot; Group ${t.group}</small>
+        <div class="compare">
+          <span class="cmp"><span class="cmp-k">Best prior:</span> ${bestPrior(t.best_finish)}</span>
+          <span class="cmp"><span class="cmp-k">Expected to reach:</span> ${expStage(t.expected_depth)}</span>
+        </div>
+      </div>
       <div class="bar-wrap">
         <div class="bar" style="width:${pct}%"></div>
         <span class="bar-val">${t[key].toFixed(1)}</span>
-      </div>
-      <div class="p">${secondaryCell(t)}</div>`;
+      </div>`;
     el.addEventListener("click", () => openDrawer(t));
     host.appendChild(el);
   });
