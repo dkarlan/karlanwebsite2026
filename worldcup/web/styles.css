@@ -100,6 +100,7 @@ main { padding: 28px 0 60px; }
   color: var(--gold); margin-left: 6px; vertical-align: middle;
 }
 .row .badge.host { color: var(--accent); }
+.row .badge.out { color: #b91c1c; }
 
 .bar-wrap { background: var(--bar-soft); border-radius: 6px; height: 22px; position: relative; }
 .bar { background: var(--bar); height: 100%; border-radius: 6px; min-width: 2px; }

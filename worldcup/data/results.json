@@ -1,0 +1,6 @@
+{
+  "as_of": "2026-06-19",
+  "source": "default snapshot (pre-knockout)",
+  "note": "Group stage in progress. Every team is alive and no knockout depth has been reached yet, so each carries its full capacity to surprise. Updated by fetch_results.py (set FOOTBALL_DATA_TOKEN) or by hand: per team, reached_depth is the deepest knockout round reached (R32=1, R16=2, QF=3, SF=4, final=5, champion=6) and eliminated is true once they are out. Teams absent from this map default to reached_depth 0, not eliminated.",
+  "teams": {}
+}

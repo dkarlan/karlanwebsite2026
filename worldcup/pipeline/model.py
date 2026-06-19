@@ -41,6 +41,45 @@ def _load_workbook():
     return rows
 
 
+def _load_expectations():
+    """team -> {1: P(reach R32), ..., 6: P(champion), 'depth': expected depth}."""
+    path = os.path.join(DATA, "expectations.csv")
+    out = {}
+    if not os.path.exists(path):
+        return out
+    cols = ["p_r32", "p_r16", "p_qf", "p_sf", "p_final", "p_champion"]
+    with open(path, encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            out[r["name"]] = {k + 1: float(r[c]) for k, c in enumerate(cols)}
+            out[r["name"]]["depth"] = float(r["expected_depth"])
+    return out
+
+
+def _load_results():
+    """team -> {'reached_depth': int, 'eliminated': bool}; default empty."""
+    path = os.path.join(DATA, "results.json")
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh).get("teams", {})
+    return {}
+
+
+def surprise_score(probs, reached_depth, eliminated):
+    """Depth-weighted sum of how unlikely each reached (or still-reachable) stage was.
+
+    maxk = the depth reached if the team is out, else 6 (a live team keeps its full
+    forward potential). Deeper stages count more via the depth weight.
+    """
+    if not probs:
+        return 0.0
+    maxk = reached_depth if eliminated else 6
+    total = 0.0
+    for k in range(1, maxk + 1):
+        weight = k ** config.STAGE_WEIGHT_EXP
+        total += weight * (1.0 - probs.get(k, 0.0))
+    return total
+
+
 def mu_weight(consumption, eta):
     c = max(float(consumption), 500.0)        # floor to avoid blow-ups
     return (config.C_REF / c) ** eta
@@ -100,13 +139,31 @@ def main():
 
     base = compute(teams, config.ETA)
     band = compute(teams, config.ETA_SENSITIVITY)
+    expectations = _load_expectations()
+    results = _load_results()
+
+    # Surprise factor per team (independent of eta), and the surprise-weighted
+    # welfare at both eta values.
+    surprise = {}
+    for n in teams:
+        res = results.get(n, {})
+        surprise[n] = surprise_score(
+            expectations.get(n, {}),
+            int(res.get("reached_depth", 0)),
+            bool(res.get("eliminated", False)),
+        )
+
     max_wnet = max(r["w_net"] for r in base.values())
     max_wnet_band = max(r["w_net"] for r in band.values())
+    max_surp = max(base[n]["w_net"] * surprise[n] for n in teams) or 1.0
+    max_surp_band = max(band[n]["w_net"] * surprise[n] for n in teams) or 1.0
 
     out_teams = []
     for n, t in teams.items():
         b = base[n]
         history = float(t["history"]) if t["history"] else 0.0
+        res = results.get(n, {})
+        exp = expectations.get(n, {})
         out_teams.append({
             "name": n,
             "confederation": t["confederation"],
@@ -127,12 +184,18 @@ def main():
             "solidarity_fans": round(b["solidarity_fans"]),
             "mu_weight": round(b["mu"], 3),
             "present_value": round(b["title_value"], 3),
+            "expected_depth": round(exp.get("depth", 0.0), 2),
+            "reached_depth": int(res.get("reached_depth", 0)),
+            "eliminated": bool(res.get("eliminated", False)),
+            "surprise": round(surprise[n], 2),
             "w_net": b["w_net"],
             "rooting_index": round(100 * b["w_net"] / max_wnet, 1),
             "rooting_index_eta15": round(100 * band[n]["w_net"] / max_wnet_band, 1),
+            "surprise_index": round(100 * b["w_net"] * surprise[n] / max_surp, 1),
+            "surprise_index_eta15": round(100 * band[n]["w_net"] * surprise[n] / max_surp_band, 1),
         })
 
-    out_teams.sort(key=lambda x: x["w_net"], reverse=True)
+    out_teams.sort(key=lambda x: x["surprise_index"], reverse=True)
 
     with open(os.path.join(DATA, "fixtures.json"), encoding="utf-8") as fh:
         fixtures = json.load(fh)
@@ -141,13 +204,15 @@ def main():
         "meta": {
             "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "title": "World Cup Happiness Index 2026",
-            "basis": "marginal utility to the world if the team wins (no win probability)",
+            "basis": "happiness from beating expectations (default), or from winning the Cup; never weighted by win probability",
             "params": {
                 "eta": config.ETA,
                 "eta_sensitivity": config.ETA_SENSITIVITY,
                 "h0": config.H0,
                 "r_lo": config.R_LO,
                 "r_hi": config.R_HI,
+                "stage_weight_exp": config.STAGE_WEIGHT_EXP,
+                "mc_iterations": config.MC_ITERATIONS,
                 "diaspora_weight": config.DIASPORA_WEIGHT,
                 "continental_weight": config.CONTINENTAL_WEIGHT,
                 "darkside_fraction": config.DARKSIDE_FRACTION,
@@ -161,11 +226,11 @@ def main():
         json.dump(payload, fh, indent=2)
 
     print(f"\nWorld Cup Happiness Index 2026  (eta={config.ETA})")
-    print("Who to root for - marginal happiness to the world if they win\n")
-    print(f"{'#':>2}  {'Team':22} {'Index':>6} {'Half-life':>9} {'Fans(M)':>8} {'GNIpc':>7}")
+    print("Who to root for - happiness from beating expectations\n")
+    print(f"{'#':>2}  {'Team':22} {'Surprise':>8} {'ExpDepth':>8} {'WinCup':>7} {'GNIpc':>7}")
     for i, x in enumerate(out_teams[:15], 1):
-        print(f"{i:>2}  {x['name']:22} {x['rooting_index']:>6} "
-              f"{x['memory_half_life']:>7}y {x['fan_population']/1e6:>8.0f} {x['consumption']:>7}")
+        print(f"{i:>2}  {x['name']:22} {x['surprise_index']:>8} "
+              f"{x['expected_depth']:>8} {x['rooting_index']:>7} {x['consumption']:>7}")
     print(f"\nWrote {os.path.join(WEB, 'rankings.json')}")
 
 

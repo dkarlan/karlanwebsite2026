@@ -14,10 +14,11 @@
       <p class="lede">
         A title lifts a country's mood. The lift is bigger where more people care,
         where people have less, and where the joy lingers because a win would be a
-        first rather than a habit. This index ranks all 48 teams by the happiness a
-        championship would add to the world. It leaves out the odds of winning on
-        purpose: the question is how much joy a title would bring, not how likely
-        it is.
+        first rather than a habit. By default this ranks all 48 teams by the joy of
+        beating expectations: a deep run counts for more the less it was expected,
+        and the more it was a long shot. Win probability sets the bar a team is
+        measured against. It never shrinks the score, so underdogs are rewarded,
+        not penalized.
       </p>
       <div id="headline" class="headline"></div>
     </div>
@@ -26,8 +27,9 @@
   <main class="wrap">
     <section class="controls">
       <div class="toggle" id="view-toggle">
-        <button data-view="rooting" class="active">Marginal happiness</button>
-        <button data-view="eta15">Tilt to the poor</button>
+        <button data-view="surprise" class="active">Beating expectations</button>
+        <button data-view="rooting">If they win the Cup</button>
+        <button data-view="tilt">Tilt to the poor</button>
       </div>
       <p class="view-note" id="view-note"></p>
     </section>
@@ -39,8 +41,9 @@
         <h2>Matches</h2>
         <input type="date" id="match-date" />
       </div>
-      <p class="view-note">For each match, root for the side whose win adds more
-        aggregate happiness. The stakes bar shows how much is on the table.</p>
+      <p class="view-note">For each match, the side to root for under the view you
+        picked above. Under "beating expectations" that favours the needier
+        underdog, whose win would be the bigger surprise.</p>
       <div id="matches"></div>
     </section>
 

@@ -12,24 +12,31 @@ appendix live in the writing project and read from here.
 
 ## What this measures
 
-The marginal happiness to the world if a team wins the Cup. **Not** expected
-happiness. Win probability is deliberately excluded: the question is how much joy
-a title would add, not how likely the title is. Rooting is free, so root for the
-win that would matter most.
+The happiness a team's run adds to the world. Win probability is never used to
+weight or discount the score. There are two views:
 
-With the default parameters the pick is **DR Congo**: about 109 million people,
-deep football interest, very low consumption, and no World Cup pedigree to take
-for granted, so a title would land where the marginal value of joy is highest and
-the memory would linger for years. The 2014 answer moved from Nigeria to its
-larger, poorer neighbour. Serial winners like Brazil and Germany fall far down the
-list: rich, and so used to winning that the glow of another title fades in a
-season.
+- **Beating expectations (default).** Joy from overperforming: a deep run, valued
+  by how unlikely it was, with later rounds counting more. Each team's
+  pre-tournament odds set the bar; clearing a low bar is what brings joy, so
+  underdogs are rewarded, not penalized.
+- **If they win the Cup.** The marginal happiness a title alone would add.
+
+With the default parameters **DR Congo** tops both: about 109 million people, deep
+football interest, very low consumption, no World Cup pedigree to take for
+granted, and little expected of them, so every round they survive is a jolt of joy
+that lands where the marginal value is highest and lingers for years. The 2014
+answer moved from Nigeria to its larger, poorer neighbour. Serial winners and rich
+favourites fall far down: a title there is worth less per fan and would surprise
+no one.
 
 ## The model
 
-For each country *i*:
+For each country *i*, the value of winning the Cup is
 
     W_i = N_i x MU_i x V_i
+
+and the default "beating expectations" value multiplies that by a surprise factor,
+`W_i x Surprise_i` (defined below).
 
 - **N_i** affected fan population: engaged home fans (population x interest),
   plus diaspora fans, plus a continental-solidarity share of co-confederation
@@ -69,11 +76,33 @@ discount rate captures.
 a World Cup semifinal flag, summed and capped. A multiple-time winner sits near 1
 (short memory), a debutant at 0 (long memory).
 
+### Beating expectations (the default)
+
+Joy comes from beating the bar. The bar is each team's pre-tournament chance of
+reaching each knockout stage, `P_i(reach depth k)`, from an Elo Monte Carlo over
+the real draw (`simulate.py`, `build_expectations.py`). The surprise of reaching a
+stage is how unlikely it was, `1 - P`, and deeper stages count for more:
+
+    Surprise_i = sum_{k=1..maxk}  (k ** STAGE_WEIGHT_EXP) * (1 - P_i(reach depth k))
+
+`maxk` is the depth a team has actually reached if it is out, else 6 (a live team
+keeps its full forward potential). So before kickoff every team carries its full
+capacity to surprise; a favourite knocked out early collapses toward zero, and an
+underdog that advances banks real, depth-weighted surprise. As favourites fall and
+the field narrows, surviving long shots rise, so overperformance matters more as
+the tournament goes on. The realized depths come from a live results feed
+(`fetch_results.py`, football-data.org); with no feed the committed snapshot has
+every team alive pre-knockout.
+
+Expectation as a reference point is the same prediction-error idea that drives the
+memory term (Rutledge et al. 2014; Mellers et al. 1997; Koszegi & Rabin 2006). It
+is not probability weighting: the odds set the bar, they never shrink the score.
+
 Four upgrades over 2014: (1) fan population reaches beyond home borders, (2) the
 happiness bump is modelled, not assumed, (3) the figure is net of a documented
-externality, (4) it values the lingering memory of a win, so a first-ever or
-long-awaited title, remembered for years, counts for far more than a serial
-winner's, which fades in a season.
+externality, (4) it values the lingering memory of a win and rewards beating
+expectations, so a long shot's deep run, remembered for years, counts for far
+more than a favourite meeting them.
 
 ## Layout
 
@@ -83,19 +112,24 @@ worldcup/
     teams.json        48-team field, the 5 Dec 2025 group draw, snapshot inputs
     pedigree.json     World Cup / continental records per team (curated)
     worldbank.csv     population + consumption (generated; committed snapshot)
-    elo.csv           Elo ratings, shown as reference only (generated)
+    elo.csv           Elo ratings: the expectation bar and a reference (generated)
     interest.csv      soccer-interest composite (generated)
     pedigree.csv      history + novelty score (generated)
+    expectations.csv  pre-tournament P(reach each stage), the bar (generated)
+    results.json      live tournament state for beating-expectations (hand or feed)
     workbook.csv      the merged master table (generated)
     fixtures.json     group-stage schedule (generated)
   pipeline/
     config.py         every parameter, with the reasoning and sensitivity bands
     fetch_worldbank.py  World Bank WDI: population + GNI per capita (PPP)
-    fetch_elo.py        World Football Elo Ratings (reference column only)
+    fetch_elo.py        World Football Elo Ratings (the expectation bar)
     fetch_trends.py     Google Trends soccer interest via pytrends (optional)
+    fetch_results.py    live results via football-data.org (optional; phase 2)
     build_interest.py   z-score interest composite
     build_pedigree.py   history + novelty score from pedigree.json
     build_workbook.py   merge layers + build fixtures
+    build_expectations.py  Elo Monte Carlo -> P(reach each stage)
+    simulate.py         Monte Carlo of the 48-team format (sets the bar)
     model.py            welfare math, writes web/rankings.json
     run_all.py          fetch + build + model
   web/
@@ -119,6 +153,14 @@ pip install -r requirements.txt
 python fetch_trends.py && python build_interest.py && python model.py
 ```
 
+For the live "beating expectations" view, set a free football-data.org token to
+pull results; otherwise edit `data/results.json` by hand to advance the bracket:
+
+```bash
+export FOOTBALL_DATA_TOKEN=xxxxxxxx
+python fetch_results.py && python model.py
+```
+
 Then open the tool:
 
 ```bash
@@ -134,6 +176,8 @@ biggest levers:
 - `R_LO` / `R_HI`: the discount rates at the no-pedigree and serial-winner ends,
   i.e. the memory half-lives (default about 14 years versus 1.4 years). The
   closer they are, the less pedigree matters.
+- `STAGE_WEIGHT_EXP`: how much more a late-round upset counts than an early one
+  (1 = weight equals depth; raise it to punch up deep runs).
 - `PEDIGREE_WEIGHTS` / `PEDIGREE_CAP`: what counts as a "history of success".
 - `DIASPORA_WEIGHT`, `CONTINENTAL_WEIGHT`: how far fandom reaches beyond home.
 
@@ -151,14 +195,18 @@ Change a number, rerun `python model.py`, and the ranking and the tool update.
   composite.
 - Subjective-wellbeing calibration for the joy size and decay: Gallup World Poll
   Cantril ladder via the World Happiness Report, plus the references below.
-- Elo ratings (eloratings.net) are fetched and shown as a strength reference only;
-  they do not enter the score, since probability is excluded.
+- Expectation bar and Elo: World Football Elo Ratings (eloratings.net), simulated
+  over the draw to get each team's pre-tournament chance of reaching each stage.
+  This sets the bar for the beating-expectations view; it never weights the score.
+  Market-implied or Opta numbers can be dropped in via a probabilities file.
+- Live results: football-data.org (free tier) via `fetch_results.py`; the bracket
+  can also be advanced by hand in `results.json`.
 
 ## Calibration references
 
 - Rutledge, Skandali, Dayan & Dolan (2014, PNAS), a computational and neural
   model of momentary subjective well-being (happiness tracks reward prediction
-  error: the novelty premium).
+  error: the basis for both the memory term and beating expectations).
 - Mellers, Schwartz, Ho & Ritov (1997, Psychological Science), decision affect
   theory (surprise amplifies emotional reactions).
 - Koszegi & Rabin (2006, QJE), a model of reference-dependent preferences
@@ -183,5 +231,9 @@ Change a number, rerun `python model.py`, and the ranking and the tool update.
   levers most worth refining.
 - Pedigree facts in `pedigree.json` are curated to appendix standard but should be
   spot-checked before print.
+- The expectation bar (`expectations.csv`) should be frozen from pre-tournament
+  Elo; the committed snapshot is that freeze. The group draw is the official
+  5 December 2025 draw, and the group-stage fixture dates are approximate
+  placeholders for the live tool.
 - The group draw is the official 5 December 2025 draw. The group-stage fixture
   dates are approximate placeholders for the live tool.

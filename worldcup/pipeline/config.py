@@ -93,3 +93,24 @@ INTEREST_WEIGHTS = {
     "big_count": 0.20,
     "culture": 0.35,
 }
+
+# ---------------------------------------------------------------------------
+# Beating expectations (the default view)
+# ---------------------------------------------------------------------------
+# Joy comes from beating the bar. The bar is each team's pre-tournament chance of
+# reaching each knockout stage, from an Elo Monte Carlo (simulate.py,
+# build_expectations.py). The surprise of reaching a stage is how unlikely it was,
+# 1 - P(reach stage), and deeper stages count for more (an upset in the
+# quarterfinals matters more than one in the round of 32). With STAGE_WEIGHT_EXP =
+# 1 the weight on a stage equals its depth (R32 = 1 ... champion = 6); raise it to
+# punch up the late rounds further.
+#
+#   surprise_i = sum_{k=1..maxk} (k ** STAGE_WEIGHT_EXP) * (1 - P_i(reach depth k))
+#
+# maxk = the depth a team actually reached if eliminated, else 6 (a live team keeps
+# its full forward potential). So before kickoff every team carries its full
+# capacity to surprise; teams that flop fall to zero, and underdogs that advance
+# bank real surprise. The index multiplies the title's present value by surprise_i.
+STAGE_WEIGHT_EXP = 1.0
+ELO_HOME_ADVANTAGE = 60     # Elo points for the three host nations at home
+MC_ITERATIONS = 20000       # Monte Carlo tournament simulations for the bar
