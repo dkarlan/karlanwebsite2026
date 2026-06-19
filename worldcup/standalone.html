@@ -360,6 +360,8 @@ html { overflow-x: clip; }
 .chart-legend { max-width: 860px; margin: 0 auto 8px; }
 
 #chart {
+  --gut: 96px;
+  --colmin: 18px;
   display: grid;
   grid-template-rows: 150px 118px 16px 16px 24px;
   column-gap: 1px;
@@ -368,7 +370,9 @@ html { overflow-x: clip; }
   border-radius: 10px;
   background: var(--card);
   padding: 10px 10px 8px;
+  overflow-x: auto;
 }
+.swipe-hint { display: none; }
 #chart .g-label {
   align-self: center; text-align: right; padding-right: 8px;
   font-size: 0.72rem; font-weight: 600; color: var(--muted); white-space: nowrap;
@@ -442,6 +446,14 @@ html { overflow-x: clip; }
   .m-pair { grid-column: 1 / -1; }
 }
 
+/* Mobile: make the 48-bar chart swipeable with legible bars */
+@media (max-width: 620px) {
+  #chart { --gut: 58px; --colmin: 27px; padding: 8px 6px 6px; }
+  .chart-wrap { padding: 0 10px; }
+  .swipe-hint { display: inline; color: var(--accent); font-weight: 600; }
+  #chart .g-label { font-size: 0.62rem; padding-right: 5px; }
+}
+
 </style>
 </head>
 <body>
@@ -491,7 +503,8 @@ html { overflow-x: clip; }
 
     <section class="chart-wrap">
       <p class="chart-legend">Bar height is the score, tallest first (leader fixed at
-        100). Click a country for its full detail.</p>
+        100). Click a country for its full detail.<span class="swipe-hint"> Swipe the
+        chart sideways to see all 48.</span></p>
       <div id="chart"></div>
       <div id="tooltip" class="tooltip hidden"></div>
       <div class="compare-bar">
@@ -3015,7 +3028,7 @@ function renderChart() {
   const teams = teamsByView();
   const max = Math.max(...teams.map((t) => t[key])) || 1;
   const chart = document.getElementById("chart");
-  chart.style.gridTemplateColumns = `96px repeat(${teams.length}, minmax(0, 1fr))`;
+  chart.style.gridTemplateColumns = `var(--gut, 96px) repeat(${teams.length}, minmax(var(--colmin, 18px), 1fr))`;
 
   const bars = teams.map((t, i) => {
     const h = Math.max(2, (t[key] / max) * 100);
