@@ -96,9 +96,10 @@ main { padding: 28px 0 60px; }
 .row .name { font-weight: 600; }
 .row .name small { display: block; font-weight: 400; color: var(--muted); font-size: 0.76rem; }
 .row .badge {
-  display: inline-block; font-size: 0.66rem; font-weight: 700;
+  display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em;
   color: var(--gold); margin-left: 6px; vertical-align: middle;
 }
+.row .badge.host { color: var(--accent); }
 
 .bar-wrap { background: var(--bar-soft); border-radius: 6px; height: 22px; position: relative; }
 .bar { background: var(--bar); height: 100%; border-radius: 6px; min-width: 2px; }
@@ -146,6 +147,10 @@ main { padding: 28px 0 60px; }
 .kv { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
 .kv .k { color: var(--muted); }
 .kv .v { font-weight: 600; font-variant-numeric: tabular-nums; }
+.kv-group {
+  margin-top: 18px; margin-bottom: 2px; font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent);
+}
 .drawer .note { margin-top: 16px; font-size: 0.82rem; color: var(--muted); background: var(--bg); padding: 12px; border-radius: 8px; }
 
 @media (max-width: 620px) {

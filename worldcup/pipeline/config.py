@@ -1,83 +1,88 @@
 """Model parameters for the World Cup Happiness Index.
 
-Every contestable assumption lives here, stated openly rather than buried in
-code. Change a value, rerun run_all.py, and the ranking and the live tool both
-update. The defaults follow the project brief; the comments give the reasoning
-and the sensitivity band where the brief asks for one.
+Every contestable assumption lives here, stated openly. Change a value, rerun
+run_all.py (or model.py), and the ranking and the live tool both update.
+
+The published object is the marginal utility to the world if a team wins, NOT
+expected utility. Win probability is deliberately excluded: the question is how
+much joy a title would add, not how likely it is. Two history effects shape that
+joy, both pointing toward teams unaccustomed to winning:
+
+  - Novelty raises the size of the bump. Happiness tracks prediction error, so a
+    long-awaited or first-ever win lands harder than a serial winner's next one
+    (Rutledge et al. 2014 PNAS; Mellers et al. 1997; Koszegi & Rabin 2006).
+  - Memory raises how long it lasts. Joy fades through hedonic adaptation, and
+    repeated rewards adapt faster (Frederick & Loewenstein 1999), while a
+    surprising, consequential win is encoded durably (flashbulb memory, Brown &
+    Kulik 1977). So a no-pedigree team's joy decays slowly, a serial winner's
+    fast. Measured daily-mood spikes are brief either way (Stieger et al. 2015),
+    so the lasting value is the low-level remembered/identity utility, not the spike.
 """
 
 # ---------------------------------------------------------------------------
 # Marginal-utility curvature (the contestable assumption)
 # ---------------------------------------------------------------------------
 # Isoelastic utility u(c) = c^(1-ETA)/(1-ETA), so marginal utility MU ~ c^(-ETA).
-# ETA = 1 is log utility (a 1% gain in consumption is worth the same to everyone,
-# so absolute welfare weight scales like 1/c). ETA = 1.5 tilts further toward the
-# poor. Run the model at both and report the band.
+# ETA = 1 is log utility (absolute welfare weight scales like 1/c). ETA = 1.5
+# tilts further toward the poor. The tool shows both as a band.
 ETA = 1.0
 ETA_SENSITIVITY = 1.5
 
-# Reference consumption used to normalize the MU weight so it reads near 1.0 for
-# a middle-income country instead of an unitless raw number. MU_i = (C_REF/c_i)^ETA.
-# 10,000 international dollars is roughly the global median GNI per capita (PPP).
+# Reference consumption normalizing the MU weight near 1 for a middle-income
+# country: MU_i = (C_REF/c_i)^ETA. Roughly global median GNI per capita (PPP).
 C_REF = 10000.0
 
 # ---------------------------------------------------------------------------
-# Per-fan happiness shock h (Cantril-ladder points from a title)
+# NPV of remembered happiness (replaces the old flat per-fan shock h)
 # ---------------------------------------------------------------------------
-# A national-team triumph lifts subjective wellbeing briefly. Kavetsos &
-# Szymanski (2010) find hosting/major-tournament success raises life satisfaction
-# by a small but real amount; Dolan et al. and the wider literature put a major
-# sporting high in the low tenths of a ladder point, decaying over weeks. We use a
-# flat per-engaged-fan shock in ladder points (0-10 scale). This is an upper-ish
-# estimate for a championship and is the unit that makes W_i interpretable as
-# "ladder-points of happiness, MU-weighted, summed over fans."
-H_PER_FAN = 0.10            # ladder points per engaged fan from winning the Cup
-H_SENSITIVITY = (0.05, 0.20)
+# Per engaged fan, the lifetime value of a title is the net present value of a
+# joy stream that starts at intensity s_i and decays at rate r_i:
+#
+#     LU_i = integral_0^inf  s_i * e^(-r_i t) dt  =  s_i / r_i
+#
+#   s_i = NPV_H0 * (1 + NPV_ALPHA * novelty_i)     novelty raises the spike
+#   r_i = NPV_R_LO + (NPV_R_HI - NPV_R_LO) * history_i   pedigree speeds the fade
+#
+# novelty_i = 1 - history_i, with history_i in [0,1] the pedigree score below.
+NPV_H0 = 0.10          # base spike, Cantril-ladder points per engaged fan
+NPV_ALPHA = 0.8        # novelty premium: a pure first-timer's spike is 1.8x a serial winner's
+NPV_R_LO = 0.05        # decay for no-pedigree teams  (half-life ln2/r ~ 14 years)
+NPV_R_HI = 0.50        # decay for serial winners      (half-life ~ 1.4 years)
 
 # ---------------------------------------------------------------------------
-# Fan population reach (Extension 1 + 3): beyond home borders
+# Pedigree score (history_i): history of success in international play
 # ---------------------------------------------------------------------------
-# Engaged home fans = population * interest_share. Diaspora fans are counted at
-# DIASPORA_WEIGHT of the home interest share (a migrant who emigrated is, if
-# anything, more attached to the national team, so 1.0 is defensible). Continental
-# solidarity: co-confederation neighbors feel a fraction of the joy of a regional
-# side winning, captured as CONTINENTAL_WEIGHT of their own engaged-fan mass.
+# Raw facts live in data/pedigree.json. Points are summed and divided by
+# PEDIGREE_CAP, then clipped to [0,1]; a multiple-time World Cup winner sits near
+# 1, a debutant at 0. Tune the weights to change what "success" counts as.
+PEDIGREE_WEIGHTS = {
+    "wc_titles": 5.0,      # World Cup wins
+    "wc_finals": 2.5,      # World Cup final appearances (including wins)
+    "confed_titles": 1.0,  # continental championship titles
+    "ever_semi": 1.0,      # has reached at least one World Cup semifinal
+}
+PEDIGREE_CAP = 54.0        # points mapping to history = 1 (Brazil-level pedigree)
+
+# ---------------------------------------------------------------------------
+# Fan population reach (beyond home borders)
+# ---------------------------------------------------------------------------
+# Engaged home fans = population * interest. Diaspora fans count at DIASPORA_WEIGHT
+# of the home interest share. Continental solidarity: co-confederation neighbours
+# feel CONTINENTAL_WEIGHT of their own engaged-fan mass.
 DIASPORA_WEIGHT = 1.0
 CONTINENTAL_WEIGHT = 0.05
 
 # ---------------------------------------------------------------------------
-# Net welfare (Extension 2): subtract the losing side and the dark side
+# Dark-side externality (net welfare)
 # ---------------------------------------------------------------------------
-# The final has a loser. Their fans suffer a loss; loss aversion makes a defeat
-# sting more than the symmetric win pleases, so the loser's loss is scaled above
-# 1. We net the *expected* loser's loss inside the simulation (we know who the
-# likely finalists are), not a fixed counterparty.
-LOSS_AVERSION = 1.25        # a final defeat hurts 1.25x what the win delights
-
-# Dark-side externality (Card & Dahl 2011): upset losses by a favored team raise
-# family violence. We model a small negative term proportional to the favorite's
-# engaged-fan mass, triggered in expectation by the probability the team is favored
-# and loses. Expressed as a fraction of that team's gross W, deliberately modest
-# and flagged as illustrative.
+# A modest haircut for documented negative externalities around high-stakes
+# tournament matches (fan violence and the Card & Dahl 2011 effect). Flagged as
+# illustrative; expressed as a fraction of gross welfare.
 DARKSIDE_FRACTION = 0.04
-
-# ---------------------------------------------------------------------------
-# Probability source of record
-# ---------------------------------------------------------------------------
-# "elo" runs a Monte Carlo over the real 2026 bracket using Elo win
-# probabilities (the free baseline). Swap in market or Opta numbers by writing a
-# data/win_probabilities.csv and setting this to "file".
-PROB_SOURCE = "elo"
-ELO_HOME_ADVANTAGE = 60     # Elo points added for the three host nations at home
-MC_ITERATIONS = 20000       # Monte Carlo tournament simulations
 
 # ---------------------------------------------------------------------------
 # Soccer-interest composite weights (build_interest.py)
 # ---------------------------------------------------------------------------
-# No clean single source, so triangulate and report a band. Weights on the
-# z-scored components of the composite. Google Trends is the best free live proxy;
-# FIFA Big Count is registered players (stale, flagged); the curated culture score
-# stands in for TV reach / federation following until those feeds are wired in.
 INTEREST_WEIGHTS = {
     "trends": 0.45,
     "big_count": 0.20,

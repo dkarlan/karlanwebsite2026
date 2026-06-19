@@ -1,5 +1,5 @@
-# Core pipeline (fetch_worldbank, fetch_elo, build_interest, build_workbook,
-# simulate, model, run_all) uses only the Python 3 standard library.
+# Core pipeline (fetch_worldbank, fetch_elo, build_interest, build_pedigree,
+# build_workbook, model, run_all) uses only the Python 3 standard library.
 
 # Optional: live Google Trends soccer-interest proxy (fetch_trends.py).
 pytrends>=4.9

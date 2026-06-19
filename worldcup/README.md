@@ -10,41 +10,65 @@ This repo is the executable side of the project: a data pipeline (workstream A)
 and a live "who to root for" tool (workstream B). The article and technical
 appendix live in the writing project and read from here.
 
-## The headline
+## What this measures
 
-Run the pipeline (below) and the model prints the ranking. With the default
-parameters the 2026 pick is **DR Congo**: a country of about 109 million, deep
-football interest, and very low consumption, so a title would land where the
-marginal value of joy is highest. The answer moved from Nigeria to its even
-larger, even poorer neighbour. Balancing for who can realistically win, **Brazil**
-tops the expected-impact view: a huge, devoted fan base attached to a genuine
-contender.
+The marginal happiness to the world if a team wins the Cup. **Not** expected
+happiness. Win probability is deliberately excluded: the question is how much joy
+a title would add, not how likely the title is. Rooting is free, so root for the
+win that would matter most.
+
+With the default parameters the pick is **DR Congo**: about 109 million people,
+deep football interest, very low consumption, and no World Cup pedigree to get
+used to, so a title would land where the marginal value of joy is highest and
+would be remembered for a generation. The 2014 answer moved from Nigeria to its
+larger, poorer neighbour. Serial winners like Brazil and Germany fall far down
+the list: rich, and so accustomed to winning that another title adds little.
 
 ## The model
 
-For each country *i*, the welfare from winning the Cup is
+For each country *i*:
 
-    W_i = N_i x h x MU_i
+    W_i = N_i x MU_i x LU_i
 
 - **N_i** affected fan population: engaged home fans (population x interest),
   plus diaspora fans, plus a continental-solidarity share of co-confederation
   neighbours.
-- **h** per-fan happiness shock from a win, in Cantril-ladder points, estimated
-  from the wellbeing-from-football literature rather than assumed.
 - **MU_i** marginal-utility weight under isoelastic utility, `MU_i = (C_REF/c_i)^eta`,
-  with `c_i` mean consumption per head. Default `eta = 1`, sensitivity to 1.5.
-  This is the contestable assumption and it is stated openly in `config.py`.
+  with `c_i` consumption per head. Default `eta = 1`, sensitivity to 1.5. A
+  windfall counts for more where people have less. This is the contestable
+  assumption and it is stated openly in `config.py`.
+- **LU_i** per-fan lifetime value of the title: the net present value of a joy
+  stream that starts at intensity `s_i` and decays at rate `r_i`,
 
-The published object is expected, net and dynamic:
+      LU_i = integral_0^inf s_i e^(-r_i t) dt = s_i / r_i
 
-    E[dW from i] = P(champion_i) x W_net_i  -  (loss aversion) x E[beaten finalist's loss]
+  with `s_i = h0 (1 + alpha * novelty_i)` and `r_i = r_lo + (r_hi - r_lo) history_i`.
 
-`W_net_i` is `W_i` minus a documented dark-side externality. `P(champion_i)`
-comes from a Monte Carlo over the real 2026 bracket and updates each round.
+`W_net_i` nets out a documented dark-side externality.
+
+### Why novelty and memory
+
+Two history effects, both pointing toward teams unaccustomed to winning:
+
+- **Novelty raises the size of the joy.** Happiness tracks prediction error, so a
+  long-awaited or first-ever win lands harder than a serial winner's next one.
+  (Rutledge, Skandali, Dayan & Dolan 2014, PNAS; Mellers et al. 1997; Koszegi &
+  Rabin 2006.)
+- **Memory raises how long it lasts.** Joy fades through hedonic adaptation, and
+  repeated rewards adapt faster, while a surprising, consequential win is encoded
+  durably. So a no-pedigree team's joy decays slowly (long half-life), a serial
+  winner's fast. (Frederick & Loewenstein 1999; Brown & Kulik 1977.) Measured
+  daily-mood spikes are brief either way (Stieger et al. 2015), so the lasting
+  value is the low-level remembered and identity utility, not the spike.
+
+`history_i` in [0,1] is the pedigree score (`data/pedigree.json`,
+`build_pedigree.py`): World Cup titles, final appearances, continental titles and
+a World Cup semifinal flag, summed and capped. A multiple-time winner sits near
+1, a debutant at 0. `novelty_i = 1 - history_i`.
 
 Four upgrades over 2014: (1) fan population reaches beyond home borders, (2) the
-happiness bump is estimated, (3) the figure is net of the losing side and
-negative externalities, (4) it is probability-weighted and updates as teams go out.
+happiness bump is modelled, not assumed, (3) the figure is net of a documented
+externality, (4) it accounts for novelty and the memory of a win.
 
 ## Layout
 
@@ -52,22 +76,22 @@ negative externalities, (4) it is probability-weighted and updates as teams go o
 worldcup/
   data/
     teams.json        48-team field, the 5 Dec 2025 group draw, snapshot inputs
+    pedigree.json     World Cup / continental records per team (curated)
     worldbank.csv     population + consumption (generated; committed snapshot)
-    elo.csv           Elo ratings (generated)
+    elo.csv           Elo ratings, shown as reference only (generated)
     interest.csv      soccer-interest composite (generated)
+    pedigree.csv      history + novelty score (generated)
     workbook.csv      the merged master table (generated)
     fixtures.json     group-stage schedule (generated)
-    state.json        tournament state for the live loop (optional)
   pipeline/
     config.py         every parameter, with the reasoning and sensitivity bands
     fetch_worldbank.py  World Bank WDI: population + GNI per capita (PPP)
-    fetch_elo.py        World Football Elo Ratings (free win-prob baseline)
+    fetch_elo.py        World Football Elo Ratings (reference column only)
     fetch_trends.py     Google Trends soccer interest via pytrends (optional)
     build_interest.py   z-score interest composite
+    build_pedigree.py   history + novelty score from pedigree.json
     build_workbook.py   merge layers + build fixtures
-    simulate.py         Monte Carlo of the 48-team format
     model.py            welfare math, writes web/rankings.json
-    update_round.py     advance tournament state for the live loop
     run_all.py          fetch + build + model
   web/
     index.html, app.js, styles.css   the live tool (static, no build step)
@@ -96,54 +120,64 @@ Then open the tool:
 cd ../web && python -m http.server 8000   # http://localhost:8000
 ```
 
-## Round-by-round updates
+## Tuning
 
-The recommendation is dynamic. As the tournament progresses, edit the state and
-rerun the model:
+Everything lives in `config.py`, each value commented with its reasoning. The
+biggest levers:
 
-```bash
-cd worldcup/pipeline
-python update_round.py eliminate "South Africa" "Czechia"   # group-stage exits
-python update_round.py knockout R32 bracket.json            # lock the round of 32
-python model.py                                             # refresh rankings.json
-```
+- `ETA` (1 to 1.5): how hard the index favours low-income countries.
+- `NPV_ALPHA`: the novelty premium on the size of the joy.
+- `NPV_R_LO` / `NPV_R_HI`: the memory half-lives at the no-pedigree and
+  serial-winner ends (default about 14 years versus 1.4 years).
+- `PEDIGREE_WEIGHTS` / `PEDIGREE_CAP`: what counts as a "history of success".
+- `DIASPORA_WEIGHT`, `CONTINENTAL_WEIGHT`: how far fandom reaches beyond home.
 
-`bracket.json` is a list of pairs, 16 for R32 down to 1 for the final.
+Change a number, rerun `python model.py`, and the ranking and the tool update.
 
 ## Data sources
 
 - Population, consumption: World Bank WDI (`SP.POP.TOTL`, `NY.GNP.PCAP.PP.CD`).
-  The brief's first choice for the utility weight is the World Bank Poverty and
-  Inequality Platform mean consumption; GNI per capita (PPP) is the complete,
-  free cross-check used here, with PIP as the upgrade path.
-- Win probabilities: World Football Elo Ratings (eloratings.net), simulated over
-  the bracket. Market-implied or Opta numbers can be dropped in via `elo.csv` or
-  a `win_probabilities.csv` and `config.PROB_SOURCE`.
+  GNI per capita (PPP) is the complete, free cross-country series; the World Bank
+  Poverty and Inequality Platform mean consumption is the upgrade path.
+- Pedigree: World Cup and confederation-championship records (`pedigree.json`,
+  curated; spot-check before print).
 - Soccer interest: triangulated. Google Trends (free live proxy), FIFA Big Count
-  (registered players, stale), and a curated culture/TV-reach score, combined as
-  a z-score composite.
-- Subjective-wellbeing calibration for `h`: Gallup World Poll Cantril ladder via
-  the World Happiness Report.
+  (registered players, stale), and a curated culture/TV-reach score, as a z-score
+  composite.
+- Subjective-wellbeing calibration for the joy size and decay: Gallup World Poll
+  Cantril ladder via the World Happiness Report, plus the references below.
+- Elo ratings (eloratings.net) are fetched and shown as a strength reference only;
+  they do not enter the score, since probability is excluded.
 
 ## Calibration references
 
-- Kavetsos and Szymanski (2010, J. Econ. Psychology) on sporting events and
-  national wellbeing (the size of `h`).
-- Card and Dahl (2011, QJE) on upset football losses and family violence (the
-  dark-side externality).
-- Edmans, Garcia and Norli (2007, J. Finance) on football results and next-day
-  stock returns (sentiment magnitude).
-- Depetris-Chauvin, Durante and Campante (2020, AER) on national-team success,
-  cohesion and conflict (the development-dividend angle).
+- Rutledge, Skandali, Dayan & Dolan (2014, PNAS), a computational and neural
+  model of momentary subjective well-being (happiness tracks reward prediction
+  error: the novelty premium).
+- Mellers, Schwartz, Ho & Ritov (1997, Psychological Science), decision affect
+  theory (surprise amplifies emotional reactions).
+- Koszegi & Rabin (2006, QJE), a model of reference-dependent preferences
+  (expectations as the reference point).
+- Frederick & Loewenstein (1999), hedonic adaptation (joy fades; repeated rewards
+  adapt faster: the memory decay).
+- Brown & Kulik (1977, Cognition), flashbulb memories (surprising, consequential
+  events are encoded durably).
+- Stieger, Goetz & Gehrig (2015, Frontiers in Psychology), soccer results affect
+  well-being only briefly (the daily-mood spike is short; the lasting value is the
+  remembered utility).
+- Kavetsos & Szymanski (2010), Card & Dahl (2011), Edmans, Garcia & Norli (2007),
+  Depetris-Chauvin, Durante & Campante (2020): sporting events and wellbeing, the
+  dark-side externality, sentiment magnitude, and the development dividend.
 
 ## Caveats
 
-- `eta` is a value judgement, not a measurement. The tool exposes the band.
-- Diaspora, solidarity and interest figures are documented estimates; they are
-  the levers most worth refining.
-- The group draw is the official 5 December 2025 draw. The knockout bracket is
-  approximated by a fixed standard seeding; the exact FIFA R32 slot mapping can be
-  substituted in `simulate.py` without changing the rest of the model.
-- The group-stage fixture dates are approximate placeholders for the live tool.
-- Elo ratings beyond the current top 20 in the committed snapshot are estimates;
-  `fetch_elo.py` refreshes them when the source is reachable.
+- `eta`, the novelty premium and the memory half-lives are value-laden modelling
+  choices, not measured constants. The mechanisms are well-established; the
+  magnitudes are seeded from the literature and exposed for tuning. The tool shows
+  the eta band.
+- Diaspora, solidarity and interest figures are documented estimates; they are the
+  levers most worth refining.
+- Pedigree facts in `pedigree.json` are curated to appendix standard but should be
+  spot-checked before print.
+- The group draw is the official 5 December 2025 draw. The group-stage fixture
+  dates are approximate placeholders for the live tool.

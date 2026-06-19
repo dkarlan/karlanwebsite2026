@@ -1,32 +1,32 @@
 """The World Cup Happiness Index model.
 
-Per country i the welfare from winning the Cup is
+The published quantity is the marginal utility to the world if a team wins the
+Cup. Not expected utility: win probability is excluded on purpose. The question
+is how much joy a title would add, not how likely it is.
 
-    W_i = N_i * h * MU_i
+Per country i:
 
-  N_i  affected fan population: engaged home fans (population * interest), plus
-       diaspora fans, plus a continental-solidarity share of co-confederation
-       neighbours.
-  h    per-fan happiness shock in Cantril-ladder points (config.H_PER_FAN).
-  MU_i marginal-utility weight under isoelastic utility, MU_i = (C_REF/c_i)^eta,
-       with c_i mean consumption per head (GNI per capita PPP here).
+    W_i = N_i x MU_i x LU_i
 
-The published object is expected, net and dynamic:
+  N_i  affected fan population: engaged home fans (population x interest), plus
+       diaspora fans, plus a continental-solidarity share of neighbours.
+  MU_i marginal-utility weight, MU_i = (C_REF/c_i)^eta, with c_i consumption per
+       head. A windfall counts for more where people have less.
+  LU_i per-fan lifetime value of the title, the NPV of a decaying joy stream,
+       LU_i = s_i / r_i. Novelty raises the spike s_i; pedigree raises the decay
+       rate r_i, so a first-timer's joy is large and long, a serial winner's
+       small and brief. See config.py for the citations.
 
-    E[ΔW from i] = P(champion_i) * W_net_i  -  (loss aversion) * E[beaten finalist's loss]
-
-  W_net_i = W_i minus a documented dark-side externality haircut.
-
-Outputs data/../web/rankings.json for the live tool and prints the ranking.
-Run after the fetch/build steps (or via run_all.py).
+W_net_i nets out a documented dark-side externality. Outputs web/rankings.json
+and prints the ranking. Run after the fetch/build steps (or via run_all.py).
 """
 import csv
 import json
+import math
 import os
 from datetime import datetime, timezone
 
 import config
-import simulate
 
 HERE = os.path.dirname(__file__)
 DATA = os.path.join(HERE, "..", "data")
@@ -41,25 +41,22 @@ def _load_workbook():
     return rows
 
 
-def _load_state():
-    path = os.path.join(DATA, "state.json")
-    if os.path.exists(path):
-        with open(path, encoding="utf-8") as fh:
-            return json.load(fh)
-    return {"stage": "group", "eliminated": []}
-
-
 def mu_weight(consumption, eta):
     c = max(float(consumption), 500.0)        # floor to avoid blow-ups
     return (config.C_REF / c) ** eta
 
 
+def lifetime_utility(history):
+    """NPV of the remembered-joy stream for one engaged fan."""
+    novelty = 1.0 - history
+    s = config.NPV_H0 * (1.0 + config.NPV_ALPHA * novelty)
+    r = config.NPV_R_LO + (config.NPV_R_HI - config.NPV_R_LO) * history
+    return s / r, s, r
+
+
 def fan_population(teams):
     """N_i with home, diaspora and continental-solidarity components."""
-    home = {}
-    for t in teams.values():
-        home[t["name"]] = float(t["population"]) * float(t["interest"])
-    # Continental solidarity: a small share of co-confederation neighbours' fans.
+    home = {t["name"]: float(t["population"]) * float(t["interest"]) for t in teams.values()}
     by_conf = {}
     for t in teams.values():
         by_conf.setdefault(t["confederation"], []).append(t["name"])
@@ -78,47 +75,37 @@ def fan_population(teams):
     return out
 
 
-def compute(teams, eta, h):
+def compute(teams, eta):
     fans = fan_population(teams)
     rows = {}
     for t in teams.values():
         n = t["name"]
+        history = float(t["history"]) if t["history"] else 0.0
         mu = mu_weight(t["consumption"], eta)
+        lu, s, r = lifetime_utility(history)
         N = fans[n]["N"]
-        w_gross = N * h * mu
+        w_gross = N * mu * lu
         w_net = w_gross * (1.0 - config.DARKSIDE_FRACTION)
         rows[n] = {
-            "N": N, "mu": mu, "w_gross": w_gross, "w_net": w_net,
-            **fans[n],
+            "N": N, "mu": mu, "lu": lu, "spike": s, "decay": r,
+            "w_gross": w_gross, "w_net": w_net, **fans[n],
         }
     return rows
 
 
 def main():
-    wb = _load_workbook()
-    teams = wb  # name -> row dict
-    groups = {}
-    for t in teams.values():
-        groups.setdefault(t["group"], []).append(t["name"])
-    elo = {n: float(t["elo"]) for n, t in teams.items()}
-    hosts = {n for n, t in teams.items() if t["host"] == "1"}
-    state = _load_state()
+    teams = _load_workbook()
 
-    # Welfare at the default eta and at the sensitivity eta (for the band).
-    base = compute(teams, config.ETA, config.H_PER_FAN)
-    band = compute(teams, config.ETA_SENSITIVITY, config.H_PER_FAN)
-
-    # Win probabilities and the expected beaten-finalist loss, from Monte Carlo.
-    value_for_loss = {n: base[n]["w_gross"] for n in base}
-    probs, loser_loss = simulate.simulate(groups, elo, hosts, state,
-                                           team_value=value_for_loss)
-
+    base = compute(teams, config.ETA)
+    band = compute(teams, config.ETA_SENSITIVITY)
     max_wnet = max(r["w_net"] for r in base.values())
+    max_wnet_band = max(r["w_net"] for r in band.values())
+
     out_teams = []
     for n, t in teams.items():
         b = base[n]
-        p_champ = probs[n]["Champion"]
-        expected_net = p_champ * b["w_net"] - config.LOSS_AVERSION * loser_loss[n]
+        history = float(t["history"]) if t["history"] else 0.0
+        half_life = round(math.log(2) / b["decay"], 1)
         out_teams.append({
             "name": n,
             "confederation": t["confederation"],
@@ -126,29 +113,23 @@ def main():
             "host": t["host"] == "1",
             "population": int(float(t["population"])),
             "consumption": int(float(t["consumption"])),
-            "elo": round(elo[n]),
+            "elo": round(float(t["elo"])),
             "interest": round(float(t["interest"]), 3),
+            "wc_titles": int(t["wc_titles"]) if t["wc_titles"] else 0,
+            "last_major_year": t["last_major_year"] or None,
+            "history": round(history, 3),
+            "novelty": round(1.0 - history, 3),
+            "memory_half_life": half_life,
             "fan_population": round(b["N"]),
             "home_fans": round(b["home_fans"]),
             "diaspora_fans": round(b["diaspora_fans"]),
             "solidarity_fans": round(b["solidarity_fans"]),
             "mu_weight": round(b["mu"], 3),
+            "lifetime_utility": round(b["lu"], 3),
             "w_net": b["w_net"],
             "rooting_index": round(100 * b["w_net"] / max_wnet, 1),
-            "rooting_index_eta15": round(
-                100 * band[n]["w_net"] / max(r["w_net"] for r in band.values()), 1),
-            "p_champion": round(p_champ, 4),
-            "p_round_of_16": round(probs[n]["R16"], 3),
-            "p_quarterfinal": round(probs[n]["QF"], 3),
-            "p_semifinal": round(probs[n]["SF"], 3),
-            "p_final": round(probs[n]["F"], 3),
-            "expected_net_welfare": expected_net,
+            "rooting_index_eta15": round(100 * band[n]["w_net"] / max_wnet_band, 1),
         })
-
-    # Normalize the expected-value column to an index too (max positive = 100).
-    max_exp = max((x["expected_net_welfare"] for x in out_teams), default=1.0) or 1.0
-    for x in out_teams:
-        x["expected_index"] = round(100 * x["expected_net_welfare"] / max_exp, 1)
 
     out_teams.sort(key=lambda x: x["w_net"], reverse=True)
 
@@ -159,17 +140,17 @@ def main():
         "meta": {
             "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "title": "World Cup Happiness Index 2026",
-            "stage": state.get("stage", "group"),
+            "basis": "marginal utility to the world if the team wins (no win probability)",
             "params": {
                 "eta": config.ETA,
                 "eta_sensitivity": config.ETA_SENSITIVITY,
-                "h_per_fan": config.H_PER_FAN,
+                "npv_h0": config.NPV_H0,
+                "npv_alpha": config.NPV_ALPHA,
+                "npv_r_lo": config.NPV_R_LO,
+                "npv_r_hi": config.NPV_R_HI,
                 "diaspora_weight": config.DIASPORA_WEIGHT,
                 "continental_weight": config.CONTINENTAL_WEIGHT,
-                "loss_aversion": config.LOSS_AVERSION,
                 "darkside_fraction": config.DARKSIDE_FRACTION,
-                "prob_source": config.PROB_SOURCE,
-                "mc_iterations": config.MC_ITERATIONS,
             },
         },
         "teams": out_teams,
@@ -179,14 +160,12 @@ def main():
     with open(os.path.join(WEB, "rankings.json"), "w", encoding="utf-8") as fh:
         json.dump(payload, fh, indent=2)
 
-    # Console summary.
-    print(f"\nWorld Cup Happiness Index 2026  (eta={config.ETA}, h={config.H_PER_FAN})")
-    print("Who to root for — by net happiness if they win the Cup\n")
-    print(f"{'#':>2}  {'Team':22} {'Index':>6} {'P(win)':>7} {'Fans(M)':>8} {'GNIpc':>7}")
+    print(f"\nWorld Cup Happiness Index 2026  (eta={config.ETA})")
+    print("Who to root for - marginal happiness to the world if they win\n")
+    print(f"{'#':>2}  {'Team':22} {'Index':>6} {'Novelty':>7} {'Half-life':>9} {'GNIpc':>7}")
     for i, x in enumerate(out_teams[:15], 1):
         print(f"{i:>2}  {x['name']:22} {x['rooting_index']:>6} "
-              f"{x['p_champion']*100:>6.1f}% {x['fan_population']/1e6:>8.0f} "
-              f"{x['consumption']:>7}")
+              f"{x['novelty']:>7} {x['memory_half_life']:>7}y {x['consumption']:>7}")
     print(f"\nWrote {os.path.join(WEB, 'rankings.json')}")
 
 

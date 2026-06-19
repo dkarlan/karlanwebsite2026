@@ -38,11 +38,21 @@ def build_workbook():
     elo = _load_map(os.path.join(DATA, "elo.csv"), "name", "elo")
     interest = _load_map(os.path.join(DATA, "interest.csv"), "name", "interest")
 
+    # Pedigree layer (history, novelty, titles); built by build_pedigree.py.
+    ped = {}
+    ped_path = os.path.join(DATA, "pedigree.csv")
+    if os.path.exists(ped_path):
+        with open(ped_path, encoding="utf-8") as fh:
+            for r in csv.DictReader(fh):
+                ped[r["name"]] = r
+
     cols = ["name", "confederation", "group", "host", "population", "consumption",
-            "elo", "interest", "diaspora_m"]
+            "elo", "interest", "diaspora_m", "history", "novelty", "wc_titles",
+            "last_major_year"]
     rows = []
     for t in teams:
         w = wb.get(t["name"], {})
+        p = ped.get(t["name"], {})
         rows.append({
             "name": t["name"],
             "confederation": t["confederation"],
@@ -53,6 +63,10 @@ def build_workbook():
             "elo": elo.get(t["name"], t["elo"]),
             "interest": interest.get(t["name"], t["interest"]),
             "diaspora_m": t["diaspora_m"],
+            "history": p.get("history", ""),
+            "novelty": p.get("novelty", ""),
+            "wc_titles": p.get("wc_titles", ""),
+            "last_major_year": p.get("last_major_year", ""),
         })
 
     out = os.path.join(DATA, "workbook.csv")

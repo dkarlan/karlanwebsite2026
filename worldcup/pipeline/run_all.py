@@ -9,6 +9,7 @@ place and the pipeline continues, so the model and live tool always produce outp
 import sys
 
 import build_interest
+import build_pedigree
 import build_workbook
 import model
 
@@ -33,6 +34,7 @@ def main():
             print(f"Trends fetch skipped: {exc}")
 
     print("== Interest composite =="); build_interest.main()
+    print("== Pedigree =="); build_pedigree.main()
     print("== Workbook =="); build_workbook.main()
     print("== Model =="); model.main()
 

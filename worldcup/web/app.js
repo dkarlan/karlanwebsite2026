@@ -1,24 +1,21 @@
 // World Cup Happiness Index 2026 - live "who to root for" tool.
-// Reads rankings.json (written by the pipeline) and renders three views plus a
-// day-by-day match guide. No build step, no dependencies.
+// Reads rankings.json (written by the pipeline). The headline number is the
+// marginal happiness to the world if a team wins: fan population, times the
+// marginal-utility weight, times the lifetime value of the title (novelty raises
+// the joy, pedigree makes it fade faster). Win probability is excluded by design.
 
 const VIEWS = {
   rooting: {
     key: "rooting_index",
-    label: "If they win the Cup",
-    note: "Aggregate happiness added by a title: fans reached, times the per-fan " +
-      "lift, weighted up where people have less. This is the prize, before the odds.",
-  },
-  expected: {
-    key: "expected_index",
-    label: "Expected impact",
-    note: "The prize multiplied by each team's odds of actually winning, net of " +
-      "the beaten finalist's loss. What is realistically on the table.",
+    label: "Marginal happiness",
+    note: "Happiness added to the world by a title: fans reached, times the per-fan " +
+      "lifetime value, weighted up where people have less and where a win would be " +
+      "novel rather than routine.",
   },
   eta15: {
     key: "rooting_index_eta15",
     label: "Tilt to the poor",
-    note: "The same prize, but with a stronger preference for low-income countries " +
+    note: "The same measure, with a stronger preference for low-income countries " +
       "(utility curvature eta = 1.5 instead of 1).",
   },
 };
@@ -28,6 +25,11 @@ let view = "rooting";
 
 function fmtInt(n) { return n.toLocaleString("en-US"); }
 function fmtM(n) { return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + "M"; }
+function titleTag(t) {
+  if (t.last_major_year === null && t.wc_titles === 0) return "never won a major";
+  if (t.wc_titles === 0) return "never won the Cup";
+  return t.wc_titles + (t.wc_titles === 1 ? " title" : " titles");
+}
 
 async function load() {
   const res = await fetch("rankings.json");
@@ -45,11 +47,13 @@ function teamsByView() {
 }
 
 function renderHeadline() {
-  const root = [...DATA.teams].sort((a, b) => b.rooting_index - a.rooting_index)[0];
-  const exp = [...DATA.teams].sort((a, b) => b.expected_index - a.expected_index)[0];
+  const top = [...DATA.teams].sort((a, b) => b.rooting_index - a.rooting_index)[0];
+  const why = top.wc_titles === 0
+    ? "a huge, devoted following, low incomes, and no title to get used to"
+    : "a huge following weighted up by low incomes";
   document.getElementById("headline").innerHTML =
-    `For the biggest happiness gain, root for <b>${root.name}</b>. ` +
-    `Balancing for who can actually win it, the smart pick is <b>${exp.name}</b>.`;
+    `This year, root for <b>${top.name}</b>: ${why}. A win would land where it adds ` +
+    `the most happiness, and it would be remembered for a generation.`;
 }
 
 function bindToggle() {
@@ -75,15 +79,17 @@ function renderRanking() {
     const pct = Math.max(1.5, (t[key] / max) * 100);
     const el = document.createElement("div");
     el.className = "row" + (i === 0 ? " top" : "");
+    const badge = t.wc_titles === 0
+      ? `<span class="badge">${t.last_major_year === null ? "DEBUT-ERA" : "NEVER WON"}</span>` : "";
     el.innerHTML = `
       <span class="rank">${i + 1}</span>
-      <div class="name">${t.name}${t.host ? '<span class="badge">HOST</span>' : ""}
+      <div class="name">${t.name}${t.host ? '<span class="badge host">HOST</span>' : ""}${badge}
         <small>${t.confederation} &middot; Group ${t.group}</small></div>
       <div class="bar-wrap">
         <div class="bar" style="width:${pct}%"></div>
         <span class="bar-val">${t[key].toFixed(1)}</span>
       </div>
-      <div class="p">${(t.p_champion * 100).toFixed(1)}%<br><small>to win</small></div>`;
+      <div class="p">${t.memory_half_life}y<br><small>memory</small></div>`;
     el.addEventListener("click", () => openDrawer(t));
     host.appendChild(el);
   });
@@ -92,7 +98,7 @@ function renderRanking() {
 function setupDates() {
   const input = document.getElementById("match-date");
   const dates = [...new Set(DATA.fixtures.map((f) => f.date))].sort();
-  const today = "2026-06-18";
+  const today = "2026-06-19";
   input.min = dates[0];
   input.max = dates[dates.length - 1];
   input.value = dates.includes(today) ? today : dates[0];
@@ -121,12 +127,12 @@ function renderMatches(dateStr) {
       <div class="match-teams">
         <div class="side ${homePick ? "pick" : ""}">
           <div class="tn">${h.name}</div>
-          <div class="ti">rooting index ${h.rooting_index.toFixed(0)}</div>
+          <div class="ti">happiness index ${h.rooting_index.toFixed(0)}</div>
         </div>
         <div class="vs">v</div>
         <div class="side right ${homePick ? "" : "pick"}">
           <div class="tn">${a.name}</div>
-          <div class="ti">rooting index ${a.rooting_index.toFixed(0)}</div>
+          <div class="ti">happiness index ${a.rooting_index.toFixed(0)}</div>
         </div>
       </div>
       <div class="pick-line">Root for <b>${pick.name}</b>${
@@ -143,36 +149,42 @@ function renderMatches(dateStr) {
 function openDrawer(t) {
   const body = document.getElementById("drawer-body");
   const kv = (k, v) => `<div class="kv"><span class="k">${k}</span><span class="v">${v}</span></div>`;
+  const lastTitle = t.last_major_year === null ? "none on record" : t.last_major_year;
   body.innerHTML = `
     <h3>${t.name}</h3>
     <p class="sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</p>
-    ${kv("Rooting index (win the Cup)", t.rooting_index.toFixed(1))}
+    ${kv("Marginal-happiness index", t.rooting_index.toFixed(1))}
     ${kv("Tilt-to-poor index (eta 1.5)", t.rooting_index_eta15.toFixed(1))}
-    ${kv("Expected-impact index", t.expected_index.toFixed(1))}
-    ${kv("Chance of winning", (t.p_champion * 100).toFixed(1) + "%")}
-    ${kv("Reaches the final", (t.p_final * 100).toFixed(1) + "%")}
+    <div class="kv-group">Novelty and memory</div>
+    ${kv("World Cup titles", t.wc_titles)}
+    ${kv("Last major trophy", lastTitle)}
+    ${kv("Novelty (0 to 1)", t.novelty.toFixed(2))}
+    ${kv("Memory half-life", t.memory_half_life + " years")}
+    ${kv("Lifetime value per fan", t.lifetime_utility.toFixed(2))}
+    <div class="kv-group">Reach and need</div>
     ${kv("Fans reached", fmtM(t.fan_population))}
     ${kv("&nbsp;&nbsp;home", fmtM(t.home_fans))}
     ${kv("&nbsp;&nbsp;diaspora", fmtM(t.diaspora_fans))}
     ${kv("&nbsp;&nbsp;continental solidarity", fmtM(t.solidarity_fans))}
     ${kv("Consumption (GNI pc, PPP)", "$" + fmtInt(t.consumption))}
     ${kv("Marginal-utility weight", t.mu_weight.toFixed(2) + "x")}
-    ${kv("Elo rating", t.elo)}
-    <p class="note">Rooting index is fan population times the per-fan happiness
-      shock times the marginal-utility weight, net of a dark-side externality,
-      indexed to the top team. A lower consumption level raises the utility weight,
-      so a windfall counts for more.</p>`;
+    ${kv("Elo rating (reference only)", t.elo)}
+    <p class="note">Index = fans reached x marginal-utility weight x the lifetime
+      value of a title. Lower consumption raises the utility weight. A team with
+      little history of winning gets a bigger, longer-lasting bump, so its joy is
+      worth more. Win probability is not part of the score.</p>`;
   document.getElementById("drawer").classList.remove("hidden");
 }
 
 function renderMeta() {
   const p = DATA.meta.params;
   document.getElementById("meta").innerHTML =
-    `Updated ${DATA.meta.generated.slice(0, 10)} &middot; stage: ${DATA.meta.stage} &middot; ` +
-    `<code>eta=${p.eta}</code> <code>h=${p.h_per_fan}</code> ` +
-    `<code>diaspora=${p.diaspora_weight}</code> <code>solidarity=${p.continental_weight}</code> ` +
-    `<code>loss aversion=${p.loss_aversion}</code> &middot; probabilities: ${p.prob_source}, ` +
-    `${fmtInt(p.mc_iterations)} simulations. Methods in the repo README.`;
+    `Updated ${DATA.meta.generated.slice(0, 10)} &middot; ` +
+    `basis: ${DATA.meta.basis} &middot; ` +
+    `<code>eta=${p.eta}</code> <code>novelty=${p.npv_alpha}</code> ` +
+    `<code>memory half-life ${(Math.log(2) / p.npv_r_lo).toFixed(0)}y to ${(Math.log(2) / p.npv_r_hi).toFixed(1)}y</code> ` +
+    `<code>diaspora=${p.diaspora_weight}</code> <code>solidarity=${p.continental_weight}</code>. ` +
+    `Methods in the repo README.`;
 }
 
 document.getElementById("drawer-close")
