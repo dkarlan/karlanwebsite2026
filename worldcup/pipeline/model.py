@@ -215,7 +215,7 @@ def main():
             "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "title": "World Cup Happiness Index 2026",
             "live_changed": live_changed,
-            "basis": "happiness from beating expectations (default), or from winning the Cup; never weighted by win probability",
+            "basis": "performance relative to expectations (default), or absolute performance if they win; never weighted by win probability",
             "params": {
                 "eta": config.ETA,
                 "eta_sensitivity": config.ETA_SENSITIVITY,

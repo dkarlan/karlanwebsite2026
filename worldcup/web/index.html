@@ -144,12 +144,10 @@
             weight each country by how poor it is. A country whose people consume
             half as much per head as another counts, at the default setting, for
             roughly twice as much. One parameter sets how hard we lean toward the
-            poor. At its default the weight is simply inversely proportional to
-            consumption; turn it up and the poor count for even more. Because that
-            lean is a judgment call rather than a measured fact, we also re-run the
-            whole ranking with a stronger setting and confirm the conclusions hold.
-            That re-run is the robustness check, and the tilt toward the poor is
-            always on.</li>
+            poor: crank it up and we favor the poor even more; lower it toward zero
+            and we favor them less, until at zero everyone counts the same. Which
+            value to choose is ultimately a question for the philosopher and the
+            social planner. The tilt toward the poor is always on.</li>
           <li><strong>V, memory.</strong> A title is a glow that fades, and we value
             the present value of that fading stream rather than a single moment.
             Pedigree sets how fast it fades. A serial winner's glow is largely gone
@@ -182,21 +180,17 @@
           size of the wellbeing effect of national sporting success: Kavetsos and
           Szymanski (2010).</p>
 
-        <h3>Not yet incorporated: the dark side</h3>
-        <p>A title has victims. Card and Dahl (2011) show that upset losses by a
-          favored team raise domestic violence, and the losing finalist's fans
-          suffer a real disappointment. Neither cost is netted out in the numbers
-          here. Both would temper the case for rooting on pure-upset grounds, and
-          would fall harder on the favored side, so this is a priority for the next
-          version.</p>
+        <h3>Not yet incorporated</h3>
+        <p>One real cost is left out: upset losses can raise domestic violence
+          (Card and Dahl 2011), and the losing finalist's fans are let down. A
+          priority for the next version.</p>
 
         <h3>Caveats</h3>
-        <p>The lean toward lower incomes is a value judgment, not a measurement.
-          Diaspora, interest and pedigree figures are documented estimates. The size
-          of the happiness bump is a flat assumed value, informed by the literature
-          rather than estimated team by team. The expectation bar is frozen from
-          before the tournament, so it does not drift as results come in. Full code
-          and data are in the project repository.</p>
+        <p>Diaspora, interest and pedigree figures are documented estimates. The
+          size of the happiness bump is a flat assumed value, informed by the
+          literature rather than estimated team by team. The expectation bar is
+          frozen from before the tournament, so it does not drift as results come
+          in. Full code and data are in the project repository.</p>
       </div>
     </details>
 
