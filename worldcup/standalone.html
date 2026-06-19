@@ -1,0 +1,2856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Cup Happiness Index 2026</title>
+  <style>
+:root {
+  --ink: #14181f;
+  --muted: #5b6573;
+  --line: #e4e7ec;
+  --bg: #f7f8fa;
+  --card: #ffffff;
+  --accent: #0f7b6c;
+  --accent-soft: #d7efe9;
+  --gold: #c79a3b;
+  --bar: #0f7b6c;
+  --bar-soft: #e6efee;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+/* Site navigation, mirrored from deankarlan.com */
+.site-nav {
+  background: #1a2332;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.site-nav .nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+}
+.site-nav .site-name {
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: 1rem 0;
+  letter-spacing: 0.5px;
+}
+.site-nav ul { list-style: none; display: flex; gap: 0; margin: 0; padding: 0; }
+.site-nav li a {
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 1.1rem 1.2rem;
+  display: block;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+}
+.site-nav li a.two-line { text-align: center; line-height: 1.3; padding-top: 0.7rem; padding-bottom: 0.7rem; }
+.site-nav li a:hover, .site-nav li a.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-bottom-color: #3b82f6;
+}
+
+/* Background / further-reading links on the front page */
+.reading {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  font-size: 0.85rem;
+}
+.reading-label { color: #9fd3c8; font-weight: 600; }
+.reading a {
+  color: #d4dbe2;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: 1px;
+}
+.reading a:hover { color: #fff; border-bottom-color: #fff; }
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+header {
+  background: linear-gradient(160deg, #0f2f2a 0%, #14181f 100%);
+  color: #fff;
+  padding: 48px 0 36px;
+}
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: #9fd3c8;
+  font-weight: 600;
+}
+
+header h1 { font-size: 2.2rem; line-height: 1.1; margin: 8px 0 14px; }
+
+.standfirst { max-width: 640px; color: #d4dbe2; font-size: 1.08rem; }
+.byline {
+  margin-top: 10px; color: #9fd3c8; font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+/* Readable main text */
+.essay { max-width: 680px; margin: 32px auto 8px; }
+.essay p { margin-bottom: 16px; font-size: 1.06rem; line-height: 1.7; color: #283039; }
+.essay p:first-child::first-letter {
+  font-size: 3.1rem; line-height: 0.8; font-weight: 700;
+  float: left; margin: 4px 8px 0 0; color: var(--accent);
+}
+
+.toolintro { margin-top: 26px; }
+.toolintro h2 { font-size: 1.4rem; margin-bottom: 10px; }
+
+/* Live pick callout, now in the light body */
+#headline.headline {
+  background: var(--accent-soft);
+  border: 1px solid #bfe3db;
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 1.04rem;
+  color: var(--ink);
+}
+#headline.headline b { color: var(--accent); font-weight: 700; }
+
+/* Technical appendix (native expand/collapse) */
+.appendix {
+  margin-top: 40px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 4px 18px;
+}
+.appendix summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 14px 0;
+  color: var(--ink);
+  list-style: none;
+}
+.appendix summary::-webkit-details-marker { display: none; }
+.appendix summary::before { content: "+ "; color: var(--accent); font-weight: 700; }
+.appendix[open] summary::before { content: "- "; }
+.appendix-body { padding: 4px 0 16px; max-width: 680px; }
+.appendix-body h3 { font-size: 1rem; margin: 18px 0 6px; color: var(--accent); }
+.appendix-body p, .appendix-body li { font-size: 0.94rem; line-height: 1.6; color: #3a434e; }
+.appendix-body ul { margin: 6px 0 6px 18px; }
+.appendix-body li { margin-bottom: 6px; }
+
+main { padding: 28px 0 60px; }
+
+.controls { margin-bottom: 18px; }
+
+.toggle-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.toggle.small button { padding: 8px 12px; font-size: 0.82rem; }
+.toggle.muted { opacity: 0.4; }
+
+.toggle {
+  display: inline-flex;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+.toggle button {
+  border: none;
+  background: none;
+  padding: 10px 16px;
+  font-size: 0.92rem;
+  cursor: pointer;
+  color: var(--muted);
+  border-right: 1px solid var(--line);
+}
+.toggle button:last-child { border-right: none; }
+.toggle button.active { background: var(--accent); color: #fff; font-weight: 600; }
+
+.view-note { color: var(--muted); font-size: 0.88rem; margin-top: 10px; }
+
+.ranking { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+
+.row {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: 26px 1.6fr 3fr auto;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.05s;
+}
+.row:hover { border-color: var(--accent); }
+.row:active { transform: scale(0.998); }
+.row .rank { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+.row .name { font-weight: 600; }
+.row .name small { display: block; font-weight: 400; color: var(--muted); font-size: 0.76rem; }
+.row .badge {
+  display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em;
+  color: var(--gold); margin-left: 6px; vertical-align: middle;
+}
+.row .badge.host { color: var(--accent); }
+.row .badge.out { color: #b91c1c; }
+
+.bar-wrap { background: var(--bar-soft); border-radius: 6px; height: 22px; position: relative; }
+.bar { background: var(--bar); height: 100%; border-radius: 6px; min-width: 2px; }
+.bar-val {
+  position: absolute; right: 8px; top: 0; line-height: 22px;
+  font-size: 0.78rem; font-weight: 600; color: var(--ink);
+}
+.row .p { text-align: right; font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.row.top .bar { background: var(--gold); }
+
+.tonight { margin-top: 40px; }
+.tonight-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tonight-head h2 { font-size: 1.3rem; }
+#match-date { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; }
+
+.match {
+  background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 14px; margin-top: 10px;
+}
+.match-top { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.78rem; margin-bottom: 8px; }
+.match-teams { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
+.side { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); }
+.side.pick { border-color: var(--accent); background: var(--accent-soft); }
+.side .tn { font-weight: 600; }
+.side .ti { font-size: 0.8rem; color: var(--muted); }
+.side.right { text-align: right; }
+.vs { color: var(--muted); font-size: 0.8rem; }
+.pick-line { margin-top: 10px; font-size: 0.86rem; }
+.pick-line b { color: var(--accent); }
+.empty { color: var(--muted); padding: 16px 0; }
+
+.meta { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8rem; }
+.meta code { background: #eef1f4; padding: 1px 5px; border-radius: 4px; }
+
+.drawer {
+  position: fixed; top: 0; right: 0; width: 380px; max-width: 92vw; height: 100%;
+  background: #fff; box-shadow: -4px 0 24px rgba(0,0,0,0.18); z-index: 50;
+  padding: 24px; overflow-y: auto; transition: transform 0.22s ease;
+}
+.drawer.hidden { transform: translateX(102%); }
+#drawer-close { position: absolute; top: 12px; right: 16px; border: none; background: none; font-size: 1.7rem; cursor: pointer; color: var(--muted); }
+.drawer h3 { font-size: 1.3rem; margin-bottom: 2px; }
+.drawer .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 16px; }
+.kv { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+.kv .k { color: var(--muted); }
+.kv .v { font-weight: 600; font-variant-numeric: tabular-nums; }
+.kv-group {
+  margin-top: 18px; margin-bottom: 2px; font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent);
+}
+.drawer .note { margin-top: 16px; font-size: 0.82rem; color: var(--muted); background: var(--bg); padding: 12px; border-radius: 8px; }
+
+@media (max-width: 620px) {
+  .row { grid-template-columns: 22px 1.4fr 2fr; }
+  .row .p { display: none; }
+  header h1 { font-size: 1.7rem; }
+  .site-nav .nav-inner { flex-direction: column; padding: 0.4rem 1rem; }
+  .site-nav .site-name { padding: 0.5rem 0; }
+  .site-nav ul { flex-wrap: wrap; justify-content: center; }
+  .site-nav li a { padding: 0.6rem 0.7rem; font-size: 0.82rem; }
+  .site-nav li a.two-line br { display: none; }
+}
+
+</style>
+</head>
+<body>
+  <!-- Site navigation, mirrored from deankarlan.com so this page sits inside it.
+       The "World Cup" item is the new entry, placed next to OCE@USAID Museum. -->
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <span class="site-name">Dean Karlan</span>
+      <ul>
+        <li><a href="https://www.deankarlan.com/">Home</a></li>
+        <li><a href="https://drive.google.com/file/d/1ew7vB3uoib5L1WZr1g5mdxZ8Z6TP7IA9/view" target="_blank" rel="noopener">CV</a></li>
+        <li><a href="https://www.deankarlan.com/publications">Publications</a></li>
+        <li><a href="https://www.deankarlan.com/books">Books</a></li>
+        <li><a href="https://www.deankarlan.com/usaid" class="two-line">OCE@USAID<br>Museum</a></li>
+        <li><a href="#" class="active">Utilitarian World Cup Guide</a></li>
+        <li><a href="https://www.deankarlan.com/photos">Photos</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header>
+    <div class="wrap">
+      <p class="kicker">World Cup 2026</p>
+      <h1>2026 Utilitarian World Cup Fan Guide: Not sure who to root for? Maximize consequential global happiness!</h1>
+      <p class="standfirst">A data-and-philosophy driven guide for the 48-team World Cup, with updates as the tournament progresses</p>
+      <p class="byline">By Dean Karlan</p>
+      <div class="reading">
+        <span class="reading-label">Links to similar prior year guides by me and others:</span>
+        <a href="https://www.nytimes.com/2014/06/26/upshot/why-you-should-root-for-nigeria-or-brazil-mexico-or-ghana.html" target="_blank" rel="noopener">2014 The original (NYTimes Upshot, by Karlan)</a>
+        <a href="https://www.nytimes.com/2014/07/05/upshot/which-world-cup-team-to-root-for-reconsidered.html" target="_blank" rel="noopener">2014 Reconsidered (NYTimes Upshot, by Karlan)</a>
+        <a href="https://blog.uehiro.ox.ac.uk/2018/06/the-utilitarians-guide-to-the-fifa-world-cup/" target="_blank" rel="noopener">2018 A Utilitarian's Guide (Oxford, by Zohny)</a>
+        <a href="https://www.cgdev.org/blog/why-you-should-support-brazil-or-cameroon-2022-world-cup" target="_blank" rel="noopener">2022 Support Brazil or Cameroon (CGD, by Crawfurd, Mitchell and Wickstead)</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="essay">
+      <p>In 2014 I wrote a short piece for The New York Times with a simple premise.
+        A World Cup is watched by billions, and a title sets off real joy in the
+        winning country. If you have no dog in the fight, you get to choose your
+        dog. So pick the one whose win does the most good. Add up the happiness a
+        championship would create, and root for the country at the top. That year
+        the math pointed to Nigeria.</p>
+
+      <p>The 2026 tournament is bigger and, for this exercise, better. Forty-eight
+        teams instead of thirty-two, and a field that reaches deeper into the
+        places the model cares about most: lower-income countries, and first-timers
+        like Cape Verde, Curacao, Jordan and Uzbekistan. Lets update this, add some
+        more nuance, and take advantage of the AI-world to make this auto-update and
+        more sophisticated at a fraction of the cost to do this.</p>
+
+      <p>The logic is similar, but with added nuance. A title's value to the world
+        rises with three things. How many people care, which is population times
+        how much a country follows the game. How much a windfall is worth to them,
+        which is larger where incomes are lower, because the same joy means more to
+        someone who has less (or, one arrives at the same implication if instead you
+        just prefer to increase the utility more for those who have less to begin
+        with, in line with utilitarianism as well as several other philosophical
+        constructs). And how long the joy lasts. A country that wins all
+        the time forgets quickly. A country that has never won remembers for a
+        generation. We put that last idea where it belongs, in the discount rate.
+        The memory of an unaccustomed win fades slowly, so its value today is
+        higher.</p>
+
+      <p>Three more refinements separate this from a guess on the back of an
+        envelope. Fans are not only the home population, so we add the diaspora and
+        a share of the neighbors who feel a regional win as their own. The size of
+        the happiness bump is estimated from the research on sport and wellbeing,
+        not assumed. And the number is net of the losing finalist and the
+        documented dark side of big matches, not a pure feel-good figure.</p>
+
+      <p>The headline answer: Democratic Republic of Congo! Nearly a hundred million people, a
+        deep love of the game, very low incomes, and no World Cup pedigree to take
+        for granted. A title there would land where the marginal value of joy is
+        highest, and it would be remembered for years.</p>
+
+      <p>But a champion is crowned only once. The tournament gives joy every night,
+        and the best of it comes from surprise. So the default view of the tool
+        below is not who should win the whole thing. It is who is beating
+        expectations. Each team starts with a bar, its pre-tournament odds of
+        reaching each round. Clearing a low bar is what thrills. A long shot that
+        reaches the quarterfinals delivers more joy than a favorite who was
+        supposed to be there all along, and the deeper the run, the more it counts.
+        The odds set the bar. They never shrink the reward, so underdogs are
+        rewarded, not penalized.</p>
+
+      <p>Note: The weight on lower incomes is a value judgment, not a
+        measurement, so the tool lets you turn the dial yourself.</p>
+
+      <p>So this year, root for the Democratic Republic of the Congo. Or open the
+        tool and let it tell you who to pull for tonight.</p>
+    </article>
+
+    <section class="toolintro">
+      <h2>The tool</h2>
+      <div id="headline" class="headline"></div>
+    </section>
+
+    <section class="controls">
+      <div class="toggle-row">
+        <div class="toggle" id="view-toggle">
+          <button data-view="surprise" class="active">Beating expectations</button>
+          <button data-view="rooting">If they win the Cup</button>
+          <button data-view="tilt">Tilt to the poor</button>
+        </div>
+        <div class="toggle small" id="time-toggle" title="Applies to the beating-expectations views">
+          <button data-time="live" class="active">Live</button>
+          <button data-time="pre">Pre-tournament</button>
+        </div>
+      </div>
+      <p class="view-note" id="view-note"></p>
+    </section>
+
+    <section id="ranking" class="ranking"></section>
+
+    <section class="tonight">
+      <div class="tonight-head">
+        <h2>Matches</h2>
+        <input type="date" id="match-date" />
+      </div>
+      <p class="view-note">For each match, the side to root for under the view you
+        picked above. Under "beating expectations" that favours the needier
+        underdog, whose win would be the bigger surprise.</p>
+      <div id="matches"></div>
+    </section>
+
+    <details class="appendix">
+      <summary>Technical appendix: how the index is built</summary>
+      <div class="appendix-body">
+        <h3>The model</h3>
+        <p>For each country <em>i</em>, the value of a title is the product of three
+          terms, <strong>W = N x MU x V</strong>.</p>
+        <ul>
+          <li><strong>N, reach.</strong> Engaged home fans, which is population
+            times how much the country follows the game, plus the diaspora, plus a
+            small share of co-confederation neighbors who share a regional win.</li>
+          <li><strong>MU, need.</strong> The marginal utility of a windfall under
+            isoelastic utility, MU = (c_ref / c)^eta, where c is consumption per
+            head. The default curvature is eta = 1, with a sensitivity test at 1.5.
+            Lower income, higher weight.</li>
+          <li><strong>V, memory.</strong> A title is a glow that fades. Its value is
+            the present value of that fading stream, V = H0 / r, discounted at rate
+            r. Pedigree sets the rate. A serial winner's joy fades in about a year
+            and a half; a country with no history holds it for about fourteen years.</li>
+        </ul>
+
+        <h3>Beating expectations (the default view)</h3>
+        <p>The bar is each team's pre-tournament chance of reaching each knockout
+          round, from an Elo simulation of the real bracket. The surprise of a run
+          is how unlikely it was, summed over the rounds the team reaches and
+          weighted so deeper rounds count for more. The odds set the bar. They never
+          weight the welfare, so the method rewards underdogs rather than favorites.
+          A second toggle compares the live standing with the frozen pre-tournament
+          one.</p>
+
+        <h3>Net, not gross</h3>
+        <p>The figure is net of a documented dark-side externality around
+          high-stakes matches, drawing on Card and Dahl (2011) on upset losses and
+          family violence.</p>
+
+        <h3>Data</h3>
+        <p>Population and consumption from the World Bank. Soccer interest
+          triangulated from Google Trends, registered-player counts and a culture
+          score. Team strength and the expectation bar from the World Football Elo
+          Ratings. Pedigree from World Cup and continental records. Live results
+          from football-data.org.</p>
+
+        <h3>The evidence behind the joy</h3>
+        <p>That happiness tracks surprise: Rutledge, Skandali, Dayan and Dolan
+          (2014), Mellers et al. (1997), Koszegi and Rabin (2006). That it fades,
+          faster with repetition: Frederick and Loewenstein (1999). That a shocking,
+          meaningful win is remembered for years: Brown and Kulik (1977). That the
+          daily mood bump itself is brief: Stieger, Goetz and Gehrig (2015). On the
+          size of the wellbeing effect of national sporting success: Kavetsos and
+          Szymanski (2010).</p>
+
+        <h3>Caveats</h3>
+        <p>The weight on lower incomes, eta, is a value judgment, not a measurement.
+          Diaspora, interest and pedigree figures are documented estimates. The
+          expectation bar is frozen from before the tournament, so it does not drift
+          as results come in. Full code and data are in the project repository.</p>
+      </div>
+    </details>
+
+    <footer id="meta" class="meta"></footer>
+  </main>
+
+  <div id="drawer" class="drawer hidden">
+    <button id="drawer-close">&times;</button>
+    <div id="drawer-body"></div>
+  </div>
+
+  <script>window.__RANKINGS__ = {
+  "meta": {
+    "generated": "2026-06-19T18:28:55+00:00",
+    "title": "World Cup Happiness Index 2026",
+    "live_changed": false,
+    "basis": "happiness from beating expectations (default), or from winning the Cup; never weighted by win probability",
+    "params": {
+      "eta": 1.0,
+      "eta_sensitivity": 1.5,
+      "h0": 0.1,
+      "r_lo": 0.05,
+      "r_hi": 0.5,
+      "stage_weight_exp": 1.0,
+      "mc_iterations": 20000,
+      "diaspora_weight": 1.0,
+      "continental_weight": 0.05,
+      "darkside_fraction": 0.04
+    }
+  },
+  "teams": [
+    {
+      "name": "DR Congo",
+      "confederation": "CAF",
+      "group": "K",
+      "host": false,
+      "population": 109276265,
+      "consumption": 1760,
+      "elo": 1674,
+      "interest": 0.5,
+      "wc_titles": 0,
+      "last_major_year": "1974",
+      "history": 0.037,
+      "novelty": 0.963,
+      "memory_half_life": 10.4,
+      "fan_population": 65119349,
+      "home_fans": 54638132,
+      "diaspora_fans": 750000,
+      "solidarity_fans": 9731216,
+      "mu_weight": 5.682,
+      "present_value": 1.5,
+      "expected_depth": 0.35,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.57,
+      "surprise_pre": 20.57,
+      "w_net": 532927903.7100184,
+      "rooting_index": 100.0,
+      "rooting_index_eta15": 100.0,
+      "surprise_index": 100.0,
+      "surprise_index_eta15": 100.0,
+      "surprise_index_pre": 100.0,
+      "surprise_index_pre_eta15": 100.0
+    },
+    {
+      "name": "Haiti",
+      "confederation": "CONCACAF",
+      "group": "C",
+      "host": false,
+      "population": 11772557,
+      "consumption": 3190,
+      "elo": 1536,
+      "interest": 0.45,
+      "wc_titles": 0,
+      "last_major_year": "1973",
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 15339600,
+      "home_fans": 5297651,
+      "diaspora_fans": 720000,
+      "solidarity_fans": 9321950,
+      "mu_weight": 3.135,
+      "present_value": 1.715,
+      "expected_depth": 0.37,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.6,
+      "surprise_pre": 20.6,
+      "w_net": 79147981.97431698,
+      "rooting_index": 14.9,
+      "rooting_index_eta15": 11.0,
+      "surprise_index": 14.9,
+      "surprise_index_eta15": 11.0,
+      "surprise_index_pre": 14.9,
+      "surprise_index_pre_eta15": 11.0
+    },
+    {
+      "name": "Senegal",
+      "confederation": "CAF",
+      "group": "I",
+      "host": false,
+      "population": 18501984,
+      "consumption": 4920,
+      "elo": 1839,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": "2021",
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 22955410,
+      "home_fans": 10176091,
+      "diaspora_fans": 825000,
+      "solidarity_fans": 11954318,
+      "mu_weight": 2.033,
+      "present_value": 1.715,
+      "expected_depth": 1.36,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.82,
+      "surprise_pre": 18.82,
+      "w_net": 76795615.92840791,
+      "rooting_index": 14.4,
+      "rooting_index_eta15": 8.6,
+      "surprise_index": 13.2,
+      "surprise_index_eta15": 7.9,
+      "surprise_index_pre": 13.2,
+      "surprise_index_pre_eta15": 7.9
+    },
+    {
+      "name": "Cote d'Ivoire",
+      "confederation": "CAF",
+      "group": "E",
+      "host": false,
+      "population": 31934230,
+      "consumption": 7360,
+      "elo": 1743,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": "2023",
+      "history": 0.056,
+      "novelty": 0.944,
+      "memory_half_life": 9.2,
+      "fan_population": 29698758,
+      "home_fans": 17563826,
+      "diaspora_fans": 550000,
+      "solidarity_fans": 11584932,
+      "mu_weight": 1.359,
+      "present_value": 1.333,
+      "expected_depth": 1.09,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 19.54,
+      "surprise_pre": 19.54,
+      "w_net": 51636244.36527072,
+      "rooting_index": 9.7,
+      "rooting_index_eta15": 4.7,
+      "surprise_index": 9.2,
+      "surprise_index_eta15": 4.5,
+      "surprise_index_pre": 9.2,
+      "surprise_index_pre_eta15": 4.5
+    },
+    {
+      "name": "Morocco",
+      "confederation": "CAF",
+      "group": "C",
+      "host": false,
+      "population": 38081173,
+      "consumption": 10260,
+      "elo": 1840,
+      "interest": 0.6,
+      "wc_titles": 0,
+      "last_major_year": "1976",
+      "history": 0.037,
+      "novelty": 0.963,
+      "memory_half_life": 10.4,
+      "fan_population": 37409392,
+      "home_fans": 22848704,
+      "diaspora_fans": 3240000,
+      "solidarity_fans": 11320688,
+      "mu_weight": 0.975,
+      "present_value": 1.5,
+      "expected_depth": 1.66,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.36,
+      "surprise_pre": 18.36,
+      "w_net": 52517538.51094351,
+      "rooting_index": 9.9,
+      "rooting_index_eta15": 4.1,
+      "surprise_index": 8.8,
+      "surprise_index_eta15": 3.6,
+      "surprise_index_pre": 8.8,
+      "surprise_index_pre_eta15": 3.6
+    },
+    {
+      "name": "Ghana",
+      "confederation": "CAF",
+      "group": "L",
+      "host": false,
+      "population": 34427414,
+      "consumption": 7720,
+      "elo": 1510,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": "1982",
+      "history": 0.074,
+      "novelty": 0.926,
+      "memory_half_life": 8.3,
+      "fan_population": 31001447,
+      "home_fans": 18935078,
+      "diaspora_fans": 550000,
+      "solidarity_fans": 11516369,
+      "mu_weight": 1.295,
+      "present_value": 1.2,
+      "expected_depth": 0.07,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.92,
+      "surprise_pre": 20.92,
+      "w_net": 46254750.509850904,
+      "rooting_index": 8.7,
+      "rooting_index_eta15": 4.1,
+      "surprise_index": 8.8,
+      "surprise_index_eta15": 4.2,
+      "surprise_index_pre": 8.8,
+      "surprise_index_pre_eta15": 4.2
+    },
+    {
+      "name": "South Africa",
+      "confederation": "CAF",
+      "group": "A",
+      "host": false,
+      "population": 64007187,
+      "consumption": 15150,
+      "elo": 1511,
+      "interest": 0.45,
+      "wc_titles": 0,
+      "last_major_year": "1996",
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 40231195,
+      "home_fans": 28803234,
+      "diaspora_fans": 405000,
+      "solidarity_fans": 11022961,
+      "mu_weight": 0.66,
+      "present_value": 1.715,
+      "expected_depth": 0.13,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.86,
+      "surprise_pre": 20.86,
+      "w_net": 43708589.22884316,
+      "rooting_index": 8.2,
+      "rooting_index_eta15": 2.8,
+      "surprise_index": 8.3,
+      "surprise_index_eta15": 2.8,
+      "surprise_index_pre": 8.3,
+      "surprise_index_pre_eta15": 2.8
+    },
+    {
+      "name": "Uzbekistan",
+      "confederation": "AFC",
+      "group": "K",
+      "host": false,
+      "population": 36361859,
+      "consumption": 12000,
+      "elo": 1714,
+      "interest": 0.4,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 24011713,
+      "home_fans": 14544744,
+      "diaspora_fans": 800000,
+      "solidarity_fans": 8666970,
+      "mu_weight": 0.833,
+      "present_value": 2.0,
+      "expected_depth": 0.6,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.24,
+      "surprise_pre": 20.24,
+      "w_net": 38418741.400000006,
+      "rooting_index": 7.2,
+      "rooting_index_eta15": 2.8,
+      "surprise_index": 7.1,
+      "surprise_index_eta15": 2.7,
+      "surprise_index_pre": 7.1,
+      "surprise_index_pre_eta15": 2.7
+    },
+    {
+      "name": "Iraq",
+      "confederation": "AFC",
+      "group": "I",
+      "host": false,
+      "population": 46042015,
+      "consumption": 14530,
+      "elo": 1592,
+      "interest": 0.5,
+      "wc_titles": 0,
+      "last_major_year": "2007",
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 32264164,
+      "home_fans": 23021008,
+      "diaspora_fans": 1000000,
+      "solidarity_fans": 8243157,
+      "mu_weight": 0.688,
+      "present_value": 1.715,
+      "expected_depth": 0.11,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.87,
+      "surprise_pre": 20.87,
+      "w_net": 36548645.69696173,
+      "rooting_index": 6.9,
+      "rooting_index_eta15": 2.4,
+      "surprise_index": 7.0,
+      "surprise_index_eta15": 2.4,
+      "surprise_index_pre": 7.0,
+      "surprise_index_pre_eta15": 2.4
+    },
+    {
+      "name": "Egypt",
+      "confederation": "CAF",
+      "group": "G",
+      "host": false,
+      "population": 116538258,
+      "consumption": 18230,
+      "elo": 1711,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": "2010",
+      "history": 0.13,
+      "novelty": 0.87,
+      "memory_half_life": 6.4,
+      "fan_population": 75279363,
+      "home_fans": 64096042,
+      "diaspora_fans": 1925000,
+      "solidarity_fans": 9258321,
+      "mu_weight": 0.549,
+      "present_value": 0.923,
+      "expected_depth": 0.86,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 19.88,
+      "surprise_pre": 19.88,
+      "w_net": 36597536.01283777,
+      "rooting_index": 6.9,
+      "rooting_index_eta15": 2.1,
+      "surprise_index": 6.6,
+      "surprise_index_eta15": 2.1,
+      "surprise_index_pre": 6.6,
+      "surprise_index_pre_eta15": 2.1
+    },
+    {
+      "name": "Iran",
+      "confederation": "AFC",
+      "group": "G",
+      "host": false,
+      "population": 91567738,
+      "consumption": 19820,
+      "elo": 1756,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": "1976",
+      "history": 0.056,
+      "novelty": 0.944,
+      "memory_half_life": 9.2,
+      "fan_population": 58118350,
+      "home_fans": 50362256,
+      "diaspora_fans": 880000,
+      "solidarity_fans": 6876094,
+      "mu_weight": 0.505,
+      "present_value": 1.333,
+      "expected_depth": 1.22,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 19.25,
+      "surprise_pre": 19.25,
+      "w_net": 37523539.67472112,
+      "rooting_index": 7.0,
+      "rooting_index_eta15": 2.1,
+      "surprise_index": 6.6,
+      "surprise_index_eta15": 2.0,
+      "surprise_index_pre": 6.6,
+      "surprise_index_pre_eta15": 2.0
+    },
+    {
+      "name": "Algeria",
+      "confederation": "CAF",
+      "group": "J",
+      "host": false,
+      "population": 46814308,
+      "consumption": 17290,
+      "elo": 1759,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": "2019",
+      "history": 0.037,
+      "novelty": 0.963,
+      "memory_half_life": 10.4,
+      "fan_population": 38023599,
+      "home_fans": 25747869,
+      "diaspora_fans": 1100000,
+      "solidarity_fans": 11175729,
+      "mu_weight": 0.578,
+      "present_value": 1.5,
+      "expected_depth": 0.93,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 19.69,
+      "surprise_pre": 19.69,
+      "w_net": 31675924.94098077,
+      "rooting_index": 5.9,
+      "rooting_index_eta15": 1.9,
+      "surprise_index": 5.7,
+      "surprise_index_eta15": 1.8,
+      "surprise_index_pre": 5.7,
+      "surprise_index_pre_eta15": 1.8
+    },
+    {
+      "name": "Colombia",
+      "confederation": "CONMEBOL",
+      "group": "K",
+      "host": false,
+      "population": 52886363,
+      "consumption": 21890,
+      "elo": 1982,
+      "interest": 0.6,
+      "wc_titles": 0,
+      "last_major_year": "2001",
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 43616636,
+      "home_fans": 31731818,
+      "diaspora_fans": 1800000,
+      "solidarity_fans": 10084818,
+      "mu_weight": 0.457,
+      "present_value": 1.715,
+      "expected_depth": 2.41,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 15.88,
+      "surprise_pre": 15.88,
+      "w_net": 32796152.089692906,
+      "rooting_index": 6.2,
+      "rooting_index_eta15": 1.7,
+      "surprise_index": 4.8,
+      "surprise_index_eta15": 1.3,
+      "surprise_index_pre": 4.8,
+      "surprise_index_pre_eta15": 1.3
+    },
+    {
+      "name": "Jordan",
+      "confederation": "AFC",
+      "group": "J",
+      "host": false,
+      "population": 11552876,
+      "consumption": 10570,
+      "elo": 1653,
+      "interest": 0.4,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 14104300,
+      "home_fans": 4621150,
+      "diaspora_fans": 320000,
+      "solidarity_fans": 9163149,
+      "mu_weight": 0.946,
+      "present_value": 2.0,
+      "expected_depth": 0.3,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.64,
+      "surprise_pre": 20.64,
+      "w_net": 25619920.230085146,
+      "rooting_index": 4.8,
+      "rooting_index_eta15": 2.0,
+      "surprise_index": 4.8,
+      "surprise_index_eta15": 2.0,
+      "surprise_index_pre": 4.8,
+      "surprise_index_pre_eta15": 2.0
+    },
+    {
+      "name": "Ecuador",
+      "confederation": "CONMEBOL",
+      "group": "E",
+      "host": false,
+      "population": 18135478,
+      "consumption": 15410,
+      "elo": 1890,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 21972196,
+      "home_fans": 9974513,
+      "diaspora_fans": 825000,
+      "solidarity_fans": 11172684,
+      "mu_weight": 0.649,
+      "present_value": 2.0,
+      "expected_depth": 1.77,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 17.97,
+      "surprise_pre": 17.97,
+      "w_net": 27376130.52864373,
+      "rooting_index": 5.1,
+      "rooting_index_eta15": 1.7,
+      "surprise_index": 4.5,
+      "surprise_index_eta15": 1.5,
+      "surprise_index_pre": 4.5,
+      "surprise_index_pre_eta15": 1.5
+    },
+    {
+      "name": "Cape Verde",
+      "confederation": "CAF",
+      "group": "H",
+      "host": false,
+      "population": 524877,
+      "consumption": 11000,
+      "elo": 1606,
+      "interest": 0.6,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 13362303,
+      "home_fans": 314926,
+      "diaspora_fans": 600000,
+      "solidarity_fans": 12447377,
+      "mu_weight": 0.909,
+      "present_value": 2.0,
+      "expected_depth": 0.27,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.69,
+      "surprise_pre": 20.69,
+      "w_net": 23323292.129454546,
+      "rooting_index": 4.4,
+      "rooting_index_eta15": 1.8,
+      "surprise_index": 4.4,
+      "surprise_index_eta15": 1.8,
+      "surprise_index_pre": 4.4,
+      "surprise_index_pre_eta15": 1.8
+    },
+    {
+      "name": "Tunisia",
+      "confederation": "CAF",
+      "group": "F",
+      "host": false,
+      "population": 12277109,
+      "consumption": 14230,
+      "elo": 1585,
+      "interest": 0.5,
+      "wc_titles": 0,
+      "last_major_year": "2004",
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 18944750,
+      "home_fans": 6138554,
+      "diaspora_fans": 650000,
+      "solidarity_fans": 12156195,
+      "mu_weight": 0.703,
+      "present_value": 1.715,
+      "expected_depth": 0.17,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.8,
+      "surprise_pre": 20.8,
+      "w_net": 21912930.254929505,
+      "rooting_index": 4.1,
+      "rooting_index_eta15": 1.4,
+      "surprise_index": 4.2,
+      "surprise_index_eta15": 1.5,
+      "surprise_index_pre": 4.2,
+      "surprise_index_pre_eta15": 1.5
+    },
+    {
+      "name": "Turkiye",
+      "confederation": "UEFA",
+      "group": "D",
+      "host": false,
+      "population": 85518661,
+      "consumption": 44600,
+      "elo": 1849,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 60345203,
+      "home_fans": 47035264,
+      "diaspora_fans": 3300000,
+      "solidarity_fans": 10009939,
+      "mu_weight": 0.224,
+      "present_value": 1.715,
+      "expected_depth": 1.4,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.68,
+      "surprise_pre": 18.68,
+      "w_net": 22270213.366557814,
+      "rooting_index": 4.2,
+      "rooting_index_eta15": 0.8,
+      "surprise_index": 3.8,
+      "surprise_index_eta15": 0.8,
+      "surprise_index_pre": 3.8,
+      "surprise_index_pre_eta15": 0.8
+    },
+    {
+      "name": "Mexico",
+      "confederation": "CONCACAF",
+      "group": "A",
+      "host": true,
+      "population": 130861007,
+      "consumption": 25460,
+      "elo": 1881,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": "2023",
+      "history": 0.222,
+      "novelty": 0.778,
+      "memory_half_life": 4.6,
+      "fan_population": 84561708,
+      "home_fans": 71973554,
+      "diaspora_fans": 6600000,
+      "solidarity_fans": 5988154,
+      "mu_weight": 0.393,
+      "present_value": 0.667,
+      "expected_depth": 2.11,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 16.94,
+      "surprise_pre": 16.94,
+      "w_net": 21258091.73180281,
+      "rooting_index": 4.0,
+      "rooting_index_eta15": 1.0,
+      "surprise_index": 3.3,
+      "surprise_index_eta15": 0.9,
+      "surprise_index_pre": 3.3,
+      "surprise_index_pre_eta15": 0.9
+    },
+    {
+      "name": "Paraguay",
+      "confederation": "CONMEBOL",
+      "group": "D",
+      "host": false,
+      "population": 6929153,
+      "consumption": 17930,
+      "elo": 1780,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": "1979",
+      "history": 0.037,
+      "novelty": 0.963,
+      "memory_half_life": 10.4,
+      "fan_population": 15786892,
+      "home_fans": 3811034,
+      "diaspora_fans": 495000,
+      "solidarity_fans": 11480857,
+      "mu_weight": 0.558,
+      "present_value": 1.5,
+      "expected_depth": 0.91,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 19.65,
+      "surprise_pre": 19.65,
+      "w_net": 12681990.31268135,
+      "rooting_index": 2.4,
+      "rooting_index_eta15": 0.7,
+      "surprise_index": 2.3,
+      "surprise_index_eta15": 0.7,
+      "surprise_index_pre": 2.3,
+      "surprise_index_pre_eta15": 0.7
+    },
+    {
+      "name": "Bosnia and Herzegovina",
+      "confederation": "UEFA",
+      "group": "B",
+      "host": false,
+      "population": 3164253,
+      "consumption": 24990,
+      "elo": 1616,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 15115025,
+      "home_fans": 1740339,
+      "diaspora_fans": 1100000,
+      "solidarity_fans": 12274685,
+      "mu_weight": 0.4,
+      "present_value": 2.0,
+      "expected_depth": 0.58,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.34,
+      "surprise_pre": 20.34,
+      "w_net": 11612984.094885955,
+      "rooting_index": 2.2,
+      "rooting_index_eta15": 0.6,
+      "surprise_index": 2.2,
+      "surprise_index_eta15": 0.6,
+      "surprise_index_pre": 2.2,
+      "surprise_index_pre_eta15": 0.6
+    },
+    {
+      "name": "Brazil",
+      "confederation": "CONMEBOL",
+      "group": "C",
+      "host": false,
+      "population": 211998573,
+      "consumption": 21590,
+      "elo": 1978,
+      "interest": 0.72,
+      "wc_titles": 5,
+      "last_major_year": "2019",
+      "history": 0.972,
+      "novelty": 0.028,
+      "memory_half_life": 1.4,
+      "fan_population": 158046433,
+      "home_fans": 152638973,
+      "diaspora_fans": 1368000,
+      "solidarity_fans": 4039461,
+      "mu_weight": 0.463,
+      "present_value": 0.205,
+      "expected_depth": 2.53,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 15.61,
+      "surprise_pre": 15.61,
+      "w_net": 14415761.156762864,
+      "rooting_index": 2.7,
+      "rooting_index_eta15": 0.8,
+      "surprise_index": 2.1,
+      "surprise_index_eta15": 0.6,
+      "surprise_index_pre": 2.1,
+      "surprise_index_pre_eta15": 0.6
+    },
+    {
+      "name": "Japan",
+      "confederation": "AFC",
+      "group": "F",
+      "host": false,
+      "population": 123975371,
+      "consumption": 55490,
+      "elo": 1910,
+      "interest": 0.4,
+      "wc_titles": 0,
+      "last_major_year": "2011",
+      "history": 0.074,
+      "novelty": 0.926,
+      "memory_half_life": 8.3,
+      "fan_population": 56824848,
+      "home_fans": 49590148,
+      "diaspora_fans": 320000,
+      "solidarity_fans": 6914700,
+      "mu_weight": 0.18,
+      "present_value": 1.2,
+      "expected_depth": 1.82,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 17.76,
+      "surprise_pre": 17.76,
+      "w_net": 11795469.7049063,
+      "rooting_index": 2.2,
+      "rooting_index_eta15": 0.4,
+      "surprise_index": 1.9,
+      "surprise_index_eta15": 0.3,
+      "surprise_index_pre": 1.9,
+      "surprise_index_pre_eta15": 0.3
+    },
+    {
+      "name": "United States",
+      "confederation": "CONCACAF",
+      "group": "D",
+      "host": true,
+      "population": 340110988,
+      "consumption": 85980,
+      "elo": 1780,
+      "interest": 0.3,
+      "wc_titles": 0,
+      "last_major_year": "2021",
+      "history": 0.148,
+      "novelty": 0.852,
+      "memory_half_life": 5.9,
+      "fan_population": 107418464,
+      "home_fans": 102033296,
+      "diaspora_fans": 900000,
+      "solidarity_fans": 4485167,
+      "mu_weight": 0.116,
+      "present_value": 0.857,
+      "expected_depth": 1.24,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.97,
+      "surprise_pre": 18.97,
+      "w_net": 10282213.134687329,
+      "rooting_index": 1.9,
+      "rooting_index_eta15": 0.3,
+      "surprise_index": 1.8,
+      "surprise_index_eta15": 0.3,
+      "surprise_index_pre": 1.8,
+      "surprise_index_pre_eta15": 0.3
+    },
+    {
+      "name": "Curacao",
+      "confederation": "CONCACAF",
+      "group": "E",
+      "host": false,
+      "population": 155967,
+      "consumption": 33300,
+      "elo": 1427,
+      "interest": 0.5,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 9735917,
+      "home_fans": 77984,
+      "diaspora_fans": 75000,
+      "solidarity_fans": 9582933,
+      "mu_weight": 0.3,
+      "present_value": 2.0,
+      "expected_depth": 0.04,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.96,
+      "surprise_pre": 20.96,
+      "w_net": 5613501.414054055,
+      "rooting_index": 1.1,
+      "rooting_index_eta15": 0.2,
+      "surprise_index": 1.1,
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 1.1,
+      "surprise_index_pre_eta15": 0.2
+    },
+    {
+      "name": "South Korea",
+      "confederation": "AFC",
+      "group": "A",
+      "host": false,
+      "population": 51751065,
+      "consumption": 61930,
+      "elo": 1786,
+      "interest": 0.4,
+      "wc_titles": 0,
+      "last_major_year": "1960",
+      "history": 0.056,
+      "novelty": 0.944,
+      "memory_half_life": 9.2,
+      "fan_population": 30059612,
+      "home_fans": 20700426,
+      "diaspora_fans": 1000000,
+      "solidarity_fans": 8359186,
+      "mu_weight": 0.161,
+      "present_value": 1.333,
+      "expected_depth": 1.4,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.88,
+      "surprise_pre": 18.88,
+      "w_net": 6211213.516279398,
+      "rooting_index": 1.2,
+      "rooting_index_eta15": 0.2,
+      "surprise_index": 1.1,
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 1.1,
+      "surprise_index_pre_eta15": 0.2
+    },
+    {
+      "name": "Panama",
+      "confederation": "CONCACAF",
+      "group": "L",
+      "host": false,
+      "population": 4515577,
+      "consumption": 39260,
+      "elo": 1730,
+      "interest": 0.45,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 11589241,
+      "home_fans": 2032010,
+      "diaspora_fans": 72000,
+      "solidarity_fans": 9485232,
+      "mu_weight": 0.255,
+      "present_value": 2.0,
+      "expected_depth": 0.9,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 19.83,
+      "surprise_pre": 19.83,
+      "w_net": 5667688.081100358,
+      "rooting_index": 1.1,
+      "rooting_index_eta15": 0.2,
+      "surprise_index": 1.0,
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 1.0,
+      "surprise_index_pre_eta15": 0.2
+    },
+    {
+      "name": "Canada",
+      "confederation": "CONCACAF",
+      "group": "B",
+      "host": true,
+      "population": 41288599,
+      "consumption": 63630,
+      "elo": 1767,
+      "interest": 0.25,
+      "wc_titles": 0,
+      "last_major_year": "2000",
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 19742874,
+      "home_fans": 10322150,
+      "diaspora_fans": 350000,
+      "solidarity_fans": 9070725,
+      "mu_weight": 0.157,
+      "present_value": 1.715,
+      "expected_depth": 1.67,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.29,
+      "surprise_pre": 18.29,
+      "w_net": 5106989.278767446,
+      "rooting_index": 1.0,
+      "rooting_index_eta15": 0.2,
+      "surprise_index": 0.9,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.9,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Portugal",
+      "confederation": "UEFA",
+      "group": "K",
+      "host": false,
+      "population": 10694681,
+      "consumption": 50730,
+      "elo": 1967,
+      "interest": 0.62,
+      "wc_titles": 0,
+      "last_major_year": "2016",
+      "history": 0.037,
+      "novelty": 0.963,
+      "memory_half_life": 10.4,
+      "fan_population": 20210870,
+      "home_fans": 6630702,
+      "diaspora_fans": 1550000,
+      "solidarity_fans": 12030167,
+      "mu_weight": 0.197,
+      "present_value": 1.5,
+      "expected_depth": 2.25,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 16.38,
+      "surprise_pre": 16.38,
+      "w_net": 5738405.25370846,
+      "rooting_index": 1.1,
+      "rooting_index_eta15": 0.2,
+      "surprise_index": 0.9,
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 0.9,
+      "surprise_index_pre_eta15": 0.2
+    },
+    {
+      "name": "Scotland",
+      "confederation": "UEFA",
+      "group": "C",
+      "host": false,
+      "population": 5490000,
+      "consumption": 61460,
+      "elo": 853,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 15725227,
+      "home_fans": 3019500,
+      "diaspora_fans": 495000,
+      "solidarity_fans": 12210727,
+      "mu_weight": 0.163,
+      "present_value": 2.0,
+      "expected_depth": 0.0,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 21.0,
+      "surprise_pre": 21.0,
+      "w_net": 4912534.4359778715,
+      "rooting_index": 0.9,
+      "rooting_index_eta15": 0.2,
+      "surprise_index": 0.9,
+      "surprise_index_eta15": 0.2,
+      "surprise_index_pre": 0.9,
+      "surprise_index_pre_eta15": 0.2
+    },
+    {
+      "name": "England",
+      "confederation": "UEFA",
+      "group": "L",
+      "host": false,
+      "population": 57100000,
+      "consumption": 61460,
+      "elo": 2055,
+      "interest": 0.65,
+      "wc_titles": 1,
+      "last_major_year": "1966",
+      "history": 0.157,
+      "novelty": 0.843,
+      "memory_half_life": 5.7,
+      "fan_population": 50220952,
+      "home_fans": 37115000,
+      "diaspora_fans": 2600000,
+      "solidarity_fans": 10505952,
+      "mu_weight": 0.163,
+      "present_value": 0.828,
+      "expected_depth": 3.12,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 13.31,
+      "surprise_pre": 13.31,
+      "w_net": 6492154.495480455,
+      "rooting_index": 1.2,
+      "rooting_index_eta15": 0.2,
+      "surprise_index": 0.8,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.8,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Saudi Arabia",
+      "confederation": "AFC",
+      "group": "H",
+      "host": false,
+      "population": 35300280,
+      "consumption": 71730,
+      "elo": 1598,
+      "interest": 0.45,
+      "wc_titles": 0,
+      "last_major_year": "1996",
+      "history": 0.056,
+      "novelty": 0.944,
+      "memory_half_life": 9.2,
+      "fan_population": 24620077,
+      "home_fans": 15885126,
+      "diaspora_fans": 135000,
+      "solidarity_fans": 8599951,
+      "mu_weight": 0.139,
+      "present_value": 1.333,
+      "expected_depth": 0.24,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.73,
+      "surprise_pre": 20.73,
+      "w_net": 4392206.427707386,
+      "rooting_index": 0.8,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.8,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.8,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Belgium",
+      "confederation": "UEFA",
+      "group": "G",
+      "host": false,
+      "population": 11858610,
+      "consumption": 74770,
+      "elo": 1879,
+      "interest": 0.5,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 18244542,
+      "home_fans": 5929305,
+      "diaspora_fans": 250000,
+      "solidarity_fans": 12065237,
+      "mu_weight": 0.134,
+      "present_value": 1.715,
+      "expected_depth": 1.85,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 17.77,
+      "surprise_pre": 17.77,
+      "w_net": 4016262.3545490927,
+      "rooting_index": 0.8,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.7,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.7,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Australia",
+      "confederation": "AFC",
+      "group": "D",
+      "host": false,
+      "population": 27196812,
+      "consumption": 69600,
+      "elo": 1839,
+      "interest": 0.3,
+      "wc_titles": 0,
+      "last_major_year": "2015",
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 17325298,
+      "home_fans": 8159044,
+      "diaspora_fans": 180000,
+      "solidarity_fans": 8986255,
+      "mu_weight": 0.144,
+      "present_value": 1.715,
+      "expected_depth": 1.31,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.86,
+      "surprise_pre": 18.86,
+      "w_net": 4097207.5912322444,
+      "rooting_index": 0.8,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.7,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.7,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Croatia",
+      "confederation": "UEFA",
+      "group": "L",
+      "host": false,
+      "population": 3866200,
+      "consumption": 49740,
+      "elo": 1881,
+      "interest": 0.62,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.065,
+      "novelty": 0.935,
+      "memory_half_life": 8.8,
+      "fan_population": 15258894,
+      "home_fans": 2397044,
+      "diaspora_fans": 620000,
+      "solidarity_fans": 12241850,
+      "mu_weight": 0.201,
+      "present_value": 1.263,
+      "expected_depth": 1.67,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.21,
+      "surprise_pre": 18.21,
+      "w_net": 3720340.8329071654,
+      "rooting_index": 0.7,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.6,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.6,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Switzerland",
+      "confederation": "UEFA",
+      "group": "B",
+      "host": false,
+      "population": 9005582,
+      "consumption": 91110,
+      "elo": 1865,
+      "interest": 0.45,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 16526589,
+      "home_fans": 4052512,
+      "diaspora_fans": 315000,
+      "solidarity_fans": 12159077,
+      "mu_weight": 0.11,
+      "present_value": 2.0,
+      "expected_depth": 1.88,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 17.74,
+      "surprise_pre": 17.74,
+      "w_net": 3482718.730009878,
+      "rooting_index": 0.7,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.6,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.6,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Austria",
+      "confederation": "UEFA",
+      "group": "J",
+      "host": false,
+      "population": 9177982,
+      "consumption": 74160,
+      "elo": 1857,
+      "interest": 0.45,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.018,
+      "novelty": 0.982,
+      "memory_half_life": 11.9,
+      "fan_population": 16555290,
+      "home_fans": 4130092,
+      "diaspora_fans": 270000,
+      "solidarity_fans": 12155198,
+      "mu_weight": 0.135,
+      "present_value": 1.715,
+      "expected_depth": 1.43,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.71,
+      "surprise_pre": 18.71,
+      "w_net": 3674375.612271934,
+      "rooting_index": 0.7,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.6,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.6,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Czechia",
+      "confederation": "UEFA",
+      "group": "A",
+      "host": false,
+      "population": 10905028,
+      "consumption": 54800,
+      "elo": 1712,
+      "interest": 0.45,
+      "wc_titles": 0,
+      "last_major_year": "1976",
+      "history": 0.13,
+      "novelty": 0.87,
+      "memory_half_life": 6.4,
+      "fan_population": 17248602,
+      "home_fans": 4907263,
+      "diaspora_fans": 225000,
+      "solidarity_fans": 12116339,
+      "mu_weight": 0.182,
+      "present_value": 0.923,
+      "expected_depth": 0.9,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 19.84,
+      "surprise_pre": 19.84,
+      "w_net": 2789561.378855837,
+      "rooting_index": 0.5,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.5,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.5,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Sweden",
+      "confederation": "UEFA",
+      "group": "F",
+      "host": false,
+      "population": 10569709,
+      "consumption": 75000,
+      "elo": 1755,
+      "interest": 0.4,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.065,
+      "novelty": 0.935,
+      "memory_half_life": 8.8,
+      "fan_population": 16538192,
+      "home_fans": 4227884,
+      "diaspora_fans": 160000,
+      "solidarity_fans": 12150308,
+      "mu_weight": 0.133,
+      "present_value": 1.263,
+      "expected_depth": 1.0,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 19.62,
+      "surprise_pre": 19.62,
+      "w_net": 2674189.685861546,
+      "rooting_index": 0.5,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.5,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.5,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Spain",
+      "confederation": "UEFA",
+      "group": "H",
+      "host": false,
+      "population": 48848840,
+      "consumption": 57670,
+      "elo": 2129,
+      "interest": 0.62,
+      "wc_titles": 1,
+      "last_major_year": "2024",
+      "history": 0.232,
+      "novelty": 0.768,
+      "memory_half_life": 4.5,
+      "fan_population": 42001669,
+      "home_fans": 30286281,
+      "diaspora_fans": 868000,
+      "solidarity_fans": 10847388,
+      "mu_weight": 0.173,
+      "present_value": 0.649,
+      "expected_depth": 3.88,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 10.22,
+      "surprise_pre": 10.22,
+      "w_net": 4534964.319797991,
+      "rooting_index": 0.9,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.4,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.4,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Norway",
+      "confederation": "UEFA",
+      "group": "I",
+      "host": false,
+      "population": 5572279,
+      "consumption": 106830,
+      "elo": 1929,
+      "interest": 0.4,
+      "wc_titles": 0,
+      "last_major_year": null,
+      "history": 0.0,
+      "novelty": 1.0,
+      "memory_half_life": 13.9,
+      "fan_population": 14559168,
+      "home_fans": 2228912,
+      "diaspora_fans": 80000,
+      "solidarity_fans": 12250257,
+      "mu_weight": 0.094,
+      "present_value": 2.0,
+      "expected_depth": 1.86,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 17.55,
+      "surprise_pre": 17.55,
+      "w_net": 2616643.5834428533,
+      "rooting_index": 0.5,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.4,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.4,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Argentina",
+      "confederation": "CONMEBOL",
+      "group": "J",
+      "host": false,
+      "population": 45696159,
+      "consumption": 29800,
+      "elo": 2128,
+      "interest": 0.72,
+      "wc_titles": 3,
+      "last_major_year": "2024",
+      "history": 0.852,
+      "novelty": 0.148,
+      "memory_half_life": 1.6,
+      "fan_population": 43647582,
+      "home_fans": 32901234,
+      "diaspora_fans": 720000,
+      "solidarity_fans": 10026347,
+      "mu_weight": 0.336,
+      "present_value": 0.231,
+      "expected_depth": 3.79,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 10.49,
+      "surprise_pre": 10.49,
+      "w_net": 3244676.0718195387,
+      "rooting_index": 0.6,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.3,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.3,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "France",
+      "confederation": "UEFA",
+      "group": "I",
+      "host": false,
+      "population": 68551653,
+      "consumption": 63880,
+      "elo": 2084,
+      "interest": 0.55,
+      "wc_titles": 2,
+      "last_major_year": "2018",
+      "history": 0.426,
+      "novelty": 0.574,
+      "memory_half_life": 2.9,
+      "fan_population": 49279941,
+      "home_fans": 37703409,
+      "diaspora_fans": 1100000,
+      "solidarity_fans": 10476532,
+      "mu_weight": 0.157,
+      "present_value": 0.414,
+      "expected_depth": 3.32,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 12.45,
+      "surprise_pre": 12.45,
+      "w_net": 3064648.853272001,
+      "rooting_index": 0.6,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.3,
+      "surprise_index_eta15": 0.1,
+      "surprise_index_pre": 0.3,
+      "surprise_index_pre_eta15": 0.1
+    },
+    {
+      "name": "Netherlands",
+      "confederation": "UEFA",
+      "group": "F",
+      "host": false,
+      "population": 17993485,
+      "consumption": 84970,
+      "elo": 1944,
+      "interest": 0.55,
+      "wc_titles": 0,
+      "last_major_year": "1988",
+      "history": 0.176,
+      "novelty": 0.824,
+      "memory_half_life": 5.4,
+      "fan_population": 22313298,
+      "home_fans": 9896417,
+      "diaspora_fans": 550000,
+      "solidarity_fans": 11866882,
+      "mu_weight": 0.118,
+      "present_value": 0.774,
+      "expected_depth": 2.15,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 16.75,
+      "surprise_pre": 16.75,
+      "w_net": 1951902.6921620565,
+      "rooting_index": 0.4,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.3,
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.3,
+      "surprise_index_pre_eta15": 0.0
+    },
+    {
+      "name": "Germany",
+      "confederation": "UEFA",
+      "group": "E",
+      "host": false,
+      "population": 83516593,
+      "consumption": 76180,
+      "elo": 1939,
+      "interest": 0.55,
+      "wc_titles": 4,
+      "last_major_year": "2014",
+      "history": 0.815,
+      "novelty": 0.185,
+      "memory_half_life": 1.7,
+      "fan_population": 58199122,
+      "home_fans": 45934126,
+      "diaspora_fans": 2200000,
+      "solidarity_fans": 10064996,
+      "mu_weight": 0.131,
+      "present_value": 0.24,
+      "expected_depth": 2.13,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 16.87,
+      "surprise_pre": 16.87,
+      "w_net": 1760211.6457878035,
+      "rooting_index": 0.3,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.3,
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.3,
+      "surprise_index_pre_eta15": 0.0
+    },
+    {
+      "name": "Uruguay",
+      "confederation": "CONMEBOL",
+      "group": "H",
+      "host": false,
+      "population": 3386588,
+      "consumption": 34170,
+      "elo": 1870,
+      "interest": 0.7,
+      "wc_titles": 2,
+      "last_major_year": "2011",
+      "history": 0.574,
+      "novelty": 0.426,
+      "memory_half_life": 2.2,
+      "fan_population": 14343490,
+      "home_fans": 2370612,
+      "diaspora_fans": 420000,
+      "solidarity_fans": 11552879,
+      "mu_weight": 0.293,
+      "present_value": 0.324,
+      "expected_depth": 1.59,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 18.44,
+      "surprise_pre": 18.44,
+      "w_net": 1306905.4968885619,
+      "rooting_index": 0.2,
+      "rooting_index_eta15": 0.1,
+      "surprise_index": 0.2,
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.2,
+      "surprise_index_pre_eta15": 0.0
+    },
+    {
+      "name": "Qatar",
+      "confederation": "AFC",
+      "group": "B",
+      "host": false,
+      "population": 2857822,
+      "consumption": 121900,
+      "elo": 1447,
+      "interest": 0.35,
+      "wc_titles": 0,
+      "last_major_year": "2023",
+      "history": 0.037,
+      "novelty": 0.963,
+      "memory_half_life": 10.4,
+      "fan_population": 10361933,
+      "home_fans": 1000238,
+      "diaspora_fans": 17500,
+      "solidarity_fans": 9344195,
+      "mu_weight": 0.082,
+      "present_value": 1.5,
+      "expected_depth": 0.11,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.89,
+      "surprise_pre": 20.89,
+      "w_net": 1224357.2122563047,
+      "rooting_index": 0.2,
+      "rooting_index_eta15": 0.0,
+      "surprise_index": 0.2,
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.2,
+      "surprise_index_pre_eta15": 0.0
+    },
+    {
+      "name": "New Zealand",
+      "confederation": "OFC",
+      "group": "G",
+      "host": false,
+      "population": 5287500,
+      "consumption": 53600,
+      "elo": 1578,
+      "interest": 0.2,
+      "wc_titles": 0,
+      "last_major_year": "2016",
+      "history": 0.093,
+      "novelty": 0.907,
+      "memory_half_life": 7.6,
+      "fan_population": 1177500,
+      "home_fans": 1057500,
+      "diaspora_fans": 120000,
+      "solidarity_fans": 0,
+      "mu_weight": 0.187,
+      "present_value": 1.091,
+      "expected_depth": 0.28,
+      "reached_depth": 0,
+      "eliminated": false,
+      "surprise": 20.69,
+      "surprise_pre": 20.69,
+      "w_net": 230059.47680599944,
+      "rooting_index": 0.0,
+      "rooting_index_eta15": 0.0,
+      "surprise_index": 0.0,
+      "surprise_index_eta15": 0.0,
+      "surprise_index_pre": 0.0,
+      "surprise_index_pre_eta15": 0.0
+    }
+  ],
+  "fixtures": [
+    {
+      "date": "2026-06-11",
+      "matchday": 1,
+      "group": "A",
+      "home": "Mexico",
+      "away": "Czechia"
+    },
+    {
+      "date": "2026-06-11",
+      "matchday": 1,
+      "group": "A",
+      "home": "South Africa",
+      "away": "South Korea"
+    },
+    {
+      "date": "2026-06-11",
+      "matchday": 1,
+      "group": "G",
+      "home": "Belgium",
+      "away": "Egypt"
+    },
+    {
+      "date": "2026-06-11",
+      "matchday": 1,
+      "group": "G",
+      "home": "Iran",
+      "away": "New Zealand"
+    },
+    {
+      "date": "2026-06-12",
+      "matchday": 1,
+      "group": "B",
+      "home": "Canada",
+      "away": "Switzerland"
+    },
+    {
+      "date": "2026-06-12",
+      "matchday": 1,
+      "group": "B",
+      "home": "Bosnia and Herzegovina",
+      "away": "Qatar"
+    },
+    {
+      "date": "2026-06-12",
+      "matchday": 1,
+      "group": "H",
+      "home": "Uruguay",
+      "away": "Spain"
+    },
+    {
+      "date": "2026-06-12",
+      "matchday": 1,
+      "group": "H",
+      "home": "Cape Verde",
+      "away": "Saudi Arabia"
+    },
+    {
+      "date": "2026-06-13",
+      "matchday": 1,
+      "group": "C",
+      "home": "Brazil",
+      "away": "Haiti"
+    },
+    {
+      "date": "2026-06-13",
+      "matchday": 1,
+      "group": "C",
+      "home": "Scotland",
+      "away": "Morocco"
+    },
+    {
+      "date": "2026-06-13",
+      "matchday": 1,
+      "group": "I",
+      "home": "France",
+      "away": "Norway"
+    },
+    {
+      "date": "2026-06-13",
+      "matchday": 1,
+      "group": "I",
+      "home": "Senegal",
+      "away": "Iraq"
+    },
+    {
+      "date": "2026-06-14",
+      "matchday": 1,
+      "group": "D",
+      "home": "Paraguay",
+      "away": "United States"
+    },
+    {
+      "date": "2026-06-14",
+      "matchday": 1,
+      "group": "D",
+      "home": "Turkiye",
+      "away": "Australia"
+    },
+    {
+      "date": "2026-06-14",
+      "matchday": 1,
+      "group": "J",
+      "home": "Argentina",
+      "away": "Austria"
+    },
+    {
+      "date": "2026-06-14",
+      "matchday": 1,
+      "group": "J",
+      "home": "Algeria",
+      "away": "Jordan"
+    },
+    {
+      "date": "2026-06-15",
+      "matchday": 1,
+      "group": "E",
+      "home": "Ecuador",
+      "away": "Curacao"
+    },
+    {
+      "date": "2026-06-15",
+      "matchday": 1,
+      "group": "E",
+      "home": "Germany",
+      "away": "Cote d'Ivoire"
+    },
+    {
+      "date": "2026-06-15",
+      "matchday": 1,
+      "group": "K",
+      "home": "Colombia",
+      "away": "Portugal"
+    },
+    {
+      "date": "2026-06-15",
+      "matchday": 1,
+      "group": "K",
+      "home": "DR Congo",
+      "away": "Uzbekistan"
+    },
+    {
+      "date": "2026-06-16",
+      "matchday": 1,
+      "group": "F",
+      "home": "Netherlands",
+      "away": "Sweden"
+    },
+    {
+      "date": "2026-06-16",
+      "matchday": 1,
+      "group": "F",
+      "home": "Tunisia",
+      "away": "Japan"
+    },
+    {
+      "date": "2026-06-16",
+      "matchday": 1,
+      "group": "L",
+      "home": "Panama",
+      "away": "England"
+    },
+    {
+      "date": "2026-06-16",
+      "matchday": 1,
+      "group": "L",
+      "home": "Croatia",
+      "away": "Ghana"
+    },
+    {
+      "date": "2026-06-17",
+      "matchday": 2,
+      "group": "A",
+      "home": "Mexico",
+      "away": "South Africa"
+    },
+    {
+      "date": "2026-06-17",
+      "matchday": 2,
+      "group": "A",
+      "home": "South Korea",
+      "away": "Czechia"
+    },
+    {
+      "date": "2026-06-17",
+      "matchday": 2,
+      "group": "G",
+      "home": "Belgium",
+      "away": "Iran"
+    },
+    {
+      "date": "2026-06-17",
+      "matchday": 2,
+      "group": "G",
+      "home": "New Zealand",
+      "away": "Egypt"
+    },
+    {
+      "date": "2026-06-18",
+      "matchday": 2,
+      "group": "B",
+      "home": "Canada",
+      "away": "Bosnia and Herzegovina"
+    },
+    {
+      "date": "2026-06-18",
+      "matchday": 2,
+      "group": "B",
+      "home": "Qatar",
+      "away": "Switzerland"
+    },
+    {
+      "date": "2026-06-18",
+      "matchday": 2,
+      "group": "H",
+      "home": "Uruguay",
+      "away": "Cape Verde"
+    },
+    {
+      "date": "2026-06-18",
+      "matchday": 2,
+      "group": "H",
+      "home": "Saudi Arabia",
+      "away": "Spain"
+    },
+    {
+      "date": "2026-06-19",
+      "matchday": 2,
+      "group": "C",
+      "home": "Brazil",
+      "away": "Scotland"
+    },
+    {
+      "date": "2026-06-19",
+      "matchday": 2,
+      "group": "C",
+      "home": "Morocco",
+      "away": "Haiti"
+    },
+    {
+      "date": "2026-06-19",
+      "matchday": 2,
+      "group": "I",
+      "home": "France",
+      "away": "Senegal"
+    },
+    {
+      "date": "2026-06-19",
+      "matchday": 2,
+      "group": "I",
+      "home": "Iraq",
+      "away": "Norway"
+    },
+    {
+      "date": "2026-06-20",
+      "matchday": 2,
+      "group": "D",
+      "home": "Paraguay",
+      "away": "Turkiye"
+    },
+    {
+      "date": "2026-06-20",
+      "matchday": 2,
+      "group": "D",
+      "home": "Australia",
+      "away": "United States"
+    },
+    {
+      "date": "2026-06-20",
+      "matchday": 2,
+      "group": "J",
+      "home": "Argentina",
+      "away": "Algeria"
+    },
+    {
+      "date": "2026-06-20",
+      "matchday": 2,
+      "group": "J",
+      "home": "Jordan",
+      "away": "Austria"
+    },
+    {
+      "date": "2026-06-21",
+      "matchday": 2,
+      "group": "E",
+      "home": "Ecuador",
+      "away": "Germany"
+    },
+    {
+      "date": "2026-06-21",
+      "matchday": 2,
+      "group": "E",
+      "home": "Cote d'Ivoire",
+      "away": "Curacao"
+    },
+    {
+      "date": "2026-06-21",
+      "matchday": 2,
+      "group": "K",
+      "home": "Colombia",
+      "away": "DR Congo"
+    },
+    {
+      "date": "2026-06-21",
+      "matchday": 2,
+      "group": "K",
+      "home": "Uzbekistan",
+      "away": "Portugal"
+    },
+    {
+      "date": "2026-06-22",
+      "matchday": 2,
+      "group": "F",
+      "home": "Netherlands",
+      "away": "Tunisia"
+    },
+    {
+      "date": "2026-06-22",
+      "matchday": 2,
+      "group": "F",
+      "home": "Japan",
+      "away": "Sweden"
+    },
+    {
+      "date": "2026-06-22",
+      "matchday": 2,
+      "group": "L",
+      "home": "Panama",
+      "away": "Croatia"
+    },
+    {
+      "date": "2026-06-22",
+      "matchday": 2,
+      "group": "L",
+      "home": "Ghana",
+      "away": "England"
+    },
+    {
+      "date": "2026-06-23",
+      "matchday": 3,
+      "group": "A",
+      "home": "Mexico",
+      "away": "South Korea"
+    },
+    {
+      "date": "2026-06-23",
+      "matchday": 3,
+      "group": "A",
+      "home": "Czechia",
+      "away": "South Africa"
+    },
+    {
+      "date": "2026-06-23",
+      "matchday": 3,
+      "group": "G",
+      "home": "Belgium",
+      "away": "New Zealand"
+    },
+    {
+      "date": "2026-06-23",
+      "matchday": 3,
+      "group": "G",
+      "home": "Egypt",
+      "away": "Iran"
+    },
+    {
+      "date": "2026-06-24",
+      "matchday": 3,
+      "group": "B",
+      "home": "Canada",
+      "away": "Qatar"
+    },
+    {
+      "date": "2026-06-24",
+      "matchday": 3,
+      "group": "B",
+      "home": "Switzerland",
+      "away": "Bosnia and Herzegovina"
+    },
+    {
+      "date": "2026-06-24",
+      "matchday": 3,
+      "group": "H",
+      "home": "Uruguay",
+      "away": "Saudi Arabia"
+    },
+    {
+      "date": "2026-06-24",
+      "matchday": 3,
+      "group": "H",
+      "home": "Spain",
+      "away": "Cape Verde"
+    },
+    {
+      "date": "2026-06-25",
+      "matchday": 3,
+      "group": "C",
+      "home": "Brazil",
+      "away": "Morocco"
+    },
+    {
+      "date": "2026-06-25",
+      "matchday": 3,
+      "group": "C",
+      "home": "Haiti",
+      "away": "Scotland"
+    },
+    {
+      "date": "2026-06-25",
+      "matchday": 3,
+      "group": "I",
+      "home": "France",
+      "away": "Iraq"
+    },
+    {
+      "date": "2026-06-25",
+      "matchday": 3,
+      "group": "I",
+      "home": "Norway",
+      "away": "Senegal"
+    },
+    {
+      "date": "2026-06-26",
+      "matchday": 3,
+      "group": "D",
+      "home": "Paraguay",
+      "away": "Australia"
+    },
+    {
+      "date": "2026-06-26",
+      "matchday": 3,
+      "group": "D",
+      "home": "United States",
+      "away": "Turkiye"
+    },
+    {
+      "date": "2026-06-26",
+      "matchday": 3,
+      "group": "J",
+      "home": "Argentina",
+      "away": "Jordan"
+    },
+    {
+      "date": "2026-06-26",
+      "matchday": 3,
+      "group": "J",
+      "home": "Austria",
+      "away": "Algeria"
+    },
+    {
+      "date": "2026-06-27",
+      "matchday": 3,
+      "group": "E",
+      "home": "Ecuador",
+      "away": "Cote d'Ivoire"
+    },
+    {
+      "date": "2026-06-27",
+      "matchday": 3,
+      "group": "E",
+      "home": "Curacao",
+      "away": "Germany"
+    },
+    {
+      "date": "2026-06-27",
+      "matchday": 3,
+      "group": "K",
+      "home": "Colombia",
+      "away": "Uzbekistan"
+    },
+    {
+      "date": "2026-06-27",
+      "matchday": 3,
+      "group": "K",
+      "home": "Portugal",
+      "away": "DR Congo"
+    },
+    {
+      "date": "2026-06-28",
+      "matchday": 3,
+      "group": "F",
+      "home": "Netherlands",
+      "away": "Japan"
+    },
+    {
+      "date": "2026-06-28",
+      "matchday": 3,
+      "group": "F",
+      "home": "Sweden",
+      "away": "Tunisia"
+    },
+    {
+      "date": "2026-06-28",
+      "matchday": 3,
+      "group": "L",
+      "home": "Panama",
+      "away": "Ghana"
+    },
+    {
+      "date": "2026-06-28",
+      "matchday": 3,
+      "group": "L",
+      "home": "England",
+      "away": "Croatia"
+    }
+  ]
+};</script>
+  <script>
+// World Cup Happiness Index 2026 - live "who to root for" tool.
+// Reads rankings.json (written by the pipeline). Two ways to value the joy:
+//   Beating expectations (default): a deep run weighted by how unlikely it was,
+//     with later rounds counting more. Underdogs with big, needy followings rise.
+//   If they win the Cup: the marginal happiness a title would add, full stop.
+// Both use fans reached x marginal-utility weight x the present value of the
+// lingering memory of a win. Win probability never weights the score; under
+// "beating expectations" it only sets the bar a team is measured against.
+
+const HOME_ADV = 60;  // Elo bump for host nations, matches the model
+
+const VIEWS = {
+  surprise: {
+    key: "surprise_index",
+    eta15: false,
+    label: "Beating expectations",
+    note: "Joy from overperforming: a deep run weighted by how unlikely it was, " +
+      "with later rounds counting more. The bar is each team's pre-tournament odds; " +
+      "those odds set the bar, they never shrink the score.",
+  },
+  rooting: {
+    key: "rooting_index",
+    eta15: false,
+    label: "If they win the Cup",
+    note: "The happiness a title would add, full stop: fans reached, weighted up " +
+      "where people have less, valued by the lingering memory of a win.",
+  },
+  tilt: {
+    key: "surprise_index_eta15",
+    eta15: true,
+    label: "Tilt to the poor",
+    note: "Beating expectations, with a stronger preference for low-income " +
+      "countries (utility curvature eta = 1.5 instead of 1).",
+  },
+};
+
+let DATA = null;
+let view = "surprise";
+let timeframe = "live";   // "live" (results so far) or "pre" (frozen pre-tournament)
+
+// The index field for the active method and timeframe. "If they win the Cup" is a
+// fixed prize and ignores the timeframe; the surprise views switch on it.
+function activeKey() {
+  if (view === "rooting") return "rooting_index";
+  const base = view === "tilt" ? "surprise_index_eta15" : "surprise_index";
+  return timeframe === "pre" ? base.replace("surprise_index", "surprise_index_pre") : base;
+}
+
+function fmtInt(n) { return n.toLocaleString("en-US"); }
+function fmtM(n) { return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + "M"; }
+function pWin(a, b) {
+  const ea = a.elo + (a.host ? HOME_ADV : 0);
+  const eb = b.elo + (b.host ? HOME_ADV : 0);
+  return 1 / (1 + Math.pow(10, -(ea - eb) / 400));
+}
+
+async function load() {
+  DATA = window.__RANKINGS__;
+  bindToggle();
+  renderHeadline();
+  renderRanking();
+  setupDates();
+  renderMeta();
+}
+
+function teamsByView() {
+  const key = activeKey();
+  return [...DATA.teams].sort((a, b) => b[key] - a[key]);
+}
+
+function renderHeadline() {
+  const top = teamsByView()[0];
+  if (view === "rooting") {
+    const why = top.wc_titles === 0
+      ? "a huge, devoted following, low incomes, and no title to take for granted"
+      : "a huge following weighted up by low incomes";
+    document.getElementById("headline").innerHTML =
+      `If you only care about the win itself, root for <b>${top.name}</b>: ${why}. ` +
+      `The glow would linger for years rather than fade in a season.`;
+    return;
+  }
+  document.getElementById("headline").innerHTML =
+    `Root for <b>${top.name}</b>: few expect much of them, their following is large ` +
+    `and their incomes low, so every round they survive is a jolt of joy that lands ` +
+    `where it counts and lingers for years.`;
+}
+
+function refresh() {
+  // The timeframe toggle only bites on the surprise views; dim it otherwise.
+  document.getElementById("time-toggle").classList.toggle("muted", view === "rooting");
+  renderHeadline();
+  renderRanking();
+  renderMatches(document.getElementById("match-date").value);
+}
+
+function bindToggle() {
+  document.querySelectorAll("#view-toggle button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      view = btn.dataset.view;
+      document.querySelectorAll("#view-toggle button")
+        .forEach((b) => b.classList.toggle("active", b === btn));
+      refresh();
+    });
+  });
+  document.querySelectorAll("#time-toggle button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      timeframe = btn.dataset.time;
+      document.querySelectorAll("#time-toggle button")
+        .forEach((b) => b.classList.toggle("active", b === btn));
+      refresh();
+    });
+  });
+}
+
+function secondaryCell(t) {
+  if (view === "rooting") return `${t.memory_half_life}y<br><small>memory</small>`;
+  return `${t.expected_depth.toFixed(1)}<br><small>exp. run</small>`;
+}
+
+function renderRanking() {
+  let note = VIEWS[view].note;
+  if (view !== "rooting") {
+    note += timeframe === "pre"
+      ? " Showing the frozen pre-tournament ranking, before any results."
+      : " Showing the live ranking, updated for results so far.";
+  }
+  document.getElementById("view-note").textContent = note;
+  const key = activeKey();
+  const teams = teamsByView();
+  const max = Math.max(...teams.map((t) => t[key])) || 1;
+  const host = document.getElementById("ranking");
+  host.innerHTML = "";
+
+  teams.forEach((t, i) => {
+    const pct = Math.max(1.5, (t[key] / max) * 100);
+    const el = document.createElement("div");
+    el.className = "row" + (i === 0 ? " top" : "");
+    const tags = [];
+    if (t.host) tags.push('<span class="badge host">HOST</span>');
+    if (t.eliminated) tags.push('<span class="badge out">OUT</span>');
+    else if (t.wc_titles === 0) tags.push(`<span class="badge">${t.last_major_year === null ? "DEBUT-ERA" : "NEVER WON"}</span>`);
+    el.innerHTML = `
+      <span class="rank">${i + 1}</span>
+      <div class="name">${t.name}${tags.join("")}
+        <small>${t.confederation} &middot; Group ${t.group}</small></div>
+      <div class="bar-wrap">
+        <div class="bar" style="width:${pct}%"></div>
+        <span class="bar-val">${t[key].toFixed(1)}</span>
+      </div>
+      <div class="p">${secondaryCell(t)}</div>`;
+    el.addEventListener("click", () => openDrawer(t));
+    host.appendChild(el);
+  });
+}
+
+function setupDates() {
+  const input = document.getElementById("match-date");
+  const dates = [...new Set(DATA.fixtures.map((f) => f.date))].sort();
+  const today = "2026-06-19";
+  input.min = dates[0];
+  input.max = dates[dates.length - 1];
+  input.value = dates.includes(today) ? today : dates[0];
+  input.addEventListener("change", () => renderMatches(input.value));
+  renderMatches(input.value);
+}
+
+// Per-side score for a match, in the active view. "If they win the Cup" roots for
+// the bigger prize; the surprise views weight that prize by how big an upset the
+// win would be tonight.
+function matchScore(t, opp) {
+  const base = VIEWS[view].eta15 ? t.rooting_index_eta15 : t.rooting_index;
+  if (view === "rooting") return base;
+  return base * (1 - pWin(t, opp));
+}
+
+function renderMatches(dateStr) {
+  const host = document.getElementById("matches");
+  const byName = Object.fromEntries(DATA.teams.map((t) => [t.name, t]));
+  const todays = DATA.fixtures.filter((f) => f.date === dateStr);
+  host.innerHTML = "";
+  if (!todays.length) {
+    host.innerHTML = '<p class="empty">No group-stage matches on this date.</p>';
+    return;
+  }
+  const key = activeKey();
+  todays.forEach((f) => {
+    const h = byName[f.home], a = byName[f.away];
+    const hs = matchScore(h, a), as = matchScore(a, h);
+    const homePick = hs >= as;
+    const pick = homePick ? h : a;
+    const upset = view !== "rooting" && (homePick ? pWin(h, a) < 0.5 : pWin(a, h) < 0.5);
+    const el = document.createElement("div");
+    el.className = "match";
+    el.innerHTML = `
+      <div class="match-top"><span>Group ${f.group}</span><span>Matchday ${f.matchday}</span></div>
+      <div class="match-teams">
+        <div class="side ${homePick ? "pick" : ""}">
+          <div class="tn">${h.name}</div>
+          <div class="ti">index ${h[key].toFixed(0)}</div>
+        </div>
+        <div class="vs">v</div>
+        <div class="side right ${homePick ? "" : "pick"}">
+          <div class="tn">${a.name}</div>
+          <div class="ti">index ${a[key].toFixed(0)}</div>
+        </div>
+      </div>
+      <div class="pick-line">Root for <b>${pick.name}</b>${
+        upset ? ", the underdog: an against-the-odds win here would be the bigger surprise." :
+        " for the most happiness on offer."
+      }</div>`;
+    el.querySelectorAll(".side").forEach((s, idx) => {
+      s.style.cursor = "pointer";
+      s.addEventListener("click", () => openDrawer(idx === 0 ? h : a));
+    });
+    host.appendChild(el);
+  });
+}
+
+function openDrawer(t) {
+  const body = document.getElementById("drawer-body");
+  const kv = (k, v) => `<div class="kv"><span class="k">${k}</span><span class="v">${v}</span></div>`;
+  const lastTitle = t.last_major_year === null ? "none on record" : t.last_major_year;
+  const status = t.eliminated ? "out"
+    : (t.reached_depth > 0 ? "still in (knockouts)" : "still in (group stage)");
+  body.innerHTML = `
+    <h3>${t.name}</h3>
+    <p class="sub">${t.confederation} &middot; Group ${t.group}${t.host ? " &middot; Host" : ""}</p>
+    ${kv("Beating expectations (live)", t.surprise_index.toFixed(1))}
+    ${kv("Beating expectations (pre-tournament)", t.surprise_index_pre.toFixed(1))}
+    ${kv("If they win the Cup", t.rooting_index.toFixed(1))}
+    <div class="kv-group">Run vs expectations</div>
+    ${kv("Expected run (knockout rounds)", t.expected_depth.toFixed(1) + " of 6")}
+    ${kv("Status", status)}
+    ${kv("Surprise score (live / pre)", t.surprise.toFixed(1) + " / " + t.surprise_pre.toFixed(1))}
+    <div class="kv-group">Memory of a win</div>
+    ${kv("World Cup titles", t.wc_titles)}
+    ${kv("Last major trophy", lastTitle)}
+    ${kv("Memory half-life", t.memory_half_life + " years")}
+    <div class="kv-group">Reach and need</div>
+    ${kv("Fans reached", fmtM(t.fan_population))}
+    ${kv("&nbsp;&nbsp;home", fmtM(t.home_fans))}
+    ${kv("&nbsp;&nbsp;diaspora", fmtM(t.diaspora_fans))}
+    ${kv("&nbsp;&nbsp;continental solidarity", fmtM(t.solidarity_fans))}
+    ${kv("Consumption (GNI pc, PPP)", "$" + fmtInt(t.consumption))}
+    ${kv("Marginal-utility weight", t.mu_weight.toFixed(2) + "x")}
+    ${kv("Elo rating (reference only)", t.elo)}
+    <p class="note">Beating-expectations index = fans reached x marginal-utility
+      weight x the present value of a title x how far the team beats its
+      pre-tournament odds, with deeper rounds counting more. Lower consumption
+      raises the utility weight; an unaccustomed win lingers longer in memory. Win
+      probability sets the bar but never weights the score.</p>`;
+  document.getElementById("drawer").classList.remove("hidden");
+}
+
+function renderMeta() {
+  const p = DATA.meta.params;
+  document.getElementById("meta").innerHTML =
+    `Updated ${DATA.meta.generated.slice(0, 10)} &middot; ` +
+    `basis: ${DATA.meta.basis} &middot; ` +
+    `<code>eta=${p.eta}</code> ` +
+    `<code>memory half-life ${(Math.log(2) / p.r_lo).toFixed(0)}y to ${(Math.log(2) / p.r_hi).toFixed(1)}y</code> ` +
+    `<code>later-round weight exp=${p.stage_weight_exp}</code> ` +
+    `<code>${fmtInt(p.mc_iterations)} sims for the bar</code>. Methods in the repo README.`;
+}
+
+document.getElementById("drawer-close")
+  .addEventListener("click", () => document.getElementById("drawer").classList.add("hidden"));
+
+load();
+
+</script>
+</body>
+</html>
